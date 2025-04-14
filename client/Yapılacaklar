@@ -1,0 +1,5 @@
+Period : isClosed seçilmemiş gelecek
+Period : Sınav tarihi, son Kayıt tarihinden önce olamaz
+Period : isClosed seçili iken kayıt edildiğinde "Önceki dönem japatılsın mı?" diye sorulacak
+
+Branch : İlgili kişi, sadece bir şubeye tanımlanabilir.

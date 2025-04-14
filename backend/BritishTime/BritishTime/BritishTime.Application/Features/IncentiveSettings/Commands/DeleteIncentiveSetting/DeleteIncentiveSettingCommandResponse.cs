@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.IncentiveSettings.Commands.DeleteIncentiveSetting;
+public sealed record DeleteIncentiveSettingCommandResponse(string message);

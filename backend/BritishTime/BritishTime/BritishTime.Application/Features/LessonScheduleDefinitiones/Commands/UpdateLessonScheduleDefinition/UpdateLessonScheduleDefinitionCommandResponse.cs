@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.LessonScheduleDefinitions.Commands.UpdateLessonScheduleDefinition;
+public sealed record UpdateLessonScheduleDefinitionCommandResponse(string message);

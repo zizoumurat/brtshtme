@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.IncentiveSettings.Commands.UpdateIncentiveSetting;
+public sealed record UpdateIncentiveSettingCommandResponse(string message);

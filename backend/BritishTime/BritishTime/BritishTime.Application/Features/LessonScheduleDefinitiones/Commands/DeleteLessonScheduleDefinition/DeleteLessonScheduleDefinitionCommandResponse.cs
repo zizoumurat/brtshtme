@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.LessonScheduleDefinitions.Commands.DeleteLessonScheduleDefinition;
+public sealed record DeleteLessonScheduleDefinitionCommandResponse(string message);

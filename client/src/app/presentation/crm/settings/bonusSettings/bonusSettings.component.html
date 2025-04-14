@@ -1,0 +1,12 @@
+<div class="flex gap-2 justify-center">
+    @for(tab of tabs; track tab.route) {
+    <a class="p-button p-button-secondary font-bold"
+        [class.p-button-info]="activeTab === tab.route" (click)="navigate(tab.route)">
+        {{ tab.label | translate }}
+    </a>
+    }
+</div>
+
+<div class="mt-8">
+    <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,21 @@
+<div class="grid grid-cols-12 gap-4">
+    <div class="col-span-12 lg:col-span-2">
+        <p-menu [model]="menuItems">
+            <ng-template #item let-item>
+                <ng-container *ngIf="item.routerLink; else elseBlock">
+                    <a [routerLink]="item.routerLink" class="p-menu-item-link"  routerLinkActive="p-menu-item-link-active">
+                        <span class="ml-2">{{ item.label }}</span>
+                    </a>
+                </ng-container>
+                <ng-template #elseBlock>
+                    <a [href]="item.url" class="p-menu-item-link">
+                        <span class="ml-2">{{ item.label }}</span>
+                    </a>
+                </ng-template>
+            </ng-template>
+        </p-menu>
+    </div>
+    <div class="col-span-12 lg:col-span-10">
+        <router-outlet></router-outlet>
+    </div>
+</div>

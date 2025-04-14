@@ -1,0 +1,56 @@
+# .NET ile ilgili
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vs/
+
+# Build çıktıları
+*.dll
+*.exe
+*.app
+*.log
+
+# Paket klasörleri
+node_modules/
+packages/
+bower_components/
+
+# Yaygın IDE dosyaları
+.vscode/
+.idea/
+
+# MacOS ve Linux sistem dosyaları
+.DS_Store
+*.swp
+
+# Log dosyaları
+*.log
+logs/
+
+# Ortam dosyaları
+.env
+.env.*
+
+# Publish dizini
+publish/
+out/
+dist/
+wwwroot/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Test coverage
+coverage/
+*.coverage
+*.coveragexml
+
+# Npm/Yarn/PNPM lock dosyaları
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

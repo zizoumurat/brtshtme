@@ -1,0 +1,38 @@
+/* Header kısmını Flexbox ile düzenleme */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h2 {
+    margin: 0;
+  }
+  
+  /* İşlem butonlarını sağa hizalamak */
+  .actions {
+    white-space: nowrap; 
+    width: 1%;            
+    text-align: center;
+    button {
+      margin: 0 2px;
+    }
+  }
+  
+
+  .p-error {
+    color: red;
+    position: absolute;
+    bottom: 0;
+  }
+
+  .form-group {
+    .flex-wrap {
+        padding-bottom: 18px;
+        position: relative;
+    }
+  }
+
+.no-header-dialog .p-dialog-header:first-child {
+    display: none !important;
+  }

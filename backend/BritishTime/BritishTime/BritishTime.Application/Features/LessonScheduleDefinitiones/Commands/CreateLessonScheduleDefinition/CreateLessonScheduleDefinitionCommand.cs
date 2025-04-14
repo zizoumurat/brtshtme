@@ -1,0 +1,6 @@
+﻿using BritishTime.Domain.Dtos;
+using MediatR;
+
+namespace BritishTime.Application.Features.LessonScheduleDefinitiones.Commands.CreateLessonScheduleDefinition;
+
+public sealed record CreateLessonScheduleDefinitionCommand(LessonScheduleDefinitionCreateDto LessonScheduleDefinition) : IRequest<CreateLessonScheduleDefinitionCommandResponse>;

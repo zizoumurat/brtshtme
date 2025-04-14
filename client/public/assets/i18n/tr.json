@@ -1,0 +1,91 @@
+{
+    "primeng": {
+        "monthNames": [
+            "Ocak",
+            "Şubat",
+            "Mart",
+            "Nisan",
+            "Mayıs",
+            "Haziran",
+            "Temmuz",
+            "Ağustos",
+            "Eylül",
+            "Ekim",
+            "Kasım",
+            "Aralık"
+        ],
+        "monthNamesShort": [
+            "Oca",
+            "Şub",
+            "Mar",
+            "Nis",
+            "May",
+            "Haz",
+            "Tem",
+            "Ağu",
+            "Eyl",
+            "Eki",
+            "Kas",
+            "Ara"
+        ],
+        "dayNames": [
+            "Pazar",
+            "Pazartesi",
+            "Salı",
+            "Çarşamba",
+            "Perşembe",
+            "Cuma",
+            "Cumartesi"
+        ],
+        "dayNamesShort": [
+            "Paz",
+            "Pts",
+            "Sal",
+            "Çar",
+            "Per",
+            "Cum",
+            "Cmt"
+        ],
+        "today": "Bugün",
+        "clear": "Temizle",
+        "dateFormat": "dd.mm.yy"
+    },
+    "crm": {
+        "tabs": {
+            "myTasks": "Görevlerim",
+            "myData": "Datalarım",
+            "myTransactions": "İşlemlerim",
+            "fieldSpecial": "Saha Özel",
+            "reports": "Raporlar",
+            "settings": "Ayarlar"
+        },
+        "settings": {
+            "branch": "Şubeler",
+            "staff": "Personeller",
+            "regionDefinitions": "Bölge Tanımları",
+            "users": "Kullanıcılar",
+            "classScheduleDefinitions": "Ders Programı Tanımları",
+            "pricingParameters": "Fiyatlandırma Parametreleri",
+            "bonusSettings": {
+                "bonusSettings": "Primlendirme Ayarları",
+                "salesRepresentative": "Satış Temsilcisi",
+                "dataProvider": "Data Sağlayıcı"
+            }
+        }
+    },
+    "results": {
+        "added": "Kayıt başarıyla tamamlandı.",
+        "updated": "Bilgiler başarıyla güncellendi.",
+        "deleted": "Kayıt başarıyla silindi."
+    },
+    "minAmount": "Minimum Tutar",
+    "maxAmount": "Maksimum Tutar",
+    "salesCommission": "Satış Primi",
+    "collectionCommission": "Tahsilat Primi",
+    "bonus": "Bonus",
+    "note": "Not",
+    "actions": "İşlemler",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "noRecords": "Kayıt bulunamadı."
+}
