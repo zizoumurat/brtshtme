@@ -10,6 +10,9 @@ public sealed class MappingProfile : Profile
         CreateMap<BranchDto, Branch>().ReverseMap();
         CreateMap<BranchCreateDto, Branch>();
 
+        CreateMap<LessonScheduleDefinitionDto, LessonScheduleDefinition>().ReverseMap();
+        CreateMap<LessonScheduleDefinitionCreateDto, LessonScheduleDefinition>();
+
         CreateMap<RegionDto, Region>().ReverseMap();
         CreateMap<RegionCreateDto, Region>();
 
