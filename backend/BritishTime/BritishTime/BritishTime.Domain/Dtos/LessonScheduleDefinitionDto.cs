@@ -19,11 +19,11 @@ public sealed record LessonScheduleDefinitionCreateDto(
     StudentType StudentType,
     EducationType EducationType,
     string ScheduleCode,
-    int DayCount,
     int DayHour,
     List<DayOfWeek> Days,
     TimeOnly StartTime,
-    ScheduleCategory ScheduleCategory
+    ScheduleCategory ScheduleCategory,
+    Guid BranchId
 );
 
 public sealed record LessonScheduleDefinitionFilterDto(

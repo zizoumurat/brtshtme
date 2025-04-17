@@ -1,17 +1,23 @@
+import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
 import { PaginationFilterModel } from '@/core/models/admin/paginationFilterModel';
+import { SelectListItem } from '@/core/models/select-list-item.model';
 import { ICrudService } from '@/core/services/admin/crud-service';
 import { Component, inject, InjectionToken } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, forkJoin, map, Observable, Subject } from 'rxjs';
 
 @Component({
     selector: 'app-base',
     template: '',
-    styleUrls: []
+    styleUrls: [],
+    imports: []
 })
 export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     protected recordService: S;
+
+    translateService: TranslateService = inject(TranslateService);
 
     pageForm!: FormGroup;
     rows: Array<T & HasId> = [];
@@ -24,7 +30,6 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     pageModal: string = '';
     private searchInputSubject = new Subject<string>();
     searchFilter: Partial<Record<string, any>> = {};
-
     currentPageUrl: string = '';
 
     constructor(serviceToken: InjectionToken<S>) {
@@ -145,4 +150,19 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
         return control?.invalid && control?.touched ? true : false;
     }
 
+    enumToSelectOptionsAsync<T extends object>(enumObj: T, prefix: string): Observable<SelectListItem[]> {
+        const keys = Object.keys(enumObj).filter(key => isNaN(Number(key)));
+        const translations$ = keys.map(key =>
+          this.translateService.get(`enums.${prefix}.${key}`)
+        );
+      
+        return forkJoin(translations$).pipe(
+          map(translations => {
+            return keys.map((key, index) => ({
+              name: translations[index],
+              id: enumObj[key as keyof T]
+            }) as SelectListItem);
+          })
+        );
+    }
 }

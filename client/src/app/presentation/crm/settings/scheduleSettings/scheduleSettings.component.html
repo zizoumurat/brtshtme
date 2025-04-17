@@ -30,7 +30,7 @@
                 <th class="actions">İşlemler</th>
             </tr>
         </ng-template>
-        
+
         <ng-template pTemplate="body" let-record>
             <tr>
                 <td>{{ record.scheduleCode }}</td>
@@ -52,11 +52,11 @@
                 </td>
             </tr>
         </ng-template>
-        
+
     </p-table>
 </div>
 
-<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
+<p-dialog *ngIf="pageForm" [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
     <ng-template pTemplate="header">
         <div class="font-semibold text-lg">{{ pageTitle }} {{ pageModal }}</div>
     </ng-template>
@@ -64,18 +64,69 @@
     <p-fluid>
 
         <form [formGroup]="pageForm" class="flex flex-col gap-4 w-full form-group">
-
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex flex-wrap gap-2 w-full">
-                    <label for="name">Adı</label>
-                    <input id="name" pInputText formControlName="name" [class.p-invalid]="isFieldInvalid('name')" />
-                    <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
+            <div class="grid grid-cols-12 gap-2">
+                <div class="col-span-12 md:col-span-6">
+                    <label for="branchId">Şube</label>
+                    <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
+                        placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
+                    <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
                 </div>
-                <div class="flex flex-wrap gap-2 w-full">
-                    <label for="description">Tanım</label>
-                    <input id="description" pInputText formControlName="description"
-                        [class.p-invalid]="isFieldInvalid('description')" />
-                    <app-validation-message [control]="pageForm.controls['description']"></app-validation-message>
+            </div>
+
+            <div class="grid grid-cols-12 gap-2 mt-2">
+                <div class="col-span-12 md:col-span-6">
+                    <label for="scheduleCode">Program Kodu</label>
+                    <input id="scheduleCode" pInputText formControlName="scheduleCode"
+                        [class.p-invalid]="isFieldInvalid('scheduleCode')" />
+                    <app-validation-message [control]="pageForm.controls['scheduleCode']"></app-validation-message>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                    <label for="scheduleCategory">Kategori</label>
+                    <p-select id="scheduleCategory" [options]="scheduleCategoryOptions" class="w-full"
+                        formControlName="scheduleCategory" placeholder="Seçiniz"
+                        [class.p-invalid]="isFieldInvalid('scheduleCategory')" />
+                    <app-validation-message [control]="pageForm.controls['scheduleCategory']"></app-validation-message>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-2 mt-2">
+                <div class="col-span-12 md:col-span-6">
+                    <label for="studentType">Öğrenci Tipi</label>
+                    <p-select id="studentType" [options]="studentTypeOptions" class="w-full"
+                        formControlName="studentType" placeholder="Seçiniz"
+                        [class.p-invalid]="isFieldInvalid('studentType')" />
+                    <app-validation-message [control]="pageForm.controls['studentType']"></app-validation-message>
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                    <label for="educationType">Eğitim Tipi</label>
+                    <p-select id="educationType" class="w-full" [options]="educationTypeOptions"
+                        formControlName="educationType" placeholder="Seçiniz"
+                        [class.p-invalid]="isFieldInvalid('educationType')" />
+                    <app-validation-message [control]="pageForm.controls['educationType']"></app-validation-message>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-2 mt-2">
+                <div class="col-span-12">
+                    <label for="days">Günler</label>
+                    <p-multiSelect id="days" [options]="dayOfWeekOptions" optionLabel="name" optionValue="id" class="w-full" appendTo="body"
+                        formControlName="days" placeholder="Gün Seçiniz" [class.p-invalid]="isFieldInvalid('days')" />
+                    <app-validation-message [control]="pageForm.controls['days']"></app-validation-message>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-2 mt-2">
+                <div class="col-span-12 md:col-span-4">
+                    <label for="startTime">Başlangıç Saati</label>
+                    <p-datepicker id="startTime" formControlName="startTime" timeOnly="true" hourFormat="24"
+                        showIcon="true" [class.p-invalid]="isFieldInvalid('startTime')" appendTo="body" />
+                    <app-validation-message [control]="pageForm.controls['startTime']"></app-validation-message>
+                </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label for="discount">İndirim</label>
+                    <input type="number" id="discount" pInputText formControlName="discount"
+                        [class.p-invalid]="isFieldInvalid('discount')" />
+                    <app-validation-message [control]="pageForm.controls['discount']"></app-validation-message>
                 </div>
             </div>
         </form>

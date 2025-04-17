@@ -4,19 +4,24 @@ using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Entities;
 using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.Branches;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace BritishTime.Application.Services.concrete;
 public class BranchService : IBranchService
 {
     private readonly IQueryBranchRepository _queryBranchRepository;
     private readonly ICommandBranchRepository _commandBranchRepository;
+    private readonly IUserContextService _userContextService;
     private readonly IMapper _mapper;
 
-    public BranchService(IQueryBranchRepository queryBranchRepository, ICommandBranchRepository commandBranchRepository, IMapper mapper)
+    public BranchService(IQueryBranchRepository queryBranchRepository, ICommandBranchRepository commandBranchRepository, IMapper mapper, IUserContextService userContextService)
     {
         _queryBranchRepository = queryBranchRepository;
         _commandBranchRepository = commandBranchRepository;
         _mapper = mapper;
+        _userContextService = userContextService;
     }
 
     public Task<PaginatedList<BranchDto>> GetAllAsync(BranchFilterDto filter, PageRequest pagination)
@@ -55,5 +60,24 @@ public class BranchService : IBranchService
         await _commandBranchRepository.DeleteAsync(branch);
 
         return true;
+    }
+
+    public async Task<List<SelectListDto>> GetUserBranchListAsync()
+    {
+        var user = await _userContextService.GetCurrentUserAsync();
+
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("User not found.");
+        }
+
+        var roles = await _userContextService.GetUserRolesAsync(user);
+        bool isAdmin = roles.Contains("Admin");
+
+        var branches = await _queryBranchRepository
+        .GetList(x => isAdmin || x.Id == user.BranchId)
+        .Select(x => new SelectListDto(x.Id, x.Name)).ToListAsync();
+
+        return branches;
     }
 }

@@ -6,6 +6,7 @@ using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.Branches;
 using BritishTime.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BritishTime.Infrastructure.Repositories.Branches;
 
@@ -56,6 +57,18 @@ public class QueryBranchRepository : IQueryBranchRepository
             .FirstOrDefaultAsync();
 
         return branch;
+    }
+
+    public IQueryable<Branch> GetList(Expression<Func<Branch, bool>> expression, bool isTracking = false)
+    {
+        if (isTracking)
+        {
+            return _context.Branches.Where(expression);
+        }
+        else
+        {
+            return _context.Branches.AsNoTracking().Where(expression);
+        }
     }
 }
 

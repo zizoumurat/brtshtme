@@ -12,7 +12,18 @@ public static class ExtensionsMiddleware
             var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
+            // Admin rolü var mı kontrol et
+            if (!roleManager.RoleExistsAsync("Admin").Result)
+            {
+                AppRole role = new()
+                {
+                    Name = "Admin",
+                    NormalizedName = "Admin".ToUpper()
+                };
+                roleManager.CreateAsync(role).Wait();
+            }
 
+            // Kullanıcı var mı kontrol et
             if (!userManager.Users.Any(p => p.UserName == "admin"))
             {
                 AppUser user = new()
@@ -26,8 +37,22 @@ public static class ExtensionsMiddleware
                 };
 
                 userManager.CreateAsync(user, "Zizou!5#5").Wait();
-                userManager.AddToRoleAsync(user, "Admin");
+
+                // Admin rolünü kullanıcıya ata
+                userManager.AddToRoleAsync(user, "Admin").Wait();
+            }
+
+            // İstersen başka roller de eklenebilir:
+            if (!roleManager.RoleExistsAsync("User").Result)
+            {
+                AppRole userRole = new()
+                {
+                    Name = "User",
+                    NormalizedName = "User".ToUpper()
+                };
+                roleManager.CreateAsync(userRole).Wait();
             }
         }
     }
+
 }

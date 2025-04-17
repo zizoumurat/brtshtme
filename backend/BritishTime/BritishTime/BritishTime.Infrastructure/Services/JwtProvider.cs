@@ -10,45 +10,63 @@ using System.Security.Claims;
 using System.Text;
 
 namespace BritishTime.Infrastructure.Services;
-internal class JwtProvider(
-    UserManager<AppUser> userManager,
-    IOptions<JwtOptions> jwtOptions) : IJwtProvider
+internal class JwtProvider : IJwtProvider
 {
+    private readonly UserManager<AppUser> _userManager;
+    private readonly IOptions<JwtOptions> _jwtOptions;
+
+    public JwtProvider(UserManager<AppUser> userManager, IOptions<JwtOptions> jwtOptions)
+    {
+        _userManager = userManager;
+        _jwtOptions = jwtOptions;
+    }
+
     public async Task<LoginCommandResponse> CreateToken(AppUser user)
     {
-        List<Claim> claims = new()
-        {
+        // Kullanıcıya ait claim'ler
+        List<Claim> claims =
+        [
             new Claim("Id", user.Id.ToString()),
             new Claim("Name", user.FullName),
             new Claim("Email", user.Email ?? ""),
-            new Claim("UserName", user.UserName ?? "")
-        };
+            new Claim("UserName", user.UserName ?? ""),
+        ];
 
+        // Kullanıcıya ait roller
+        var roles = await _userManager.GetRolesAsync(user);
+        claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+        // Token süresi
         DateTime expires = DateTime.UtcNow.AddMonths(1);
 
-       
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey));
+        // Güvenlik anahtarı
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SecretKey));
 
-        JwtSecurityToken jwtSecurityToken = new(
-            issuer: jwtOptions.Value.Issuer,
-            audience: jwtOptions.Value.Audience,
+        // JWT token oluşturma
+        var jwtSecurityToken = new JwtSecurityToken(
+            issuer: _jwtOptions.Value.Issuer,
+            audience: _jwtOptions.Value.Audience,
             claims: claims,
             notBefore: DateTime.UtcNow,
             expires: expires,
             signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512));
 
-        JwtSecurityTokenHandler handler = new();
-
+        var handler = new JwtSecurityTokenHandler();
         string token = handler.WriteToken(jwtSecurityToken);
 
+        // Refresh token ve süresi
         string refreshToken = Guid.NewGuid().ToString();
         DateTime refreshTokenExpires = expires.AddHours(1);
 
+        // Refresh token bilgilerini güncelle
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpires = refreshTokenExpires;
 
-        await userManager.UpdateAsync(user);
+        // Kullanıcıyı güncelle
+        await _userManager.UpdateAsync(user);
 
-        return new(token, refreshToken, refreshTokenExpires);
+        // Token ve refresh token döndür
+        return new LoginCommandResponse(token, refreshToken, refreshTokenExpires);
     }
 }
+

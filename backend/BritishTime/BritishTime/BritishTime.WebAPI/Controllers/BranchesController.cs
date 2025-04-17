@@ -1,4 +1,5 @@
 ﻿using BritishTime.Application.Features.BrancheFeatures.Queries.GetAllBranches;
+using BritishTime.Application.Features.BrancheFeatures.Queries.GetUserBranches;
 using BritishTime.Application.Features.Branches.Commands.CreateBranch;
 using BritishTime.Application.Features.Branches.Commands.DeleteBranch;
 using BritishTime.Application.Features.Branches.Commands.UpdateBranch;
@@ -23,6 +24,15 @@ public sealed class BranchesController : ApiController
     {
         GetAllBranchesQuery query = new(filter, pagination);
         GetAllBranchesQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
+    [HttpGet("user-branch-list")]
+    public async Task<IActionResult> GetAll()
+    {
+        GetUserBranchesQuery query = new();
+        GetUserBranchesQueryResponse response = await _mediator.Send(query);
 
         return Ok(response.result);
     }

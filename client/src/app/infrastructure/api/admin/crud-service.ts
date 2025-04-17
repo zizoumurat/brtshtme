@@ -45,21 +45,21 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
         }
 
         return firstValueFrom(
-            this.http.get<PaginationResponseModel<T>>(`${this.apiUrl}/getAll`, { params })
+            this.http.get<PaginationResponseModel<T>>(`${this.apiUrl}`, { params })
         ).then(response => response);
     }
 
 
     create(item: T): Promise<void> {
-        return firstValueFrom(this.http.post<void>(`${this.apiUrl}/create`, this.formatDates(item)));
+        return firstValueFrom(this.http.post<void>(`${this.apiUrl}`, this.formatDates(item)));
     }
 
     update(item: T): Promise<void> {
-        return firstValueFrom(this.http.put<void>(`${this.apiUrl}/update`, this.formatDates(item)));
+        return firstValueFrom(this.http.put<void>(`${this.apiUrl}`, this.formatDates(item)));
     }
 
     delete(ref: number): Promise<void> {
-        return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/delete/${ref}`));
+        return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${ref}`));
     }
 
     private formatDates(data: any) {

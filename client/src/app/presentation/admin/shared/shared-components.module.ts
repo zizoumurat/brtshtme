@@ -13,6 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
+import { MultiSelectModule } from 'primeng/multiselect';
 import { DatePickerModule } from 'primeng/datepicker';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -47,6 +48,7 @@ import { RouterModule } from '@angular/router';
     ToastModule,
     DialogModule,
     SelectModule,
+    MultiSelectModule,
     DatePickerModule,
     FullCalendarModule,
     InputMaskModule,
@@ -79,6 +81,7 @@ import { RouterModule } from '@angular/router';
     ToastModule,
     DialogModule,
     SelectModule,
+    MultiSelectModule,
     DatePickerModule,
     FullCalendarModule,
     InputMaskModule,

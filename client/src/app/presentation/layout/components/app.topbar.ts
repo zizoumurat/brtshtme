@@ -15,6 +15,7 @@ import {AvatarModule} from 'primeng/avatar';
 import {FormsModule} from "@angular/forms";
 import { IAuthService } from '@/core/services/admin/auth-service';
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
+import { BRANCH_SERVICE, IBranchService } from '@/core/services/crm/branch-service';
 
 interface NotificationsBars {
     id: string;
@@ -198,6 +199,7 @@ interface NotificationsBars {
 export class AppTopbar {
     layoutService = inject(LayoutService);
     private authService = inject<IAuthService>(AUTH_SERVICE);
+    private branchService = inject<IBranchService>(BRANCH_SERVICE);
 
     isDarkTheme = computed(() => this.layoutService.isDarkTheme());
 
@@ -313,6 +315,7 @@ export class AppTopbar {
     }
 
     logout() {
+        this.branchService.clearBranchCache();
         this.authService.logout();
     }
 }

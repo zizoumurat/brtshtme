@@ -30,7 +30,6 @@ export class BranchesComponent extends AppBaseComponent<BranchModel, IBranchServ
     this.initForm();
   }
 
-
   initForm(): void {
     this.pageForm = this.fb.group({
       id: [null],
@@ -39,6 +38,17 @@ export class BranchesComponent extends AppBaseComponent<BranchModel, IBranchServ
       address: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.email]],
+    });
+  }
+
+  override deleteRecord(recordId: number): void {
+    super.deleteRecord(recordId);
+    this.recordService.clearBranchCache();
+  }
+
+  override saveRecord(): Promise<void> {
+    return super.saveRecord().then(() => {
+      this.recordService.clearBranchCache();
     });
   }
 }
