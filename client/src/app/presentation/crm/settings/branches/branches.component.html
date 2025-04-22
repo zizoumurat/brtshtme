@@ -47,40 +47,73 @@
     </ng-template>
 
     <p-fluid>
-
-        <form [formGroup]="pageForm" class="flex flex-col gap-4 w-full form-group">
-
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex flex-wrap gap-2 w-full">
+        <form [formGroup]="pageForm">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="name">Adı</label>
                     <input id="name" pInputText formControlName="name" [class.p-invalid]="isFieldInvalid('name')" />
                     <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
                 </div>
-                <div class="flex flex-wrap gap-2 w-full">
+
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="description">Tanım</label>
                     <input id="description" pInputText formControlName="description"
                         [class.p-invalid]="isFieldInvalid('description')" />
                     <app-validation-message [control]="pageForm.controls['description']"></app-validation-message>
                 </div>
             </div>
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex flex-wrap gap-2 w-full">
+
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="phoneNumber">Telefon Numarası</label>
                     <p-inputMask id="phoneNumber" formControlName="phoneNumber" class="w-full"
                         [mask]="'(999) 999 99 99'" [class.p-invalid]="isFieldInvalid('phoneNumber')" />
                     <app-validation-message [control]="pageForm.controls['phoneNumber']"></app-validation-message>
                 </div>
-                <div class="flex flex-wrap gap-2 w-full">
+
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="email">Email</label>
                     <input id="email" pInputText formControlName="email" [class.p-invalid]="isFieldInvalid('email')" />
                     <app-validation-message [control]="pageForm.controls['email']"></app-validation-message>
                 </div>
             </div>
-            <div class="flex flex-wrap">
-                <label for="address">Adres</label>
-                <textarea pTextarea id="address" formControlName="address" [class.p-invalid]="isFieldInvalid('address')"
-                    rows="3"></textarea>
-                <app-validation-message [control]="pageForm.controls['address']"></app-validation-message>
+
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 mb-4">
+                    <label for="address">Adres</label>
+                    <textarea pTextarea id="address" formControlName="address"
+                        [class.p-invalid]="isFieldInvalid('address')" rows="3"></textarea>
+                    <app-validation-message [control]="pageForm.controls['address']"></app-validation-message>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-4">
+                    <label for="lessonDurationInMinutes">Ders Süresi (dk)</label>
+                    <p-inputNumber id="lessonDurationInMinutes" formControlName="lessonDurationInMinutes" [min]="1"
+                        [step]="5" [showButtons]="true" [class.p-invalid]="isFieldInvalid('lessonDurationInMinutes')"
+                        mode="decimal"></p-inputNumber>
+                    <app-validation-message
+                        [control]="pageForm.controls['lessonDurationInMinutes']"></app-validation-message>
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="breakDurationInMinutes">Ara Süresi (dk)</label>
+                    <p-inputNumber id="breakDurationInMinutes" formControlName="breakDurationInMinutes" [min]="0"
+                        [step]="5" [showButtons]="true" [class.p-invalid]="isFieldInvalid('breakDurationInMinutes')"
+                        mode="decimal"></p-inputNumber>
+                    <app-validation-message
+                        [control]="pageForm.controls['breakDurationInMinutes']"></app-validation-message>
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="levelDurationInHours">Seviye Süresi (saat)</label>
+                    <p-inputNumber id="levelDurationInHours" formControlName="levelDurationInHours" [min]="1" [step]="1"
+                        [showButtons]="true" [class.p-invalid]="isFieldInvalid('levelDurationInHours')"
+                        mode="decimal"></p-inputNumber>
+                    <app-validation-message
+                        [control]="pageForm.controls['levelDurationInHours']"></app-validation-message>
+                </div>
             </div>
         </form>
     </p-fluid>

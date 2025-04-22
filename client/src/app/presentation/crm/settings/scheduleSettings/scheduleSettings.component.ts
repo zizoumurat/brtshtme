@@ -20,12 +20,16 @@ import { forkJoin } from 'rxjs';
   imports: [
     DefaultTableOptionsDirective,
     DefaultSelectOptionDirective,
-    SharedComponentModule
+    SharedComponentModule,
   ],
   templateUrl: './scheduleSettings.component.html'
 })
 export class ScheduleSettingsComponent extends AppBaseComponent<LessonScheduleDefinitionModel, ILessonScheduleDefinitionService> {
   branchService = inject(BRANCH_SERVICE);
+
+  StudentType = StudentType;
+  EducationType = EducationType;
+  ScheduleCategory = ScheduleCategory;
 
   branchOptions: SelectListItem[] = [];
   studentTypeOptions: SelectListItem[] = [];
@@ -45,17 +49,27 @@ export class ScheduleSettingsComponent extends AppBaseComponent<LessonScheduleDe
   }
 
   initForm(): void {
+    const fixedTime = new Date();
+    fixedTime.setHours(12, 0, 0, 0);
     this.pageForm = this.fb.group({
       id: [null],
       studentType: [null, Validators.required],
       educationType: [null, Validators.required],
-      scheduleCode: ['', Validators.required],
+      schedule: ['', Validators.required],
       scheduleCategory: [null, Validators.required],
       days: [[], Validators.required],
-      startTime: [null, Validators.required],
+      dayHour: [null, Validators.required],
+      startTime: [fixedTime, Validators.required],
       branchId: [null, Validators.required],
       discount: [0],
     });
+  }
+
+  override resetForm(): void {
+    super.resetForm();
+    const fixedTime = new Date();
+    fixedTime.setHours(12, 0, 0, 0);
+    this.pageForm.patchValue({ startTime: fixedTime });
   }
 
   getOptions() {

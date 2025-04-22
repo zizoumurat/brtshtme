@@ -15,10 +15,10 @@ internal sealed class IncentiveSettingConfiguration : IEntityTypeConfiguration<I
             .HasColumnType("decimal(18,2)");
 
         builder.Property(b => b.SalesCommission)
-            .HasColumnType("decimal(5,2)");
+            .HasColumnType("decimal(5,3)");
 
         builder.Property(b => b.CollectionCommission)
-            .HasColumnType("decimal(5,2)");
+            .HasColumnType("decimal(5,3)");
 
         builder.Property(b => b.Bonus)
             .HasColumnType("decimal(18,2)");
@@ -27,7 +27,6 @@ internal sealed class IncentiveSettingConfiguration : IEntityTypeConfiguration<I
             .HasColumnType("nvarchar(max)");
 
         builder.Property(b => b.ParticipantType)
-            .HasConversion<int>(); 
+            .HasConversion<int>();
     }
 }
-

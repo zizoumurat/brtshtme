@@ -16,34 +16,26 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="branchId">Şube <p-sortIcon field="branchId" /></th>
-                <th pSortableColumn="scheduleCode">Program Kodu <p-sortIcon field="scheduleCode" /></th>
+                <th pSortableColumn="branchId">Şube <p-sortIcon field="branch.name" /></th>
+                <th pSortableColumn="scheduleCode">Program <p-sortIcon field="scheduleCode" /></th>
+                <th pSortableColumn="scheduleCategory">Kategorisi <p-sortIcon field="scheduleCategory" /></th>
                 <th pSortableColumn="studentType">Öğrenci Tipi <p-sortIcon field="studentType" /></th>
                 <th pSortableColumn="educationType">Eğitim Tipi <p-sortIcon field="educationType" /></th>
-                <th pSortableColumn="dayCount">Gün Sayısı <p-sortIcon field="dayCount" /></th>
-                <th pSortableColumn="dayHour">Saat Sayısı <p-sortIcon field="dayHour" /></th>
-                <th pSortableColumn="days">Haftanın Günleri <p-sortIcon field="days" /></th>
-                <th pSortableColumn="startTime">Başlangıç Saati <p-sortIcon field="startTime" /></th>
-                <th pSortableColumn="endTime">Bitiş Saati <p-sortIcon field="endTime" /></th>
-                <th pSortableColumn="discount">İndirim</th>
-                <th pSortableColumn="scheduleCategory">Program Kategorisi <p-sortIcon field="scheduleCategory" /></th>
+                <th pSortableColumn="days">Günler <p-sortIcon field="days" /></th>
+                <th pSortableColumn="startTime">Saat <p-sortIcon field="startTime" /></th>
                 <th class="actions">İşlemler</th>
             </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-record>
             <tr>
-                <td>{{ record.scheduleCode }}</td>
-                <td>{{ record.studentType | enumTranslate }}</td>
-                <td>{{ record.educationType | enumTranslate }}</td>
-                <td>{{ record.dayCount }}</td>
-                <td>{{ record.dayHour }}</td>
-                <td>{{ record.days.join(', ') }}</td>
-                <td>{{ record.startTime | date:'shortTime' }}</td>
-                <td>{{ record.endTime | date:'shortTime' }}</td>
-                <td>{{ record.discount }}</td>
-                <td>{{ record.scheduleCategory | enumTranslate }}</td>
-                <td>{{ record.branchId }}</td>
+                <td>{{ record.branchName }}</td>
+                <td>{{ record.schedule }}</td>
+                <td>{{ record.scheduleCategory | enumTranslate: ScheduleCategory :'ScheduleCategory' }}</td>
+                <td>{{ record.studentType | enumTranslate: StudentType :'StudentType' }}</td>
+                <td>{{ record.educationType | enumTranslate: EducationType: 'EducationType' }}</td>
+                <td>{{ record.days | dayShortNames }}</td>
+                <td>{{ record.startTime | timeShort }} - {{ record.endTime | timeShort }}</td>
                 <td class="actions">
                     <p-button pTooltip="Düzenle" tooltipPosition="top" icon="pi pi-pencil" severity="success"
                         (click)="handleEdit(record.id)" />
@@ -62,10 +54,9 @@
     </ng-template>
 
     <p-fluid>
-
-        <form [formGroup]="pageForm" class="flex flex-col gap-4 w-full form-group">
-            <div class="grid grid-cols-12 gap-2">
-                <div class="col-span-12 md:col-span-6">
+        <form [formGroup]="pageForm">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="branchId">Şube</label>
                     <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
                         placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
@@ -73,14 +64,14 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 gap-2 mt-2">
-                <div class="col-span-12 md:col-span-6">
-                    <label for="scheduleCode">Program Kodu</label>
-                    <input id="scheduleCode" pInputText formControlName="scheduleCode"
-                        [class.p-invalid]="isFieldInvalid('scheduleCode')" />
-                    <app-validation-message [control]="pageForm.controls['scheduleCode']"></app-validation-message>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
+                    <label for="schedule">Program Kodu</label>
+                    <input id="schedule" pInputText formControlName="schedule"
+                        [class.p-invalid]="isFieldInvalid('schedule')" />
+                    <app-validation-message [control]="pageForm.controls['schedule']"></app-validation-message>
                 </div>
-                <div class="col-span-12 md:col-span-6">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="scheduleCategory">Kategori</label>
                     <p-select id="scheduleCategory" [options]="scheduleCategoryOptions" class="w-full"
                         formControlName="scheduleCategory" placeholder="Seçiniz"
@@ -89,15 +80,15 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 gap-2 mt-2">
-                <div class="col-span-12 md:col-span-6">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="studentType">Öğrenci Tipi</label>
                     <p-select id="studentType" [options]="studentTypeOptions" class="w-full"
                         formControlName="studentType" placeholder="Seçiniz"
                         [class.p-invalid]="isFieldInvalid('studentType')" />
                     <app-validation-message [control]="pageForm.controls['studentType']"></app-validation-message>
                 </div>
-                <div class="col-span-12 md:col-span-6">
+                <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="educationType">Eğitim Tipi</label>
                     <p-select id="educationType" class="w-full" [options]="educationTypeOptions"
                         formControlName="educationType" placeholder="Seçiniz"
@@ -106,22 +97,32 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 gap-2 mt-2">
-                <div class="col-span-12">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 mb-4">
                     <label for="days">Günler</label>
-                    <p-multiSelect id="days" [options]="dayOfWeekOptions" optionLabel="name" optionValue="id" class="w-full" appendTo="body"
-                        formControlName="days" placeholder="Gün Seçiniz" [class.p-invalid]="isFieldInvalid('days')" />
+                    <p-multiSelect id="days" [options]="dayOfWeekOptions" optionLabel="name" optionValue="id"
+                        class="w-full" appendTo="body" formControlName="days" placeholder="Gün Seçiniz"
+                        [class.p-invalid]="isFieldInvalid('days')" />
                     <app-validation-message [control]="pageForm.controls['days']"></app-validation-message>
                 </div>
             </div>
 
-            <div class="grid grid-cols-12 gap-2 mt-2">
+            <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-4">
                     <label for="startTime">Başlangıç Saati</label>
-                    <p-datepicker id="startTime" formControlName="startTime" timeOnly="true" hourFormat="24"
-                        showIcon="true" [class.p-invalid]="isFieldInvalid('startTime')" appendTo="body" />
+                    <p-inputMask id="startTime" formControlName="startTime" mask="99:99" placeholder="__:__"
+                        slotChar="_" [autoClear]="false" [class.p-invalid]="isFieldInvalid('startTime')" />
+
                     <app-validation-message [control]="pageForm.controls['startTime']"></app-validation-message>
                 </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label for="dayHour">Günlük Ders Saati</label>
+                    <p-inputNumber id="dayHour" formControlName="dayHour" inputId="dayHour" [min]="1" [max]="12"
+                        [showButtons]="true" [step]="1" [class.p-invalid]="isFieldInvalid('dayHour')" mode="decimal">
+                    </p-inputNumber>
+                    <app-validation-message [control]="pageForm.controls['dayHour']"></app-validation-message>
+                </div>
+
                 <div class="col-span-12 md:col-span-4">
                     <label for="discount">İndirim</label>
                     <input type="number" id="discount" pInputText formControlName="discount"

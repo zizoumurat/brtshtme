@@ -38,6 +38,9 @@ export class BranchesComponent extends AppBaseComponent<BranchModel, IBranchServ
       address: [''],
       phoneNumber: [''],
       email: ['', [Validators.required, Validators.email]],
+      lessonDurationInMinutes: [null, Validators.required],
+      breakDurationInMinutes: [null, Validators.required],
+      levelDurationInHours: [null, Validators.required]
     });
   }
 

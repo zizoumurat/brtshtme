@@ -9,5 +9,9 @@ internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
     {
         builder.Property(p => p.FirstName).HasColumnType("nvarchar(50)");
         builder.Property(p => p.LastName).HasColumnType("nvarchar(50)");
+
+        builder.HasOne(x => x.Branch)
+           .WithMany(b => b.Users)
+           .HasForeignKey(x => x.BranchId);
     }
 }

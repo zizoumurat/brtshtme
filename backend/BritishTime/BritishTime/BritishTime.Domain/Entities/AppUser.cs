@@ -11,4 +11,5 @@ public sealed class AppUser : IdentityUser<Guid>
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
 
+    public Employee Employee { get; set; }
 }

@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.InstallmentSettings.Commands.DeleteInstallmentSetting;
+public sealed record DeleteInstallmentSettingCommandResponse(string message);

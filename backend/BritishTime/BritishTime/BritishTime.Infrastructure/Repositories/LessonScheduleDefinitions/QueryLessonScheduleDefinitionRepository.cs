@@ -6,6 +6,7 @@ using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.LessonScheduleDefinitions;
 using BritishTime.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BritishTime.Infrastructure.Repositories.LessonScheduleDefinitions;
 
@@ -18,6 +19,11 @@ public class QueryLessonScheduleDefinitionRepository : IQueryLessonScheduleDefin
     {
         _context = context;
         _mapper = mapper;
+    }
+
+    public async Task<bool> ExistsAsync(Expression<Func<LessonScheduleDefinition, bool>> predicate)
+    {
+        return await _context.LessonScheduleDefinitions.AnyAsync(predicate);
     }
 
     public async Task<PaginatedList<LessonScheduleDefinitionDto>> GetAllAsync(LessonScheduleDefinitionFilterDto filter, PageRequest pagination)

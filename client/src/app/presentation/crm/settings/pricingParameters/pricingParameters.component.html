@@ -1,0 +1,13 @@
+<p-tabs [value]="activeTab">
+    <p-tablist>
+        @for(tab of tabs; track tab.route){
+        <p-tab [value]="tab.route" [routerLink]="tab.route">
+            <span> {{ tab.label | translate }} </span>
+        </p-tab>
+        }
+    </p-tablist>
+</p-tabs>
+
+<div class="mt-8">
+    <router-outlet></router-outlet>
+</div>

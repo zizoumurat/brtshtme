@@ -1,4 +1,4 @@
-﻿using BritishTime.Application.Features.Regiones.Commands.CreateRegion;
+﻿using BritishTime.Application.Features.Regions.Commands.CreateRegion;
 using BritishTime.Application.Features.Regions.Commands.DeleteRegion;
 using BritishTime.Application.Features.Regions.Commands.UpdateRegion;
 using BritishTime.Application.Features.RegionsFeatures.Queries.GetAllRegions;

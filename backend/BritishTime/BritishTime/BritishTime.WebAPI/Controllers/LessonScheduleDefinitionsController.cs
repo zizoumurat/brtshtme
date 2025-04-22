@@ -28,16 +28,16 @@ public sealed class LessonScheduleDefinitionsController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create(LessonScheduleDefinitionCreateDto LessonScheduleDefinition)
+    public async Task<IActionResult> Create(LessonScheduleDefinitionCreateDto lessonScheduleDefinition)
     {
-        CreateLessonScheduleDefinitionCommand request = new(LessonScheduleDefinition);
+        CreateLessonScheduleDefinitionCommand request = new(lessonScheduleDefinition);
         CreateLessonScheduleDefinitionCommandResponse response = await _mediator.Send(request);
 
         return Ok(response);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(LessonScheduleDefinitionDto LessonScheduleDefinition)
+    public async Task<IActionResult> Update(LessonScheduleDefinitionCreateDto LessonScheduleDefinition)
     {
         UpdateLessonScheduleDefinitionCommand request = new(LessonScheduleDefinition);
         UpdateLessonScheduleDefinitionCommandResponse response = await _mediator.Send(request);

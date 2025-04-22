@@ -1,0 +1,85 @@
+<div>
+    <p-table [value]="rows" [paginator]="true" [showGridlines]="true" [rows]="maxPageRow" [totalRecords]="totalRecords"
+        [lazy]="true" responsiveLayout="scroll" (onLazyLoad)="loadData($event)">
+        <ng-template #caption>
+            <div class="flex">
+                <button pButton type="button" icon="pi pi-plus" label="Yeni {{pageTitle}}" class="p-button-success"
+                    pTooltip="{{pageTitle}} {{pageModal}}" tooltipPosition="top" (click)="openModal()"></button>
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" #filter (input)="onSearch(filter.value, 'search')"
+                        placeholder="Arama.." />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="branchId">Şube <p-sortIcon field="branch.name" /></th>
+                <th pSortableColumn="definition">Tanım <p-sortIcon field="definition" /></th>
+                <th pSortableColumn="discountRate">Değer <p-sortIcon field="discountRate" /></th>
+                <th pSortableColumn="isActive">Aktif mi? <p-sortIcon field="isActive" /></th>
+                <th class="actions">İşlemler</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-record>
+            <tr>
+                <td>{{ record.branchName }}</td>
+                <td>{{ record.definition }}</td>
+                <td>{{ record.discountRate }}</td>
+                <td>{{ record.isActive ? 'Aktif': 'Pasif' }}</td>
+                <td class="actions">
+                    <p-button pTooltip="Düzenle" tooltipPosition="top" icon="pi pi-pencil" severity="success"
+                        (click)="handleEdit(record.id)" />
+                    <p-button pTooltip="Sil" tooltipPosition="top" icon="pi pi-trash" severity="danger"
+                        (click)="deleteRecord(record.id)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
+    <ng-template pTemplate="header">
+        <div class="font-semibold text-lg">{{ pageTitle }} {{ pageModal }}</div>
+    </ng-template>
+
+    <p-fluid>
+        <form [formGroup]="pageForm" class="flex flex-col gap-4 w-full form-group">
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
+                    <label for="branchId">Şube</label>
+                    <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
+                        placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
+                    <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
+                </div>
+            </div>
+            <div class="grid grid-cols-12 gap-4">
+                <div class="col-span-12 md:col-span-6 mb-4">
+                    <label>Tanım</label>
+                    <input pInputText formControlName="definition" [class.p-invalid]="isFieldInvalid('definition')" />
+                    <app-validation-message [control]="pageForm.controls['definition']"></app-validation-message>
+                </div>
+                <div class="col-span-12 md:col-span-6 mb-4">
+                    <label for="scheduleCategory">Değer</label>
+                    <p-inputNumber formControlName="discountRate" mode="decimal" suffix=" %" [min]="0" [max]="100"
+                        [step]="0.1" [maxFractionDigits]="3" [minFractionDigits]="1"
+                        [class.p-invalid]="isFieldInvalid('discountRate')" />
+                    <app-validation-message [control]="pageForm.controls['discountRate']"></app-validation-message>
+                </div>
+                <div class="col-span-12 md:col-span-6 mb-4">
+                    <p-checkbox formControlName="isActive" inputId="isActive" [binary]="true" />
+                    <label for="isActive" class="ml-2">Kampanya Aktif</label>
+                </div>
+            </div>
+        </form>
+    </p-fluid>
+
+    <ng-template pTemplate="footer">
+        <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
+        <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
+            [disabled]="pageForm.invalid"></button>
+    </ng-template>
+</p-dialog>

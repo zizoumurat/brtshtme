@@ -29,6 +29,10 @@ import { MenuModule } from 'primeng/menu';
 import { ValidationMessageComponent } from './validation-message.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { RouterModule } from '@angular/router';
+import { EnumTranslatePipe } from '@/core/pipes/enum-translate.pipe';
+import { TimeShortPipe } from '@/core/pipes/time-short.pipe';
+import { DayShortNamesPipe } from '@/core/pipes/day-short-names.pipe';
+import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
 
 @NgModule({
   imports: [
@@ -62,7 +66,11 @@ import { RouterModule } from '@angular/router';
     MenuModule,
     ValidationMessageComponent,
     TranslateModule,
-    RouterModule
+    RouterModule,
+    EnumTranslatePipe,
+    TimeShortPipe,
+    DayShortNamesPipe,
+    DefaultSelectOptionDirective
   ],
   exports: [
     CommonModule,
@@ -95,7 +103,11 @@ import { RouterModule } from '@angular/router';
     MenuModule,
     TranslateModule,
     ValidationMessageComponent,
-    RouterModule
+    RouterModule,
+    EnumTranslatePipe,
+    TimeShortPipe,
+    DayShortNamesPipe,
+    DefaultSelectOptionDirective
   ]
 })
 export class SharedComponentModule { }

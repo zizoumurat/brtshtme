@@ -65,11 +65,24 @@
             "regionDefinitions": "Bölge Tanımları",
             "users": "Kullanıcılar",
             "classScheduleDefinitions": "Ders Programı Tanımları",
-            "pricingParameters": "Fiyatlandırma Parametreleri",
             "bonusSettings": {
                 "bonusSettings": "Primlendirme Ayarları",
                 "salesRepresentative": "Satış Temsilcisi",
                 "dataProvider": "Data Sağlayıcı"
+            },
+            "pricingParameters": {
+                "label": "Fiyatlandırma Parametreleri",
+                "reference": {
+                    "label": "Referans Değerler",
+                    "basicParameters": "Temel Parametreler",
+                    "campaigns": "Kampanyalar",
+                    "justifiedDiscounts": "Gerekçeli İndirimler"
+                },
+                "balance": {
+                    "label": "Denge Ayarları",
+                    "courseSaleSettings": "Kur Satış Ayarları",
+                    "installmentSetting": "Eğitim Süresi / Taksit Sayısı"
+                }
             }
         }
     },

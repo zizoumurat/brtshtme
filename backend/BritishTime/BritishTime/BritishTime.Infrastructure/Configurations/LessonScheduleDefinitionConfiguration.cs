@@ -9,7 +9,8 @@ internal sealed class LessonScheduleDefinitionConfiguration : IEntityTypeConfigu
 {
     public void Configure(EntityTypeBuilder<LessonScheduleDefinition> builder)
     {
-        builder.Property(x => x.ScheduleCode).HasColumnType("nvarchar(20)").IsRequired();
+        builder.Property(x => x.Schedule).HasColumnType("nvarchar(20)").IsRequired();
+        builder.Property(x => x.ScheduleCode).HasColumnType("nvarchar(120)").IsRequired();
 
         builder.Property(x => x.DayCount).IsRequired();
         builder.Property(x => x.DayHour).IsRequired();

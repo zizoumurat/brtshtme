@@ -20,12 +20,22 @@ import { CALENDAR_SERVICE } from '@/core/services/admin/calendar-service';
 import { CalendarService } from '@/infrastructure/api/admin/calendar-service';
 import { BRANCH_SERVICE } from '@/core/services/crm/branch-service';
 import { BranchService } from '@/infrastructure/api/crm/branch-service';
-import { RegionService } from '@/infrastructure/api/crm/location-service';
+import { RegionService } from '@/infrastructure/api/crm/region-service';
 import { REGION_SERVICE } from '@/core/services/crm/region-service';
 import { INCENTIVESETTING_SERVICE } from '@/core/services/crm/incentiveSetting-service';
 import { IncentiveSettingService } from '@/infrastructure/api/crm/incentiveSetting-service';
 import { LESSONSCHEDULEDEFINITION_SERVICE } from '@/core/services/crm/lessonScheduleDefinition-service';
 import { LessonScheduleDefinitionService } from '@/infrastructure/api/crm/lessonScheduleDefinition-service';
+import { BRANCHPRICINGSETTINGS_SERVICE } from '@/core/services/crm/branchPricingSettings-service';
+import { BranchPricingSettingsService } from '@/infrastructure/api/crm/branchPricingSettings-service';
+import { CAMPAIGN_SERVICE } from '@/core/services/crm/campaign-service';
+import { CampaignService } from '@/infrastructure/api/crm/campaign-service';
+import { DISCOUNT_SERVICE } from '@/core/services/crm/discount-service';
+import { DiscountService } from '@/infrastructure/api/crm/discount-service';
+import { COURSESALESETTING_SERVICE } from '@/core/services/crm/courseSaleSetting-service';
+import { CourseSaleSettingService } from '@/infrastructure/api/crm/courseSaleSetting-service';
+import { INSTALLMENTSETTING_SERVICE } from '@/core/services/crm/installmentSetting-service';
+import { InstallmentSettingService } from '@/infrastructure/api/crm/installmentSetting-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -122,9 +132,14 @@ export const appConfig: ApplicationConfig = {
 
         { provide: AUTH_SERVICE, useClass: AuthService },
         { provide: CALENDAR_SERVICE, useClass: CalendarService },
+        { provide: CAMPAIGN_SERVICE, useClass: CampaignService },
+        { provide: COURSESALESETTING_SERVICE, useClass: CourseSaleSettingService },
+        { provide: DISCOUNT_SERVICE, useClass: DiscountService },
         { provide: BRANCH_SERVICE, useClass: BranchService },
+        { provide: BRANCHPRICINGSETTINGS_SERVICE, useClass: BranchPricingSettingsService },
         { provide: REGION_SERVICE, useClass: RegionService },
         { provide: INCENTIVESETTING_SERVICE, useClass: IncentiveSettingService },
+        { provide: INSTALLMENTSETTING_SERVICE, useClass: InstallmentSettingService },
         { provide: LESSONSCHEDULEDEFINITION_SERVICE, useClass: LessonScheduleDefinitionService },
 
         ConfirmationService,

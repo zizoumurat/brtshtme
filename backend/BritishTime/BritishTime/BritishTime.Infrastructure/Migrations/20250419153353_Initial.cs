@@ -134,13 +134,38 @@ namespace BritishTime.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BranchPricingSettings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HourlyRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DiscountForPrepayment = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    CashPrepaymentDiscount = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    CreditCardInstallmentDiscount = table.Column<decimal>(type: "decimal(5,2)", nullable: false),
+                    InstallmentRate = table.Column<decimal>(type: "decimal(8,5)", nullable: false),
+                    CollectionRateForBonus = table.Column<decimal>(type: "decimal(5,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BranchPricingSettings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BranchPricingSettings_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LessonScheduleDefinitions",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StudentType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     EducationType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ScheduleCode = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    Schedule = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    ScheduleCode = table.Column<string>(type: "nvarchar(120)", nullable: false),
                     DayCount = table.Column<int>(type: "int", nullable: false),
                     DayHour = table.Column<int>(type: "int", nullable: false),
                     Days = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -296,6 +321,11 @@ namespace BritishTime.Infrastructure.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BranchPricingSettings_BranchId",
+                table: "BranchPricingSettings",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LessonScheduleDefinitions_BranchId",
                 table: "LessonScheduleDefinitions",
                 column: "BranchId");
@@ -318,6 +348,9 @@ namespace BritishTime.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "BranchPricingSettings");
 
             migrationBuilder.DropTable(
                 name: "IncentiveSettings");

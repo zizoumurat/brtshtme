@@ -109,7 +109,7 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     }
 
     openModal() {
-        this.pageForm.reset();
+        this.resetForm();
         this.pageModal = "Ekle";
 
         this.displayModal = true;
@@ -142,6 +142,10 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
 
         this.loadData(this.lastLazyLoadEvent);
         this.displayModal = false;
+        this.resetForm();
+    }
+
+    resetForm() {
         this.pageForm.reset();
     }
 

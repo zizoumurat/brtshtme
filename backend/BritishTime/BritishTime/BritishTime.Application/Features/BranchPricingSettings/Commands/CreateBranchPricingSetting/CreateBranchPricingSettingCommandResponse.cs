@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.BranchPricingSettings.Commands.CreateBranchPricingSetting;
+public sealed record CreateBranchPricingSettingCommandResponse(string message);

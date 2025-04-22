@@ -1,0 +1,65 @@
+<div class="p-card overflow-hidden">
+    <div class="p-card-body bg-primary-100">
+        <div class="p-card-content">
+            <form *ngIf="pageForm" [formGroup]="pageForm" (ngSubmit)="submit()" class="grid gap-4">
+                <p-fluid>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label for="branchId">Şube</label>
+                            <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
+                                placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
+                            <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Saat Ücreti</label>
+                            <input id="hourlyRate" pInputText formControlName="hourlyRate"
+                                [class.p-invalid]="isFieldInvalid('hourlyRate')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['hourlyRate']"></app-validation-message>
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Peşin Ödeme İndirimi</label>
+                            <input id="discountForPrepayment" pInputText formControlName="discountForPrepayment"
+                                [class.p-invalid]="isFieldInvalid('discountForPrepayment')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['discountForPrepayment']"></app-validation-message>
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Nakit Peşin Ödemede Ek İndirim</label>
+                            <input pInputText formControlName="cashPrepaymentDiscount"
+                                [class.p-invalid]="isFieldInvalid('cashPrepaymentDiscount')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['cashPrepaymentDiscount']"></app-validation-message>
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Kredi Kartlı Taksitlendirmede İndirimi</label>
+                            <input pInputText formControlName="creditCardInstallmentDiscount"
+                                [class.p-invalid]="isFieldInvalid('creditCardInstallmentDiscount')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['creditCardInstallmentDiscount']"></app-validation-message>
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Taksit Başına Vade Farkı</label>
+                            <input pInputText formControlName="installmentRate"
+                                [class.p-invalid]="isFieldInvalid('installmentRate')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['installmentRate']"></app-validation-message>
+                        </div>
+                        <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
+                            <label>Prim Tahsilat Oranı</label>
+                            <input pInputText formControlName="collectionRateForBonus"
+                                [class.p-invalid]="isFieldInvalid('collectionRateForBonus')" />
+                            <app-validation-message
+                                [control]="pageForm.controls['collectionRateForBonus']"></app-validation-message>
+                        </div>
+                    </div>
+                </p-fluid>
+                <div class="flex justify-end">
+                    <button pButton type="submit" icon="pi pi-save" label="Kaydet" class="p-button-success"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace BritishTime.Application.Features.Regiones.Commands.CreateRegion;
+namespace BritishTime.Application.Features.Regions.Commands.CreateRegion;
 public class CreateRegionCommandValidator : AbstractValidator<CreateRegionCommand>
 {
     public CreateRegionCommandValidator()

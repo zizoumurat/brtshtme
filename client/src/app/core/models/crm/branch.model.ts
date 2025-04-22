@@ -4,5 +4,8 @@ export interface BranchModel extends HasId {
     address: string;
     phoneNumber: string;
     email: string;
-    isActive: boolean;
+    lessonDurationInMinutes: number;
+    breakDurationInMinutes: number;
+    levelDurationInHours: number;
 }
+

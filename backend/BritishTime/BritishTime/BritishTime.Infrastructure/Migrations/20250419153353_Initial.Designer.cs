@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BritishTime.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250413204340_Initial")]
+    [Migration("20250419153353_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -189,6 +189,40 @@ namespace BritishTime.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.BranchPricingSetting", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("CashPrepaymentDiscount")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("CollectionRateForBonus")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("CreditCardInstallmentDiscount")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("DiscountForPrepayment")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("InstallmentRate")
+                        .HasColumnType("decimal(8,5)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("BranchPricingSettings", (string)null);
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.IncentiveSetting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -250,13 +284,17 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
+                    b.Property<string>("Schedule")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<string>("ScheduleCategory")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ScheduleCode")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(120)");
 
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
@@ -403,6 +441,17 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.BranchPricingSetting", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
+                        .WithMany("BranchPricingSettings")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.LessonScheduleDefinition", b =>
                 {
                     b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
@@ -467,6 +516,8 @@ namespace BritishTime.Infrastructure.Migrations
 
             modelBuilder.Entity("BritishTime.Domain.Entities.Branch", b =>
                 {
+                    b.Navigation("BranchPricingSettings");
+
                     b.Navigation("LessonScheduleDefinitions");
 
                     b.Navigation("Users");

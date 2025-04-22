@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
     template: ` <div class="layout-sidebar" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
         <div class="sidebar-header">
             <a class="logo" [routerLink]="['/']">
-                <img class="logo-image" src="/layout/images/logo-{{ isDarkTheme() ? 'white' : 'dark' }}.svg" alt="logo" />
+                <img class="logo-image" src="/layout/images/logo-dark.png" alt="logo" />
                 <span class="app-name text-4xl font-medium leading-normal">BritishTime</span></a
             >
             <button class="layout-sidebar-anchor z-2" type="button" (click)="anchor()"></button>

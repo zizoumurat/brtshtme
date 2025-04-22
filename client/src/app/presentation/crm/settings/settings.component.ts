@@ -27,7 +27,7 @@ export class SettingsComponent {
     { label: 'crm.settings.users', routerLink: '/crm/settings/users' },
     { label: 'crm.settings.bonusSettings.bonusSettings', routerLink: '/crm/settings/bonus-settings' },
     { label: 'crm.settings.classScheduleDefinitions', routerLink: '/crm/settings/schedule-settings' },
-    { label: 'crm.settings.pricingParameters', routerLink: '/crm/settings/pricing-parameters' }
+    { label: 'crm.settings.pricingParameters.label', routerLink: '/crm/settings/pricing-parameters' }
   ];
 
   ngOnInit(): void {

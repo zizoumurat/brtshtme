@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.InstallmentSettings.Commands.UpdateInstallmentSetting;
+public sealed record UpdateInstallmentSettingCommandResponse(string message);

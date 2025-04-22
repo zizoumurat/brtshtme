@@ -13,6 +13,10 @@ public sealed class Branch : Entity
     public int BreakDurationInMinutes { get; set; } 
     public int LevelDurationInHours { get; set; } 
     public ICollection<AppUser> Users { get; set; } = new List<AppUser>();
-
+    public ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
+    public ICollection<CourseSaleSetting> CourseSaleSettings { get; set; } = new List<CourseSaleSetting>();
+    public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
+    public ICollection<InstallmentSetting> InstallmentSettings { get; set; } = new List<InstallmentSetting>();
     public ICollection<LessonScheduleDefinition> LessonScheduleDefinitions { get; set; } = new List<LessonScheduleDefinition>();
+    public ICollection<BranchPricingSetting> BranchPricingSettings { get; set; }
 }

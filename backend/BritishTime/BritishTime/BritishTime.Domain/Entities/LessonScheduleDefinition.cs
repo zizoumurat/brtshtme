@@ -8,7 +8,8 @@ public class LessonScheduleDefinition : Entity
     public StudentType StudentType { get; set; }
     public EducationType EducationType { get; set; }
 
-    public string ScheduleCode { get; set; } = null!; 
+    public string Schedule { get; set; } = null!; 
+    public string ScheduleCode { get; set; } = null!;
 
     public int DayCount { get; set; } 
     public int DayHour { get; set; } 

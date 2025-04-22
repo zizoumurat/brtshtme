@@ -49,7 +49,6 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
         ).then(response => response);
     }
 
-
     create(item: T): Promise<void> {
         return firstValueFrom(this.http.post<void>(`${this.apiUrl}`, this.formatDates(item)));
     }

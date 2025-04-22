@@ -16,11 +16,11 @@ export class BranchService extends CrudService<BranchModel> implements IBranchSe
         super(http, `${BASE_URL}/branches`);
     }
 
-    async getUserBranchList(): Promise<BranchModel[]> {
+    getUserBranchList(): Promise<BranchModel[]> {
         if (this.branchCache) {
             return Promise.resolve(this.branchCache);
         }
-    
+
         return firstValueFrom(
             this.http.get<BranchModel[]>(`${this.apiUrl}/user-branch-list`)
         ).then(result => {

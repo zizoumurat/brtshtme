@@ -10,8 +10,8 @@ export const BonusSettingsRoutes: Routes = [
       component: BonusSettingsComponent,
       children: [
         { path: '', redirectTo: 'sales-representative', pathMatch: 'full' },
-        { path: 'sales-representative', component: SalesRepresentativeComponent },
-        { path: 'data-provider', component: DataProviderComponent },
+        { path: 'sales-representative', data: { breadcrumb: 'Satış Temsilcisi' }, component: SalesRepresentativeComponent },
+        { path: 'data-provider',  data: { breadcrumb: 'Data Sağlayıcı' }, component: DataProviderComponent },
       ]
     }
   ];

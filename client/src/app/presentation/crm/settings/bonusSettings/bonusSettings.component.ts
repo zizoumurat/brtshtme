@@ -40,9 +40,5 @@ export class BonusSettingsComponent {
     this.router.navigate(['/crm/settings/bonus-settings/', path]);
     this.activeTab = path;
   }
-
-  isActive(path: string): boolean {
-    return this.router.url.includes(path);
-  }
 }
 

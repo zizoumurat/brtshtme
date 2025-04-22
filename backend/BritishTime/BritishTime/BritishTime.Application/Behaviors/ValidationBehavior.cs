@@ -3,8 +3,8 @@ using FluentValidation.Results;
 using MediatR;
 
 namespace BritishTime.Application.Behaviors;
-public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : class, IRequest<TResponse>
+public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    where TRequest : IRequest<TResponse>
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 
@@ -13,36 +13,26 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
         _validators = validators;
     }
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        if (!_validators.Any())
+        if (_validators.Any())
         {
-            return await next();
-        }
+            var context = new ValidationContext<TRequest>(request);
 
-        var context = new ValidationContext<TRequest>(request);
+            var validationResults = await Task.WhenAll(
+                _validators.Select(v => v.ValidateAsync(context, cancellationToken))
+            );
 
-        var errorDictionary = _validators
-            .Select(s => s.Validate(context))
-            .SelectMany(s => s.Errors)
-            .Where(s => s != null)
-            .GroupBy(
-            s => s.PropertyName,
-            s => s.ErrorMessage, (propertyName, errorMessage) => new
-            {
-                Key = propertyName,
-                Values = errorMessage.Distinct().ToArray()
-            })
-            .ToDictionary(s => s.Key, s => s.Values[0]);
+            var failures = validationResults
+                .SelectMany(r => r.Errors)
+                .Where(f => f != null)
+                .ToList();
 
-        if (errorDictionary.Any())
-        {
-            var errors = errorDictionary.Select(s => new ValidationFailure
-            {
-                PropertyName = s.Value,
-                ErrorCode = s.Key
-            });
-            throw new ValidationException(errors);
+            if (failures.Count != 0)
+                throw new ValidationException(failures);
         }
 
         return await next();

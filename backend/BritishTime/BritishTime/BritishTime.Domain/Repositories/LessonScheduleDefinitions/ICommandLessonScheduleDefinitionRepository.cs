@@ -1,4 +1,5 @@
 ﻿using BritishTime.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace BritishTime.Domain.Repositories.LessonScheduleDefinitions;
 
