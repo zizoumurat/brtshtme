@@ -94,7 +94,7 @@ export class ScheduleSettingsComponent extends AppBaseComponent<LessonScheduleDe
   override openModal(): void {
     super.openModal();
     if (this.branchOptions.length == 1) {
-      this.pageForm.patchValue({ branchId: this.branchOptions[0].id });
+      //this.pageForm.patchValue({ branchId: this.branchOptions[0].id });
     }
   }
 }

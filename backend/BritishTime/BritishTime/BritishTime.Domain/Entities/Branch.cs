@@ -16,6 +16,8 @@ public sealed class Branch : Entity
     public ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
     public ICollection<CourseSaleSetting> CourseSaleSettings { get; set; } = new List<CourseSaleSetting>();
     public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
+    public ICollection<Employee> Employees { get; set; }
+
     public ICollection<InstallmentSetting> InstallmentSettings { get; set; } = new List<InstallmentSetting>();
     public ICollection<LessonScheduleDefinition> LessonScheduleDefinitions { get; set; } = new List<LessonScheduleDefinition>();
     public ICollection<BranchPricingSetting> BranchPricingSettings { get; set; }

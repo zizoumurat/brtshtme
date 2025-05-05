@@ -47,3 +47,18 @@
     padding: 0 !important;
   }
 }
+
+p-tablist {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+}
+
+p-tablist::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+p-tab {
+  flex: 0 0 auto; /* Sekmeler satıra sığmasa bile taşsın */
+  min-width: max-content;
+}

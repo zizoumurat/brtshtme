@@ -68,7 +68,7 @@ public class BranchService : IBranchService
 
         if (user == null)
         {
-            throw new UnauthorizedAccessException("User not found.");
+            throw new UnauthorizedAccessException("userNotFound");
         }
 
         var roles = await _userContextService.GetUserRolesAsync(user);

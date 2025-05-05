@@ -1,0 +1,24 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BASE_URL } from '../../../environments/environment';
+import { CrudService } from '../admin/crud-service';
+import { ICrmRecordActionService } from '@/core/services/crm/crmrecordaction-service';
+import { CrmRecordActionModel } from '@/core/models/crm/crmrecordaction.model';
+import { firstValueFrom } from 'rxjs';
+
+
+@Injectable({
+    providedIn: 'root',
+})
+export class CrmRecordActionService extends CrudService<CrmRecordActionModel> implements ICrmRecordActionService {
+    constructor(http: HttpClient) {
+        super(http, `${BASE_URL}/CrmRecordActions`);
+    }
+
+    getListByCrmRecord(crmRecordId: string): Promise<CrmRecordActionModel[]> {
+        let params = new HttpParams()
+            .set('crmRecordId', crmRecordId);
+
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}`, { params }));
+    }
+}

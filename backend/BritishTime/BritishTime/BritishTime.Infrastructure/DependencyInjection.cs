@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Options;
 using Scrutor;
 using System.Reflection;
 
@@ -26,12 +27,12 @@ public static class DependencyInjection
         services
             .AddIdentity<AppUser, AppRole>(cfr =>
             {
+                cfr.Password.RequireDigit = true;          
+                cfr.Password.RequireLowercase = true;       
+                cfr.Password.RequireUppercase = true;      
+                cfr.Password.RequireNonAlphanumeric = true;
                 cfr.Password.RequiredLength = 6;
-                cfr.Password.RequireNonAlphanumeric = false;
-                cfr.Password.RequireUppercase = false;
-                cfr.Password.RequireLowercase = false;
-                cfr.Password.RequireDigit = false;
-                cfr.SignIn.RequireConfirmedEmail = true;
+                cfr.SignIn.RequireConfirmedEmail = false;
                 cfr.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
                 cfr.Lockout.MaxFailedAccessAttempts = 3;
                 cfr.Lockout.AllowedForNewUsers = true;

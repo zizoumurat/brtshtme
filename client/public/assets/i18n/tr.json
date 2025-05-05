@@ -60,8 +60,8 @@
             "settings": "Ayarlar"
         },
         "settings": {
-            "branch": "Şubeler",
-            "staff": "Personeller",
+            "branches": "Şubeler",
+            "employees": "Personeller",
             "regionDefinitions": "Bölge Tanımları",
             "users": "Kullanıcılar",
             "classScheduleDefinitions": "Ders Programı Tanımları",
@@ -90,6 +90,14 @@
         "added": "Kayıt başarıyla tamamlandı.",
         "updated": "Bilgiler başarıyla güncellendi.",
         "deleted": "Kayıt başarıyla silindi."
+    },
+    "errors": {
+        "notFoundEntity": "Kayıt bulunamadı",
+        "userAlreadyExist": "Kullanıcı zaten mevcut",
+        "roleNotFound": "Rol bulunamadı",
+        "userNotFound": "Kullanıcı bulunamadı",
+        "duplicatePhone": "Telefon numarası başka bir kayıtta zaten mevcut",
+        "duplicateMail": "E-posta adresi başka bir kayıtta zaten mevcut"
     },
     "minAmount": "Minimum Tutar",
     "maxAmount": "Maksimum Tutar",
@@ -125,6 +133,73 @@
             "Thursday": "Perşembe",
             "Friday": "Cuma",
             "Saturday": "Cumartesi"
+        },
+        "EmployeeRole": {
+            "Owner": "Sahip",
+            "Manager": "Yönetici",
+            "EducationConsultant": "Eğitim Danışmanı",
+            "SecurityGuard": "Güvenlik Görevlisi",
+            "PublicRelations": "Halkla İlişkiler",
+            "Cleaner": "Temizlik Görevlisi",
+            "LegalService": "Hukuk Hizmetleri",
+            "Teacher": "Öğretmen",
+            "Driver": "Sürücü",
+            "BoothStaff": "Stand Personeli",
+            "Other": "Diğer"
+        },
+        "SalaryType": {
+            "Undefined": "Belirtilmemiş",
+            "Hourly": "Saatlik",
+            "Monthly": "Aylık"
+        },
+        "UserRole": {
+            "Admin": "Yönetici",
+            "CRM": "CRM",
+            "SRM": "SRM",
+            "Muhasebe": "Muhasebe"
+        },
+        "CrmDataSource": {
+            "Survey": "Anket",
+            "LiveSupport": "Canlı Destek",
+            "OldCustomer": "Eski Müşteri",
+            "Information": "Information",
+            "Internet": "İnternet",
+            "CustomerReference": "Müşteri Referansı",
+            "FieldData": "Sahadan Data",
+            "FieldInterviewer": "Sahadan Görüşmeci",
+            "Undefined": "Tanımsız",
+            "Telemarketing": "Tele Marketing"
+        },
+        "CrmStatus": {
+            "NewData": "Yeni Data",
+            "InEvaluation": "Değerlendirmede",
+            "Negative": "Negatif Sonuçlandı",
+            "Sold": "Satış Yapıldı",
+            "BranchTransfer": "Şube Transferi",
+            "Dirty": "Kirli Data",
+            "Unreachable": "Ulaşılamadı"
+        },
+        "CrmTransactionType": {
+            "WrongNumber": "No Yanlış",
+            "Unreachable": "Ulaşılamıyor",
+            "NotInterested": "Düşünmüyor",
+            "CallBack": "Tekrar Ara",
+            "Appointment": "Randevu",
+            "Sale": "Satış",
+            "Other": "Diğer",
+            "Sms": "SMS",
+            "AppointmentCanceled": "Görüşme İptal"
+        },
+        "CrmActionType": {
+            "WrongNumber": "No Yanlış",
+            "Unreachable": "Ulaşılamıyor",
+            "NotInterested": "Düşünmüyor",
+            "CallBack": "Tekrar Ara",
+            "Appointment": "Randevu",
+            "Sale": "Satış",
+            "Other": "Diğer",
+            "Sms": "SMS",
+            "AppointmentCanceled": "Görüşme İptal"
         }
     }
 }

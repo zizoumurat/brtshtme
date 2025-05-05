@@ -56,4 +56,11 @@ public class RegionService : IRegionService
 
         return true;
     }
+
+    public async Task<List<SelectListDto>> GetListAsync()
+    {
+        var result = await _queryRegionRepository.GetListAsync();
+
+        return result;
+    }
 }

@@ -56,8 +56,8 @@
                   [options]="branchOptions"
                   class="w-full"
                   formControlName="branchId"
-                  placeholder="Seçiniz"
-                  [class.p-invalid]="isFieldInvalid('branchId')" />
+                  placeholder="Seçiniz" appendTo="body"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('branchId')" />
                 <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
               </div>
             </div>
@@ -70,7 +70,7 @@
                   formControlName="minLevel"
                   [min]="0"
                   [step]="1"
-                  [class.p-invalid]="isFieldInvalid('minLevel')" />
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('minLevel')" />
                 <app-validation-message [control]="pageForm.controls['minLevel']"></app-validation-message>
               </div>
           
@@ -81,7 +81,7 @@
                   formControlName="maxLevel"
                   [min]="0"
                   [step]="1"
-                  [class.p-invalid]="isFieldInvalid('maxLevel')" />
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('maxLevel')" />
                 <app-validation-message [control]="pageForm.controls['maxLevel']"></app-validation-message>
               </div>
           
@@ -97,7 +97,7 @@
                   [step]="0.1"
                   [maxFractionDigits]="3"
                   [minFractionDigits]="1"
-                  [class.p-invalid]="isFieldInvalid('rate')" />
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('rate')" />
                 <app-validation-message [control]="pageForm.controls['rate']"></app-validation-message>
               </div>
             </div>

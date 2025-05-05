@@ -2,6 +2,7 @@
 using BritishTime.Application.Features.Regions.Commands.DeleteRegion;
 using BritishTime.Application.Features.Regions.Commands.UpdateRegion;
 using BritishTime.Application.Features.RegionsFeatures.Queries.GetAllRegions;
+using BritishTime.Application.Features.RegionsFeatures.Queries.GetRegionList;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Pagination;
 using BritishTime.WebAPI.Abstractions;
@@ -23,6 +24,15 @@ public sealed class RegionsController : ApiController
     {
         GetAllRegionsQuery query = new(filter, pagination);
         GetAllRegionsQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
+    [HttpGet("select-list")]
+    public async Task<IActionResult> GetSelectList()
+    {
+        GetRegionListQuery query = new();
+        GetRegionListQueryResponse response = await _mediator.Send(query);
 
         return Ok(response.result);
     }

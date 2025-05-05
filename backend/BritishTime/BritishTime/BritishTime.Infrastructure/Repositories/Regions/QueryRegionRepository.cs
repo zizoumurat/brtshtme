@@ -43,13 +43,18 @@ public class QueryRegionRepository : IQueryRegionRepository
 
     public async Task<RegionDto> GetByIdAsync(Guid id)
     {
-        var Region = await _context.Regions
+        var region = await _context.Regions
             .Where(x => x.Id == id)
             .AsNoTracking()
             .ProjectTo<RegionDto>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync();
 
-        return Region;
+        return region;
+    }
+
+    public async Task<List<SelectListDto>> GetListAsync()
+    {
+        return await _context.Regions.AsNoTracking().Select(x => new SelectListDto(x.Id, x.Name)).ToListAsync();
     }
 }
 

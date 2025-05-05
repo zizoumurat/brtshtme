@@ -6,7 +6,7 @@ import { AppBaseComponent } from '@/presentation/admin/shared/base.component';
 import { IncentiveSettingModel } from '@/core/models/crm/incentiveSetting.model';
 import { IncentiveSettingService } from '@/infrastructure/api/crm/incentiveSetting-service';
 import { INCENTIVESETTING_SERVICE } from '@/core/services/crm/incentiveSetting-service';
-import { ParticipantType } from '@/core/enums/participantType.enum';
+import { ParticipantType } from '@/core/enums/participantType';
 
 @Component({
   selector: 'app-sales-representative-bonus-settnings',

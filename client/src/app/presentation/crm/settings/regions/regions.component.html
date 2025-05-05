@@ -49,13 +49,13 @@
             <div class="flex flex-col md:flex-row gap-4">
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="name">Adı</label>
-                    <input id="name" pInputText formControlName="name" [class.p-invalid]="isFieldInvalid('name')" />
+                    <input id="name" pInputText formControlName="name" [class.ng-dirty.ng-invalid]="isFieldInvalid('name')" />
                     <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
                 </div>
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="description">Tanım</label>
                     <input id="description" pInputText formControlName="description"
-                        [class.p-invalid]="isFieldInvalid('description')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('description')" />
                     <app-validation-message [control]="pageForm.controls['description']"></app-validation-message>
                 </div>
             </div>

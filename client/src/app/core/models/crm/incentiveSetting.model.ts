@@ -1,4 +1,4 @@
-import { ParticipantType } from "@/core/enums/participantType.enum";
+import { ParticipantType } from "@/core/enums/participantType";
 
 export interface IncentiveSettingModel {
   id: string;

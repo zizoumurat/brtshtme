@@ -41,24 +41,21 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
-    <ng-template pTemplate="header">
-        <div class="font-semibold text-lg">{{ pageTitle }} {{ pageModal }}</div>
-    </ng-template>
+<app-dialog [(visible)]="displayModal" header="{{ pageTitle }} {{ pageModal }}">
 
     <p-fluid>
         <form [formGroup]="pageForm">
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="name">Adı</label>
-                    <input id="name" pInputText formControlName="name" [class.p-invalid]="isFieldInvalid('name')" />
+                    <input id="name" pInputText formControlName="name" [class.ng-dirty.ng-invalid]="isFieldInvalid('name')" />
                     <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
                 </div>
 
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="description">Tanım</label>
                     <input id="description" pInputText formControlName="description"
-                        [class.p-invalid]="isFieldInvalid('description')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('description')" />
                     <app-validation-message [control]="pageForm.controls['description']"></app-validation-message>
                 </div>
             </div>
@@ -67,13 +64,13 @@
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="phoneNumber">Telefon Numarası</label>
                     <p-inputMask id="phoneNumber" formControlName="phoneNumber" class="w-full"
-                        [mask]="'(999) 999 99 99'" [class.p-invalid]="isFieldInvalid('phoneNumber')" />
+                        [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalid('phoneNumber')" />
                     <app-validation-message [control]="pageForm.controls['phoneNumber']"></app-validation-message>
                 </div>
 
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="email">Email</label>
-                    <input id="email" pInputText formControlName="email" [class.p-invalid]="isFieldInvalid('email')" />
+                    <input id="email" pInputText formControlName="email" [class.ng-dirty.ng-invalid]="isFieldInvalid('email')" />
                     <app-validation-message [control]="pageForm.controls['email']"></app-validation-message>
                 </div>
             </div>
@@ -82,7 +79,7 @@
                 <div class="col-span-12 mb-4">
                     <label for="address">Adres</label>
                     <textarea pTextarea id="address" formControlName="address"
-                        [class.p-invalid]="isFieldInvalid('address')" rows="3"></textarea>
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('address')" rows="3"></textarea>
                     <app-validation-message [control]="pageForm.controls['address']"></app-validation-message>
                 </div>
             </div>
@@ -91,7 +88,7 @@
                 <div class="col-span-12 md:col-span-4">
                     <label for="lessonDurationInMinutes">Ders Süresi (dk)</label>
                     <p-inputNumber id="lessonDurationInMinutes" formControlName="lessonDurationInMinutes" [min]="1"
-                        [step]="5" [showButtons]="true" [class.p-invalid]="isFieldInvalid('lessonDurationInMinutes')"
+                        [step]="5" [showButtons]="true" [class.ng-dirty.ng-invalid]="isFieldInvalid('lessonDurationInMinutes')"
                         mode="decimal"></p-inputNumber>
                     <app-validation-message
                         [control]="pageForm.controls['lessonDurationInMinutes']"></app-validation-message>
@@ -100,7 +97,7 @@
                 <div class="col-span-12 md:col-span-4">
                     <label for="breakDurationInMinutes">Ara Süresi (dk)</label>
                     <p-inputNumber id="breakDurationInMinutes" formControlName="breakDurationInMinutes" [min]="0"
-                        [step]="5" [showButtons]="true" [class.p-invalid]="isFieldInvalid('breakDurationInMinutes')"
+                        [step]="5" [showButtons]="true" [class.ng-dirty.ng-invalid]="isFieldInvalid('breakDurationInMinutes')"
                         mode="decimal"></p-inputNumber>
                     <app-validation-message
                         [control]="pageForm.controls['breakDurationInMinutes']"></app-validation-message>
@@ -109,7 +106,7 @@
                 <div class="col-span-12 md:col-span-4">
                     <label for="levelDurationInHours">Seviye Süresi (saat)</label>
                     <p-inputNumber id="levelDurationInHours" formControlName="levelDurationInHours" [min]="1" [step]="1"
-                        [showButtons]="true" [class.p-invalid]="isFieldInvalid('levelDurationInHours')"
+                        [showButtons]="true" [class.ng-dirty.ng-invalid]="isFieldInvalid('levelDurationInHours')"
                         mode="decimal"></p-inputNumber>
                     <app-validation-message
                         [control]="pageForm.controls['levelDurationInHours']"></app-validation-message>
@@ -118,9 +115,9 @@
         </form>
     </p-fluid>
 
-    <ng-template pTemplate="footer">
+    <ng-template #footer>
         <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
         <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
             [disabled]="pageForm.invalid"></button>
     </ng-template>
-</p-dialog>
+</app-dialog>

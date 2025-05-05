@@ -3,6 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { PaginationResponseModel } from '../../../core/models/admin/paginationResponseModel';
 import { PaginationFilterModel } from '../../../core/models/admin/paginationFilterModel';
 import { ICrudService } from '@/core/services/admin/crud-service';
+import { SelectListItem } from '@/core/models/select-list-item.model';
 
 export abstract class CrudService<T extends HasId> implements ICrudService<T> {
     protected constructor(protected http: HttpClient, protected apiUrl: string) { }
@@ -49,8 +50,13 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
         ).then(response => response);
     }
 
-    create(item: T): Promise<void> {
-        return firstValueFrom(this.http.post<void>(`${this.apiUrl}`, this.formatDates(item)));
+    getSelectList(...params: (string | number)[]): Promise<SelectListItem[]> {
+        const routeParams = params?.length ? '/' + params.join('/') : '';
+        return firstValueFrom(this.http.get<SelectListItem[]>(`${this.apiUrl}/select-list${routeParams}`));
+    }
+
+    create(item: T): Promise<any> {
+        return firstValueFrom(this.http.post<any>(`${this.apiUrl}`, this.formatDates(item)));
     }
 
     update(item: T): Promise<void> {
@@ -61,7 +67,7 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
         return firstValueFrom(this.http.delete<void>(`${this.apiUrl}/${ref}`));
     }
 
-    private formatDates(data: any) {
+    protected formatDates(data: any) {
         Object.keys(data).forEach(key => {
             if (data[key] instanceof Date) {
                 console.log('formatDates', data[key]);

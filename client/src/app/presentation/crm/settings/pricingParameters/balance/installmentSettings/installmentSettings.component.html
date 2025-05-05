@@ -51,7 +51,7 @@
         <div class="col-span-12 md:col-span-6 mb-4">
           <label for="branchId">Şube</label>
           <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
-            placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
+            placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('branchId')" />
           <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
         </div>
       </div>
@@ -60,20 +60,20 @@
         <div class="col-span-12 md:col-span-4 mb-4">
           <label for="level">Süre (Seviye)</label>
           <p-inputNumber inputId="level" formControlName="level" [min]="1"
-            [class.p-invalid]="isFieldInvalid('level')" />
+            [class.ng-dirty.ng-invalid]="isFieldInvalid('level')" />
           <app-validation-message [control]="pageForm.controls['level']"></app-validation-message>
         </div>
         <div class="col-span-12 md:col-span-4 mb-4">
           <label for="rate">Max. Senet Sayısı</label>
           <p-inputNumber inputId="maxBond" formControlName="maxBond" [min]="1"
-            [class.p-invalid]="isFieldInvalid('maxBond')" />
+            [class.ng-dirty.ng-invalid]="isFieldInvalid('maxBond')" />
           <app-validation-message [control]="pageForm.controls['maxBond']"></app-validation-message>
         </div>
 
         <div class="col-span-12 md:col-span-4 mb-4">
           <label for="rate">Max. K.K Taksit Sayısı</label>
           <p-inputNumber inputId="maxCardInstallment" formControlName="maxCardInstallment" [min]="1"
-            [class.p-invalid]="isFieldInvalid('maxCardInstallment')" />
+            [class.ng-dirty.ng-invalid]="isFieldInvalid('maxCardInstallment')" />
           <app-validation-message [control]="pageForm.controls['maxCardInstallment']"></app-validation-message>
         </div>
       </div>

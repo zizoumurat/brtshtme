@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.CrmRecordActions.Commands.CreateCrmRecordAction;
+public sealed record CreateCrmRecordActionCommandResponse(string message);

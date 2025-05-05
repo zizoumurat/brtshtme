@@ -21,33 +21,6 @@ export class AuthService implements IAuthService {
 
   constructor(private http: HttpClient) { }
 
-  async getMenuList(): Promise<MenuItemModel[]> {
-    try {
-      var user = this.getUser();
-      var firmRef = this.getFirm();
-      var roleRef = this.getRole();
-      if (!user || !firmRef || !roleRef) {
-        throw new Error('User, firm or role is not selected.');
-      }
-
-      const payload = {
-        appuserRef: user.Ref,
-        firmRef,
-        roleRef
-      };
-
-      const response = await firstValueFrom(
-        this.http.post<{ data: MenuItemModel[] }>(`${this.apiUrl}/GetMenuList`, payload).pipe(
-          map(res => res.data) // Veriyi doğru türde dönüyoruz
-        )
-      );
-
-      return response;
-    } catch (error) {
-      console.error('Get menu list failed:', error);
-      throw new Error('Failed to get menu list. Please try again.');
-    }
-  }
 
   async getRoleList(payload: { appuserRef: number; firmRef: number; }): Promise<SelectListItem[]> {
     try {
@@ -66,29 +39,6 @@ export class AuthService implements IAuthService {
     } catch (error) {
       console.error('Get role list failed:', error);
       throw new Error('Failed to get role list. Please try again.');
-    }
-  }
-
-  async getFirmList(appuserRef: number): Promise<SelectListItem[]> {
-    try {
-      const response = await firstValueFrom(
-        this.http.post<{ data: any[] }>(`${this.apiUrl}/GetFirmList`, { appuserRef }).pipe(
-          map(res =>
-            res.data.map(firm => ({
-              id: firm.ref,
-              name: firm.name
-            }))
-          ),
-          catchError(error => {
-            console.error('Get firm list failed:', error);
-            return throwError(() => new Error('Failed to get firm list. Please try again.'));
-          })
-        )
-      );
-
-      return response;
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred.');
     }
   }
 
@@ -128,31 +78,6 @@ export class AuthService implements IAuthService {
     return !!localStorage.getItem(this.token);
   }
 
-//   isAuthenticated(): boolean {
-//     this.token = localStorage.getItem("token") ?? "";
-//     console.log("token:",this.token);
-//     if(this.token === ""){
-//       this.router.navigateByUrl("/auth/login");
-//       return false;
-//     }
-
-//     const decode: JwtPayload | any = jwtDecode(this.token);
-//     const exp = decode.exp;
-//     const now = new Date().getTime() / 1000;
-//     console.log("decode");
-
-//     if(now > exp){
-//       this.router.navigateByUrl("/auth/login");
-//       return false;
-//     }
-
-//     return true;
-// }
-
-  isFirmAndRoleSelected(): boolean {
-    return this.getFirm() !== null && this.getRole() !== null;
-  }
-
   getToken(): string | null {
     const authData = localStorage.getItem(this.token);
     if (!authData) return null;
@@ -167,7 +92,9 @@ export class AuthService implements IAuthService {
 
   getUser(): User | null {
     const authData = localStorage.getItem("user");
+
     if (!authData) return null;
+
 
     try {
       const parsedData: User = JSON.parse(authData);
@@ -175,15 +102,6 @@ export class AuthService implements IAuthService {
     } catch {
       return null;
     }
-  }
-
-  setFirmAndRole(firmRef: number, roleRef: number): void {
-    localStorage.setItem('selectedFirmRef', firmRef.toString());
-    localStorage.setItem('selectedRoleRef', roleRef.toString());
-  }
-
-  getFirm(): number | null {
-    return localStorage.getItem('selectedFirmRef') ? Number(localStorage.getItem('selectedFirmRef')) : null;
   }
 
   getRole(): number | null {

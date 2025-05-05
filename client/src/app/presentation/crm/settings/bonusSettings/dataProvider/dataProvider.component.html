@@ -65,14 +65,14 @@
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="minAmount">Minimum Tutar</label>
                     <p-inputNumber inputId="minAmount" formControlName="minAmount" mode="currency" currency="TRY"
-                        locale="tr-TR" [class.p-invalid]="isFieldInvalid('minAmount')" />
+                        locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalid('minAmount')" />
                     <app-validation-message [control]="pageForm.controls['minAmount']"></app-validation-message>
                 </div>
 
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="maxAmount">Maksimum Tutar</label>
                     <p-inputNumber inputId="maxAmount" formControlName="maxAmount" mode="currency" currency="TRY"
-                        locale="tr-TR" [class.p-invalid]="isFieldInvalid('maxAmount')" />
+                        locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalid('maxAmount')" />
                     <app-validation-message [control]="pageForm.controls['maxAmount']"></app-validation-message>
                 </div>
             </div>
@@ -82,7 +82,7 @@
                     <label for="salesCommission">Satış Primi (%)</label>
                     <p-inputNumber inputId="salesCommission" formControlName="salesCommission" mode="decimal"
                         suffix=" %" [min]="0" [max]="100" [step]="0.1" [maxFractionDigits]="2" [minFractionDigits]="1"
-                        [class.p-invalid]="isFieldInvalid('salesCommission')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salesCommission')" />
 
                     <app-validation-message [control]="pageForm.controls['salesCommission']"></app-validation-message>
                 </div>
@@ -91,7 +91,7 @@
                     <label for="collectionCommission">Tahsilat Primi (%)</label>
                     <p-inputNumber inputId="collectionCommission" formControlName="collectionCommission" mode="decimal"
                         suffix=" %" [min]="0" [max]="100" [step]="0.1" [maxFractionDigits]="2" [minFractionDigits]="1"
-                        [class.p-invalid]="isFieldInvalid('collectionCommission')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('collectionCommission')" />
 
                     <app-validation-message
                         [control]="pageForm.controls['collectionCommission']"></app-validation-message>
@@ -102,13 +102,13 @@
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="bonus">Bonus</label>
                     <p-inputNumber inputId="bonus" formControlName="bonus" mode="currency" currency="TRY" locale="tr-TR"
-                        [class.p-invalid]="isFieldInvalid('bonus')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('bonus')" />
                     <app-validation-message [control]="pageForm.controls['bonus']"></app-validation-message>
                 </div>
 
                 <div class="flex flex-wrap gap-2 w-full">
                     <label for="note">Not</label>
-                    <input id="note" pInputText formControlName="note" [class.p-invalid]="isFieldInvalid('note')" />
+                    <input id="note" pInputText formControlName="note" [class.ng-dirty.ng-invalid]="isFieldInvalid('note')" />
                     <app-validation-message [control]="pageForm.controls['note']"></app-validation-message>
                 </div>
             </div>

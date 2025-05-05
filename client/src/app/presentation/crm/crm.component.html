@@ -1,3 +1,7 @@
+<div class="mb-4">
+  <button pButton label="Data Form" class="p-button-success" (click)="openModal()"></button>
+</div>
+
 <p-card>
   <p-tabs [value]="activeTab">
     <p-tablist>
@@ -14,3 +18,244 @@
     <router-outlet></router-outlet>
   </div>
 </p-card>
+
+<app-dialog [(visible)]="displayModal"
+  [breakpoints]="{  '1920px': '60vw', '1366px': '70vw', '960px': '85vw', '640px': '95vw' }">
+
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Kayıt EKranı</p-tab>
+      <p-tab *ngIf="pageForm.controls['id'].value" value="1">İşlem Tablosu</p-tab>
+      <p-tab *ngIf="pageForm.controls['id'].value" value="2">SMS Gönder</p-tab>
+    </p-tablist>
+
+    <p-tabpanels>
+
+      <p-tabpanel value="0">
+        <p-fluid>
+
+          <form [formGroup]="pageForm">
+            <app-select-branch [form]="pageForm"></app-select-branch>
+
+            <div class="grid grid-cols-12 gap-4">
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="phone">Telefon</label>
+                <p-inputMask id="phone" formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('phone')" (onBlur)="checkPhone()" />
+                <app-validation-message [control]="pageForm.controls['phone']" />
+              </div>
+
+              <!-- First & Last Name -->
+              <div class="col-span-12 md:col-span-4">
+                <label for="firstName">Ad</label>
+                <input id="firstName" pInputText formControlName="firstName"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('firstName')" />
+                <app-validation-message [control]="pageForm.controls['firstName']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="lastName">Soyad</label>
+                <input id="lastName" pInputText formControlName="lastName"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('lastName')" />
+                <app-validation-message [control]="pageForm.controls['lastName']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="dataProviderId">Data Sağlayıcı</label>
+                <p-select id="dataProviderId" [options]="dataProviderOptions" formControlName="dataProviderId"
+                  placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('dataProviderId')"
+                  class="w-full" />
+                <app-validation-message [control]="pageForm.controls['dataProviderId']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="dataSource">Data Kaynağı</label>
+                <p-select id="dataSource" [options]="dataSourceOptions" formControlName="dataSource"
+                  placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('dataSource')"
+                  class="w-full" />
+                <app-validation-message [control]="pageForm.controls['dataSource']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="regionId">Bölge</label>
+                <p-select id="regionId" [options]="regionOptions" formControlName="regionId" placeholder="Seçiniz"
+                  appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('regionId')" class="w-full" />
+                <app-validation-message [control]="pageForm.controls['regionId']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="">2.Telefon</label>
+                <p-inputMask id="secondPhone" formControlName="secondPhone" class="w-full" [mask]="'(999) 999 99 99'"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('secondPhone')" />
+                <app-validation-message [control]="pageForm.controls['secondPhone']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="email">E-posta</label>
+                <input id="email" type="email" pInputText formControlName="email"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('email')" />
+                <app-validation-message [control]="pageForm.controls['email']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="date">Tarih</label>
+                <input id="date" type="text" pInputText [value]="currentDate | date:'dd.MM.yyyy HH:mm'" readonly />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="date">Satış Temsilcisi</label>
+                <input id="date" type="text" pInputText [value]="currentUser" readonly />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <label for="status">Durumu</label>
+                <p-select id="status" [options]="crmStatusOptions" formControlName="status" placeholder="Seçiniz"
+                  appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('status')" class="w-full" />
+                <app-validation-message [control]="pageForm.controls['status']" />
+              </div>
+
+              <div class="col-span-12 md:col-span-4">
+                <div class="flex items-center h-full">
+                  <p-checkbox formControlName="excludeFromCommission" inputId="excludeFromCommission" [binary]="true" />
+                  <label for="excludeFromCommission" class="ml-2">Prim Dışı Tut</label>
+                </div>
+              </div>
+
+              <div class="col-span-12 md:col-span-8">
+                <label for="description">Açıklama</label>
+                <textarea pTextarea id="address" formControlName="description"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('description')" rows="3"></textarea>
+                <app-validation-message [control]="pageForm.controls['description']" />
+              </div>
+
+            </div>
+          </form>
+
+        </p-fluid>
+        <div class="flex justify-end my-4 gap-2">
+          <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
+          <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
+            [disabled]="pageForm.invalid"></button>
+        </div>
+      </p-tabpanel>
+
+      <p-tabpanel *ngIf="pageForm.controls['id'].value" value="1">
+        <div class="mt-4">
+          <form *ngIf="actionForm" [formGroup]="actionForm">
+            <p-table [value]="crmActions" stripedRows>
+              <ng-template #header>
+                <tr>
+                  <th style="width: 15%">İşlem Yapan</th>
+                  <th style="width: 15%">İşlem Tarihi</th>
+                  <th style="width: 20%">İşlem Türü</th>
+                  <th style="width: 15%">Hedef Tarih</th>
+                  <th style="width: 30%">Açıklama</th>
+                  <th style="width: 5%"></th>
+                </tr>
+              </ng-template>
+              <ng-template #body let-item>
+                <tr>
+                  <td>{{ item.employeeName }}</td>
+                  <td>{{ item.date | date: 'dd.MM.yyyy' }}</td>
+                  <td>{{ item.actionType | enumTranslate: CrmActionType :'CrmActionType' }}</td>
+                  <td>{{ item.targetDate | date: 'dd.MM.yyyy' }}</td>
+                  <td colspan="2">{{ item.description }}</td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="footer">
+                <tr>
+                  <td>{{ currentUser }}</td>
+                  <td>{{ currentDate | date: 'dd.MM.yyyy' }}</td>
+                  <td>
+                    <p-select id="actionType" [options]="actionTypeOptions" formControlName="actionType"
+                      placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('actionType')"
+                      class="w-full" />
+                    <app-validation-message [control]="actionForm.controls['actionType']" />
+                  </td>
+                  <td>
+                    <p-datepicker id="targetDate" formControlName="targetDate" appendTo="body" dateFormat="dd.mm.yy"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('targetDate')" class="w-full" />
+                    <app-validation-message [control]="actionForm.controls['targetDate']" />
+                  </td>
+                  <td>
+                    <textarea pTextarea id="description" formControlName="description"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('description')" rows="3" class="w-full"></textarea>
+                    <app-validation-message [control]="actionForm.controls['description']" />
+                  </td>
+                  <td>
+                    <p-button icon="pi pi-save" size="small" pTooltip="Kaydet" tooltipPosition="top" icon="pi pi-save"
+                      [disabled]="actionForm.invalid" (click)="saveAction()" />
+                  </td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </form>
+        </div>
+      </p-tabpanel>
+
+      <p-tabpanel *ngIf="pageForm.controls['id'].value" value="2">
+        <div class="mt-4 w-3/5 mx-auto">
+
+          <form *ngIf="smsForm" [formGroup]="smsForm">
+            <p-fieldset legend="Telefon Numarası" class="mb-4">
+              <div class="flex items-center gap-3">
+                <div>
+                  <label for="phone1" class="mr-2">Tel 1</label>
+                  <p-radiobutton name="phoneOption" value="phone1" formControlName="phoneOption" inputId="phone1" />
+                </div>
+
+                <div>
+                  <label for="phone2" class="mr-2">Tel 2</label>
+                  <p-radiobutton name="phoneOption" value="phone2" formControlName="phoneOption" inputId="phone2" />
+                </div>
+
+                <div class="mr-2">
+                  <label for="manual" class="mr-2">Elle Giriş</label>
+                  <p-radiobutton name="phoneOption" value="manual" formControlName="phoneOption" inputId="manual" />
+                </div>
+
+                <div>
+                  <p-inputMask formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
+                    [class.ng-dirty.ng-invalid]="isFieldInvalid('phone')" />
+                </div>
+              </div>
+            </p-fieldset>
+            <p-fieldset legend="Mesaj">
+              <div class="flex items-center gap-3">
+                <div>
+                  <textarea pTextarea id="message" formControlName="message"
+                    [class.ng-dirty.ng-invalid]="isFieldInvalid('message')" rows="3"></textarea>
+                </div>
+              </div>
+            </p-fieldset>
+          </form>
+
+        </div>
+      </p-tabpanel>
+
+    </p-tabpanels>
+  </p-tabs>
+
+</app-dialog>
+
+<p-confirmdialog #cd>
+  <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
+    <div class="flex flex-col items-center p-8 bg-surface-0 dark:bg-surface-900 rounded">
+      <div
+        class="rounded-full bg-primary text-primary-contrast inline-flex justify-center items-center h-24 w-24 -mt-20">
+        <i class="pi pi-info !text-5xl"></i>
+      </div>
+      <p class="mb-0">
+        Bu numara sistemde kayıtlı bir dataya ait.<br>
+        Şimdi bu dataya yönlendireleceksiniz.<br>
+        Bugün veya yarın tarihli bir <strong>'Tekrar Ara'</strong> işlemi yapın.<br>
+        Protokol kuralları otomatik olarak işletilecek ve bu data, ya önceki sahibinde kalacak ya da size geçecek.<br>
+        Ancak her iki durumda da data tekrar değerlendirilebilir ve yenilenmiş olarak kuruma kazandırılmış olacak.
+      </p>
+      <div class="flex items-center gap-2 mt-6">
+        <p-button label="Tamam" (onClick)="onAccept()" styleClass="w-32"></p-button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmdialog>

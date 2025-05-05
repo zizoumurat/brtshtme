@@ -19,6 +19,7 @@ export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      console.log('error', error);
       if (error.status === 401) {
         localStorage.clear();
         router.navigate(['/auth/login']);
@@ -27,8 +28,8 @@ export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
       if (error.error instanceof ErrorEvent) {
         errorMessage = `Hata: ${error.error.message}`;
       }
-      else if (error.error.errorMessages) {
-        errorMessage = error.error.errorMessages.join('<br>');
+      else if (error.error.ErrorMessages) {
+        errorMessage = error.error.ErrorMessages.map((e: any) => `errors.${e}`).join('<br>');
       }
       else {
         errorMessage = error?.error?.Message || 'Bilinmeyen bir hata oluştu.';

@@ -52,21 +52,21 @@
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="branchId">Şube</label>
                     <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
-                        placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
+                        placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('branchId')" />
                     <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
                 </div>
             </div>
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label>Tanım</label>
-                    <input pInputText formControlName="definition" [class.p-invalid]="isFieldInvalid('definition')" />
+                    <input pInputText formControlName="definition" [class.ng-dirty.ng-invalid]="isFieldInvalid('definition')" />
                     <app-validation-message [control]="pageForm.controls['definition']"></app-validation-message>
                 </div>
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="scheduleCategory">Değer</label>
                     <p-inputNumber formControlName="discountRate" mode="decimal" suffix=" %" [min]="0" [max]="100"
                         [step]="0.1" [maxFractionDigits]="3" [minFractionDigits]="1"
-                        [class.p-invalid]="isFieldInvalid('discountRate')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('discountRate')" />
                     <app-validation-message [control]="pageForm.controls['discountRate']"></app-validation-message>
                 </div>
                 <div class="col-span-12 md:col-span-6 mb-4">

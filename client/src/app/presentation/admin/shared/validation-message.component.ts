@@ -20,6 +20,8 @@ export class ValidationMessageComponent {
         maxlength: 'Girilen değer çok uzun!',
         pattern: 'Geçerli bir format giriniz!',
         email: 'Geçerli bir e-posta adresi giriniz!',
+        passwordPolicy: 'Şifre en az 6 karakter olmalı, bir büyük harf, bir küçük harf, bir rakam ve bir özel karakter içermelidir.',
+        passwordsMismatch: 'Şifreler uyuşmuyor.'
     };
 
     get errorMessage(): string | null {

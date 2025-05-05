@@ -36,6 +36,14 @@ import { COURSESALESETTING_SERVICE } from '@/core/services/crm/courseSaleSetting
 import { CourseSaleSettingService } from '@/infrastructure/api/crm/courseSaleSetting-service';
 import { INSTALLMENTSETTING_SERVICE } from '@/core/services/crm/installmentSetting-service';
 import { InstallmentSettingService } from '@/infrastructure/api/crm/installmentSetting-service';
+import { EMPLOYEE_SERVICE } from '@/core/services/crm/employee-service';
+import { EmployeeService } from '@/infrastructure/api/crm/employee-service';
+import { AppUserService } from '@/infrastructure/api/crm/appuser-service';
+import { APPUSER_SERVICE } from '@/core/services/crm/appuser.service';
+import { CRMRECORD_SERVICE } from '@/core/services/crm/crmrecord-service';
+import { CrmRecordService } from '@/infrastructure/api/crm/crmrecord-service';
+import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
+import { CrmRecordActionService } from '@/infrastructure/api/crm/crmrecordaction-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -133,14 +141,18 @@ export const appConfig: ApplicationConfig = {
         { provide: AUTH_SERVICE, useClass: AuthService },
         { provide: CALENDAR_SERVICE, useClass: CalendarService },
         { provide: CAMPAIGN_SERVICE, useClass: CampaignService },
+        { provide: CRMRECORD_SERVICE, useClass: CrmRecordService },
+        { provide: CRMRECORDACTION_SERVICE, useClass: CrmRecordActionService },
         { provide: COURSESALESETTING_SERVICE, useClass: CourseSaleSettingService },
         { provide: DISCOUNT_SERVICE, useClass: DiscountService },
+        { provide: EMPLOYEE_SERVICE, useClass: EmployeeService },
         { provide: BRANCH_SERVICE, useClass: BranchService },
         { provide: BRANCHPRICINGSETTINGS_SERVICE, useClass: BranchPricingSettingsService },
         { provide: REGION_SERVICE, useClass: RegionService },
         { provide: INCENTIVESETTING_SERVICE, useClass: IncentiveSettingService },
         { provide: INSTALLMENTSETTING_SERVICE, useClass: InstallmentSettingService },
         { provide: LESSONSCHEDULEDEFINITION_SERVICE, useClass: LessonScheduleDefinitionService },
+        { provide: APPUSER_SERVICE, useClass: AppUserService },
 
         ConfirmationService,
         MessageService

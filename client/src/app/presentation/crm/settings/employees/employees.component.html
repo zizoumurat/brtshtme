@@ -1,0 +1,178 @@
+<div>
+    <p-table [value]="rows" [paginator]="true" [showGridlines]="true" [rows]="maxPageRow" [totalRecords]="totalRecords"
+        [lazy]="true" responsiveLayout="scroll" (onLazyLoad)="loadData($event)">
+        <ng-template #caption>
+            <div class="flex">
+                <button pButton type="button" icon="pi pi-plus" label="Yeni {{pageTitle}}" class="p-button-success"
+                    pTooltip="{{pageTitle}} {{pageModal}}" tooltipPosition="top" (click)="openModal()"></button>
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input pInputText type="text" #filter (input)="onSearch(filter.value, 'search')"
+                        placeholder="Arama.." />
+                </p-iconfield>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="firstName">Şube <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="firstName">Ad <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="lastName">Soyad <p-sortIcon field="lastName" /></th>
+                <th pSortableColumn="email">E-posta <p-sortIcon field="email" /></th>
+                <th pSortableColumn="phone">Telefon <p-sortIcon field="phone" /></th>
+                <th pSortableColumn="position">Rol <p-sortIcon field="position" /></th>
+                <th class="actions">İşlemler</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-record>
+            <tr>
+                <td>{{ record.branchName }}</td>
+                <td>{{ record.firstName }}</td>
+                <td>{{ record.lastName }}</td>
+                <td>{{ record.email }}</td>
+                <td>{{ record.phone1 }}</td>
+                <td>{{ record.role | enumTranslate: EmployeeRole :'EmployeeRole' }}</td>
+                <td class="actions">
+                    <p-button pTooltip="Düzenle" tooltipPosition="top" icon="pi pi-pencil" severity="success"
+                        (click)="handleEdit(record.id)" />
+                    <p-button pTooltip="Sil" tooltipPosition="top" icon="pi pi-trash" severity="danger"
+                        (click)="deleteRecord(record.id)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-dialog [(visible)]="displayModal" header="{{ pageTitle }} {{ pageModal }}"
+    [breakpoints]="{  '1920px': '35vw', '1366px': '45vw', '960px': '75vw', '640px': '90vw' }">
+
+    <p-fluid>
+
+        <form [formGroup]="pageForm">
+            <app-select-branch [form]="pageForm"></app-select-branch>
+
+            <div class="grid grid-cols-12 gap-4">
+
+                <!-- First & Last Name -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="firstName">Ad</label>
+                    <input id="firstName" pInputText formControlName="firstName"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('firstName')" />
+                    <app-validation-message [control]="pageForm.controls['firstName']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="lastName">Soyad</label>
+                    <input id="lastName" pInputText formControlName="lastName"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('lastName')" />
+                    <app-validation-message [control]="pageForm.controls['lastName']" />
+                </div>
+
+                <!-- Identity Number & Role -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="identityNumber">TC Kimlik No</label>
+                    <input id="identityNumber" pInputText formControlName="identityNumber"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('identityNumber')" />
+                    <app-validation-message [control]="pageForm.controls['identityNumber']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="role">Rol</label>
+                    <p-select id="role" [options]="employeeRoleOptions" formControlName="role" placeholder="Seçiniz" appendTo="body"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('role')" class="w-full" />
+                    <app-validation-message [control]="pageForm.controls['role']" />
+                </div>
+
+                <!-- Start Date & Birth Date -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="startDate">İşe Başlama Tarihi</label>
+                    <p-datepicker id="startDate" formControlName="startDate" appendTo="body" dateFormat="dd.mm.yy"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('startDate')" class="w-full" />
+                    <app-validation-message [control]="pageForm.controls['startDate']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="birthDate">Doğum Tarihi</label>
+                    <p-datepicker id="birthDate" formControlName="birthDate" appendTo="body" dateFormat="dd.mm.yy"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('birthDate')" class="w-full" />
+                    <app-validation-message [control]="pageForm.controls['birthDate']" />
+                </div>
+
+                <!-- Phone1, Phone2, Phone3 -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="phone1">Telefon 1</label>
+                    <p-inputMask id="phone1" formControlName="phone1" class="w-full" [mask]="'(999) 999 99 99'"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('phone1')" />
+                    <app-validation-message [control]="pageForm.controls['phone1']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="phone2">Telefon 2</label>
+                    <p-inputMask id="phone2" formControlName="phone2" class="w-full" [mask]="'(999) 999 99 99'"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('phone2')" />
+                    <app-validation-message [control]="pageForm.controls['phone2']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="phone3">Telefon 3</label>
+                    <p-inputMask id="phone3" formControlName="phone3" class="w-full" [mask]="'(999) 999 99 99'"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('phone3')" />
+                    <app-validation-message [control]="pageForm.controls['phone3']" />
+                </div>
+
+                <!-- Email & Address -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="email">E-posta</label>
+                    <input id="email" type="email" pInputText formControlName="email"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('email')" />
+                    <app-validation-message [control]="pageForm.controls['email']" />
+                </div>
+
+                <div class="col-span-12   md:col-span-8">
+                    <label for="address">Adres</label>
+                    <textarea pTextarea id="address" formControlName="address"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('address')" rows="3"></textarea>
+                    <app-validation-message [control]="pageForm.controls['address']" />
+                </div>
+
+                <!-- Salary Type -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="salaryType">Maaş Tipi</label>
+                    <p-select id="salaryType" [options]="salaryTypeOptions" formControlName="salaryType" placeholder="Seçiniz" appendTo="body"
+                        class="w-full" [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryType')" />
+                    <app-validation-message [control]="pageForm.controls['salaryType']" />
+                </div>
+
+                <!-- Salary Amount, Extra Payment, Salary Note -->
+                <div class="col-span-12 md:col-span-4">
+                    <label for="salaryAmount">Maaş Tutarı</label>
+                    <input id="salaryAmount" type="number" pInputText formControlName="salaryAmount"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryAmount')" />
+                    <app-validation-message [control]="pageForm.controls['salaryAmount']" />
+                </div>
+
+                <div class="col-span-12 md:col-span-4">
+                    <label for="extraPayment">Ek Ödeme</label>
+                    <input id="extraPayment" type="number" pInputText formControlName="extraPayment"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('extraPayment')" />
+                    <app-validation-message [control]="pageForm.controls['extraPayment']" />
+                </div>
+
+                <div class="col-span-12">
+                    <label for="salaryNote">Açıklama</label>
+                    <textarea pTextarea id="salaryNote" formControlName="salaryNote"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryNote')" rows="3"></textarea>
+                    <app-validation-message [control]="pageForm.controls['salaryNote']" />
+                </div>
+            </div>
+        </form>
+
+    </p-fluid>
+    <ng-template #footer>
+        <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
+        <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
+            [disabled]="pageForm.invalid"></button>
+    </ng-template>
+
+</app-dialog>

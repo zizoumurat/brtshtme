@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
 import { SettingsComponent } from './settings.component';
 import { BranchesComponent } from './branches/branches.component';
-import { PersonelsComponent } from './personel/personel.component';
+import { EmployeesComponent } from './employees/employees.component';
 import { RegionComponent } from './regions/regions.component';
 import { ScheduleSettingsComponent } from './scheduleSettings/scheduleSettings.component';
+import { UsersComponent } from './users/users.component';
 
 export const SettingsRoutes: Routes = [
   {
@@ -13,7 +14,8 @@ export const SettingsRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'branches', pathMatch: 'full' },
       { path: 'branches', data: { breadcrumb: 'Şubeler' }, component: BranchesComponent },
-      { path: 'personnel', data: { breadcrumb: 'Personeller' }, component: PersonelsComponent },
+      { path: 'employees', data: { breadcrumb: 'Personeller' }, component: EmployeesComponent },
+      { path: 'users', data: { breadcrumb: 'Kullanıcılar' }, component: UsersComponent },
       { path: 'regions', data: { breadcrumb: 'Bölge Tanımları' }, component: RegionComponent },
       { path: 'schedule-settings', data: { breadcrumb: 'Ders Programı Tanımları' }, component: ScheduleSettingsComponent },
       {

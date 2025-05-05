@@ -60,7 +60,7 @@ public class LessonScheduleDefinitionService : ILessonScheduleDefinitionService
     {
         try
         {
-            if (LessonScheduleDefinitionDto.Id == null) throw new ArgumentNullException("idIsNull");
+            if (LessonScheduleDefinitionDto.Id == null) throw new ArgumentNullException("notFoundEntity");
 
             var LessonScheduleDefinition = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(LessonScheduleDefinitionDto.Id.Value);
             if (LessonScheduleDefinition == null) throw new KeyNotFoundException("notFoundEntity");

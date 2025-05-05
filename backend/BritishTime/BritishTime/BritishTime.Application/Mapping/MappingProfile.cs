@@ -12,6 +12,14 @@ public sealed class MappingProfile : Profile
 
         CreateMap<BranchPricingSettingDto, BranchPricingSetting>().ReverseMap();
 
+        CreateMap<CrmRecordDto, CrmRecord>().ReverseMap();
+        CreateMap<CrmRecordCreateDto, CrmRecord>();
+
+        CreateMap<CrmRecordAction, CrmRecordActionDto>()
+        .ForMember(dest => dest.EmployeeName, opt => opt.MapFrom(src => $"{src.Employee.FirstName} {src.Employee.LastName}"));
+
+        CreateMap<CrmRecordActionCreateDto, CrmRecordAction>();
+
         CreateMap<CampaignDto, Campaign>().ReverseMap();
         CreateMap<CampaignCreateDto, Campaign>();
 
@@ -20,6 +28,10 @@ public sealed class MappingProfile : Profile
 
         CreateMap<DiscountDto, Discount>().ReverseMap();
         CreateMap<DiscountCreateDto, Discount>();
+
+
+        CreateMap<EmployeeDto, Employee>().ReverseMap();
+        CreateMap<EmployeeCreateDto, Employee>();
 
         CreateMap<LessonScheduleDefinitionDto, LessonScheduleDefinition>().ReverseMap();
         CreateMap<LessonScheduleDefinitionCreateDto, LessonScheduleDefinition>()

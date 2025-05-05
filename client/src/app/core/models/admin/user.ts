@@ -2,6 +2,7 @@ export interface User {
   Ref: number;
   Email: string;
   FullName: string;
+  Name: string;
   ImgUrl: string;
 }
 

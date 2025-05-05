@@ -1,4 +1,3 @@
-import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
 import { PaginationFilterModel } from '@/core/models/admin/paginationFilterModel';
 import { SelectListItem } from '@/core/models/select-list-item.model';
 import { ICrudService } from '@/core/services/admin/crud-service';
@@ -12,7 +11,6 @@ import { debounceTime, forkJoin, map, Observable, Subject } from 'rxjs';
     selector: 'app-base',
     template: '',
     styleUrls: [],
-    imports: []
 })
 export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     protected recordService: S;
@@ -30,15 +28,11 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     pageModal: string = '';
     private searchInputSubject = new Subject<string>();
     searchFilter: Partial<Record<string, any>> = {};
-    currentPageUrl: string = '';
 
     constructor(serviceToken: InjectionToken<S>) {
         this.recordService = inject(serviceToken);
     }
 
-    protected setPageUrl(url: string) {
-        this.currentPageUrl = url;
-    }
 
     ngOnInit() {
         this.searchInputSubject.pipe(debounceTime(300)).subscribe((searchTerm) => {
@@ -146,7 +140,12 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     }
 
     resetForm() {
+        const branchId = this.pageForm.get('branchId')?.value;
         this.pageForm.reset();
+
+        if(branchId) {
+            this.pageForm.patchValue({ branchId: branchId });
+        }   
     }
 
     isFieldInvalid(controlName: string): boolean {

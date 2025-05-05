@@ -33,6 +33,11 @@ import { EnumTranslatePipe } from '@/core/pipes/enum-translate.pipe';
 import { TimeShortPipe } from '@/core/pipes/time-short.pipe';
 import { DayShortNamesPipe } from '@/core/pipes/day-short-names.pipe';
 import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
+import { AppDialogComponent } from './dialog.component';
+import { SelectBranchComponent } from './selectBranch.component';
+import { PasswordModule } from 'primeng/password';
+import { FieldsetModule } from 'primeng/fieldset';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   imports: [
@@ -70,7 +75,12 @@ import { DefaultSelectOptionDirective } from '@/core/directives/default-select-o
     EnumTranslatePipe,
     TimeShortPipe,
     DayShortNamesPipe,
-    DefaultSelectOptionDirective
+    DefaultSelectOptionDirective,
+    AppDialogComponent,
+    SelectBranchComponent,
+    PasswordModule,
+    FieldsetModule,
+    RadioButtonModule
   ],
   exports: [
     CommonModule,
@@ -107,7 +117,12 @@ import { DefaultSelectOptionDirective } from '@/core/directives/default-select-o
     EnumTranslatePipe,
     TimeShortPipe,
     DayShortNamesPipe,
-    DefaultSelectOptionDirective
+    DefaultSelectOptionDirective,
+    AppDialogComponent,
+    SelectBranchComponent,
+    PasswordModule,
+    FieldsetModule,
+    RadioButtonModule
   ]
 })
 export class SharedComponentModule { }

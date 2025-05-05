@@ -21,8 +21,8 @@ export class SettingsComponent {
   items: MenuItem[] | undefined;
 
   menuItems = [
-    { label: 'crm.settings.branch', routerLink: '/crm/settings/branches'},
-    { label: 'crm.settings.staff', routerLink: '/crm/settings/personnel' },
+    { label: 'crm.settings.branches', routerLink: '/crm/settings/branches'},
+    { label: 'crm.settings.employees', routerLink: '/crm/settings/employees' },
     { label: 'crm.settings.regionDefinitions', routerLink: '/crm/settings/regions' },
     { label: 'crm.settings.users', routerLink: '/crm/settings/users' },
     { label: 'crm.settings.bonusSettings.bonusSettings', routerLink: '/crm/settings/bonus-settings' },

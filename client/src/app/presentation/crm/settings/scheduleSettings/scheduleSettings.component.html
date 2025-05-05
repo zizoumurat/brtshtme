@@ -48,34 +48,24 @@
     </p-table>
 </div>
 
-<p-dialog *ngIf="pageForm" [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
-    <ng-template pTemplate="header">
-        <div class="font-semibold text-lg">{{ pageTitle }} {{ pageModal }}</div>
-    </ng-template>
+<app-dialog [(visible)]="displayModal" header="{{ pageTitle }} {{ pageModal }}">
 
     <p-fluid>
         <form [formGroup]="pageForm">
-            <div class="grid grid-cols-12 gap-4">
-                <div class="col-span-12 md:col-span-6 mb-4">
-                    <label for="branchId">Şube</label>
-                    <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
-                        placeholder="Seçiniz" [class.p-invalid]="isFieldInvalid('branchId')" />
-                    <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>
-                </div>
-            </div>
+            <app-select-branch [form]="pageForm"></app-select-branch>
 
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="schedule">Program Kodu</label>
                     <input id="schedule" pInputText formControlName="schedule"
-                        [class.p-invalid]="isFieldInvalid('schedule')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('schedule')" />
                     <app-validation-message [control]="pageForm.controls['schedule']"></app-validation-message>
                 </div>
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="scheduleCategory">Kategori</label>
                     <p-select id="scheduleCategory" [options]="scheduleCategoryOptions" class="w-full"
-                        formControlName="scheduleCategory" placeholder="Seçiniz"
-                        [class.p-invalid]="isFieldInvalid('scheduleCategory')" />
+                        formControlName="scheduleCategory" placeholder="Seçiniz" appendTo="body"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('scheduleCategory')" />
                     <app-validation-message [control]="pageForm.controls['scheduleCategory']"></app-validation-message>
                 </div>
             </div>
@@ -84,15 +74,15 @@
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="studentType">Öğrenci Tipi</label>
                     <p-select id="studentType" [options]="studentTypeOptions" class="w-full"
-                        formControlName="studentType" placeholder="Seçiniz"
-                        [class.p-invalid]="isFieldInvalid('studentType')" />
+                        formControlName="studentType" placeholder="Seçiniz" appendTo="body"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('studentType')" />
                     <app-validation-message [control]="pageForm.controls['studentType']"></app-validation-message>
                 </div>
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="educationType">Eğitim Tipi</label>
                     <p-select id="educationType" class="w-full" [options]="educationTypeOptions"
-                        formControlName="educationType" placeholder="Seçiniz"
-                        [class.p-invalid]="isFieldInvalid('educationType')" />
+                        formControlName="educationType" placeholder="Seçiniz" appendTo="body"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('educationType')" />
                     <app-validation-message [control]="pageForm.controls['educationType']"></app-validation-message>
                 </div>
             </div>
@@ -102,7 +92,7 @@
                     <label for="days">Günler</label>
                     <p-multiSelect id="days" [options]="dayOfWeekOptions" optionLabel="name" optionValue="id"
                         class="w-full" appendTo="body" formControlName="days" placeholder="Gün Seçiniz"
-                        [class.p-invalid]="isFieldInvalid('days')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('days')" />
                     <app-validation-message [control]="pageForm.controls['days']"></app-validation-message>
                 </div>
             </div>
@@ -111,14 +101,14 @@
                 <div class="col-span-12 md:col-span-4">
                     <label for="startTime">Başlangıç Saati</label>
                     <p-inputMask id="startTime" formControlName="startTime" mask="99:99" placeholder="__:__"
-                        slotChar="_" [autoClear]="false" [class.p-invalid]="isFieldInvalid('startTime')" />
+                        slotChar="_" [autoClear]="false" [class.ng-dirty.ng-invalid]="isFieldInvalid('startTime')" />
 
                     <app-validation-message [control]="pageForm.controls['startTime']"></app-validation-message>
                 </div>
                 <div class="col-span-12 md:col-span-4">
                     <label for="dayHour">Günlük Ders Saati</label>
                     <p-inputNumber id="dayHour" formControlName="dayHour" inputId="dayHour" [min]="1" [max]="12"
-                        [showButtons]="true" [step]="1" [class.p-invalid]="isFieldInvalid('dayHour')" mode="decimal">
+                        [showButtons]="true" [step]="1" [class.ng-dirty.ng-invalid]="isFieldInvalid('dayHour')" mode="decimal">
                     </p-inputNumber>
                     <app-validation-message [control]="pageForm.controls['dayHour']"></app-validation-message>
                 </div>
@@ -126,16 +116,16 @@
                 <div class="col-span-12 md:col-span-4">
                     <label for="discount">İndirim</label>
                     <input type="number" id="discount" pInputText formControlName="discount"
-                        [class.p-invalid]="isFieldInvalid('discount')" />
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('discount')" />
                     <app-validation-message [control]="pageForm.controls['discount']"></app-validation-message>
                 </div>
             </div>
         </form>
     </p-fluid>
 
-    <ng-template pTemplate="footer">
+    <ng-template #footer>
         <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
         <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
             [disabled]="pageForm.invalid"></button>
     </ng-template>
-</p-dialog>
+</app-dialog>
