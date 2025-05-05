@@ -107,6 +107,9 @@ export class CrmComponent {
                 this.dataProviderOptions = await this.employeeService.getSelectList(id);
             }
         });
+
+        this.pageForm.get('phone')?.setValue('(053) 702 60 13');
+
     }
 
     initActionForm(): void {
@@ -138,7 +141,24 @@ export class CrmComponent {
             crmRecordId: [null, Validators.required],
             phone: ['', Validators.required],
             phoneOption: ['phone1', Validators.required],
-            message: ['', Validators.required],
+            message: ['', Validators.required, Validators.maxLength(250)],
+        });
+
+        this.smsForm.get('phoneOption')?.valueChanges.subscribe(async selected => {
+            if (selected === 'phone1') {
+                this.smsForm.get('phone')?.setValue(this.pageForm.controls['phone'].value);
+                this.smsForm.controls['phone'].disable();
+            }
+
+            if (selected === 'phone2') {
+                this.smsForm.get('phone')?.setValue(this.pageForm.controls['secondPhone'].value);
+                this.smsForm.controls['phone'].disable();
+            }
+            
+            if (selected === 'manual') {
+                this.smsForm.get('phone')?.setValue('');
+                this.smsForm.controls['phone'].enable();
+            }
         });
     }
 
@@ -198,7 +218,6 @@ export class CrmComponent {
         }
     }
 
-
     getOptions() {
         this.getRegionList();
 
@@ -225,6 +244,9 @@ export class CrmComponent {
 
         this.pageForm.patchValue(existingCrm);
         this.actionForm.patchValue({ crmRecordId: existingCrm.id });
+        this.smsForm.get('phone')?.setValue(this.pageForm.controls['phone'].value);
+        this.smsForm.controls['phone'].disable();
+
         this.getActionList();
 
         this.confirmationService.confirm({});

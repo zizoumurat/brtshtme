@@ -205,7 +205,7 @@
                   <p-radiobutton name="phoneOption" value="phone1" formControlName="phoneOption" inputId="phone1" />
                 </div>
 
-                <div>
+                <div *ngIf="pageForm.controls['secondPhone'].value">
                   <label for="phone2" class="mr-2">Tel 2</label>
                   <p-radiobutton name="phoneOption" value="phone2" formControlName="phoneOption" inputId="phone2" />
                 </div>
@@ -223,9 +223,18 @@
             </p-fieldset>
             <p-fieldset legend="Mesaj">
               <div class="flex items-center gap-3">
-                <div>
-                  <textarea pTextarea id="message" formControlName="message"
+                <div class="w-3/5">
+                  <textarea pTextarea id="message" formControlName="message" class="w-full"
                     [class.ng-dirty.ng-invalid]="isFieldInvalid('message')" rows="3"></textarea>
+                </div>
+                <div class="w-1/5 h-full flex text-center justify-center flex-col">
+                  <div>
+                    <span>{{smsForm.controls['message'].value.length}}</span>
+                    <span>/</span>
+                    <span>250</span>
+                  </div>
+                  <p-button icon="pi pi-send" size="small" label="Gönder"
+                      [disabled]="smsForm.invalid" (click)="saveAction()" />
                 </div>
               </div>
             </p-fieldset>
