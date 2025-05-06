@@ -50,6 +50,10 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
         ).then(response => response);
     }
 
+    getById(id: string): Promise<T> {
+        return firstValueFrom(this.http.get<T>(`${this.apiUrl}/${id}`));
+    }
+
     getSelectList(...params: (string | number)[]): Promise<SelectListItem[]> {
         const routeParams = params?.length ? '/' + params.join('/') : '';
         return firstValueFrom(this.http.get<SelectListItem[]>(`${this.apiUrl}/select-list${routeParams}`));

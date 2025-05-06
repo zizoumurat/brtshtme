@@ -4,12 +4,14 @@ import { DefaultTableOptionsDirective } from '@/core/directives/table-options.di
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
 import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
 import { CrmRecordActionModel } from '@/core/models/crm/crmrecordaction.model';
+import { FormModalComponent } from '../formmodal/formmodal.component';
 
 @Component({
   selector: 'app-tasks',
   standalone: true,
   imports: [
     SharedComponentModule,
+    FormModalComponent
   ],
   templateUrl: './tasks.component.html'
 })
@@ -26,6 +28,9 @@ export class TasksComponent {
   openAppointments: CrmRecordActionModel[] = [];
   calls: CrmRecordActionModel[] = [];
   openCalls: CrmRecordActionModel[] = [];
+
+  displayModal: boolean = false;
+  crmRecordId: string | undefined;
 
   ngOnInit() {
     this.getAppointments();
@@ -61,6 +66,16 @@ export class TasksComponent {
   onDateChange(event: Date) {
     this.getAppointments();
     this.getCalls();
+  }
+
+  showCrm(crmRecordId: string) {
+    this.crmRecordId = crmRecordId;
+    this.displayModal = true;
+    console.log('geldi', crmRecordId)
+  }
+
+  closeModal() {
+    this.displayModal = false;
   }
 }
 
