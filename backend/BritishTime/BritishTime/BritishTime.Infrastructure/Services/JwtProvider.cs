@@ -21,7 +21,7 @@ internal class JwtProvider : IJwtProvider
         _jwtOptions = jwtOptions;
     }
 
-    public async Task<LoginCommandResponse> CreateToken(AppUser user)
+    public async Task<LoginCommandResponse> CreateToken(AppUser user, Guid EmployeeId)
     {
         // Kullanıcıya ait claim'ler
         List<Claim> claims =
@@ -30,6 +30,7 @@ internal class JwtProvider : IJwtProvider
             new Claim("Name", user.FullName),
             new Claim("Email", user.Email ?? ""),
             new Claim("UserName", user.UserName ?? ""),
+            new Claim("EmployeeId", EmployeeId.ToString()),
         ];
 
         // Kullanıcıya ait roller

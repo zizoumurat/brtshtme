@@ -70,7 +70,6 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
     protected formatDates(data: any) {
         Object.keys(data).forEach(key => {
             if (data[key] instanceof Date) {
-                console.log('formatDates', data[key]);
                 data[key] = data[key].toLocaleDateString('en-CA'); // YYYY-MM-DD formatı için
             }
         });

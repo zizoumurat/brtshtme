@@ -4,5 +4,5 @@ using BritishTime.Domain.Entities;
 namespace BritishTime.Application.Services.Abstract;
 public interface IJwtProvider
 {
-    Task<LoginCommandResponse> CreateToken(AppUser user);
+    Task<LoginCommandResponse> CreateToken(AppUser user, Guid EmployeeId);
 }

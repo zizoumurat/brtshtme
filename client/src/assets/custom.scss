@@ -62,3 +62,20 @@ p-tab {
   flex: 0 0 auto; /* Sekmeler satıra sığmasa bile taşsın */
   min-width: max-content;
 }
+
+
+::ng-deep .no-background-table .p-datatable {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+::ng-deep .no-background-table .p-datatable-thead > tr,
+::ng-deep .no-background-table .p-datatable-tbody > tr {
+  background-color: transparent !important;
+}
+
+::ng-deep .no-background-table .p-datatable-thead > tr > th,
+::ng-deep .no-background-table .p-datatable-tbody > tr > td {
+  background-color: transparent !important;
+  border: none !important;
+}

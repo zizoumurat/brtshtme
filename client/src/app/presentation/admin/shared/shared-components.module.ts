@@ -38,6 +38,7 @@ import { SelectBranchComponent } from './selectBranch.component';
 import { PasswordModule } from 'primeng/password';
 import { FieldsetModule } from 'primeng/fieldset';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { SplitterModule } from 'primeng/splitter';
 
 @NgModule({
   imports: [
@@ -80,7 +81,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     SelectBranchComponent,
     PasswordModule,
     FieldsetModule,
-    RadioButtonModule
+    RadioButtonModule,
+    SplitterModule 
   ],
   exports: [
     CommonModule,
@@ -122,7 +124,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     SelectBranchComponent,
     PasswordModule,
     FieldsetModule,
-    RadioButtonModule
+    RadioButtonModule,
+    SplitterModule 
   ]
 })
 export class SharedComponentModule { }

@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Entities;
+using BritishTime.Domain.Enums;
 using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.CrmRecords;
 using BritishTime.Infrastructure.Context;

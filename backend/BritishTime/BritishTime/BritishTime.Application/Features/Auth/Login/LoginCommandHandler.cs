@@ -1,5 +1,7 @@
 ﻿using BritishTime.Application.Services.Abstract;
+using BritishTime.Application.Services.concrete;
 using BritishTime.Domain.Entities;
+using BritishTime.Domain.Repositories.Employees;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +12,9 @@ namespace BritishTime.Application.Features.Auth.Login;
 internal sealed class LoginCommandHandler(
     UserManager<AppUser> userManager,
     SignInManager<AppUser> signInManager,
-    IJwtProvider jwtProvider) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>{
+    IQueryEmployeeRepository _queryEmployeeRepository,
+    IJwtProvider jwtProvider) : IRequestHandler<LoginCommand, Result<LoginCommandResponse>>
+{
     public async Task<Result<LoginCommandResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         AppUser? user = await userManager.Users
@@ -45,7 +49,14 @@ internal sealed class LoginCommandHandler(
             return (500, "Şifreniz yanlış");
         }
 
-        var loginResponse = await jwtProvider.CreateToken(user);
+        var employee = await _queryEmployeeRepository.GetAllAsync(x => x.AppUserId == user.Id).FirstOrDefaultAsync(cancellationToken: cancellationToken);
+
+        if (employee is null)
+        {
+            return (500, "Kullanıcı bulunamadı");
+        }
+
+        var loginResponse = await jwtProvider.CreateToken(user, employee?.Id ?? Guid.Empty);
 
 
         return loginResponse;

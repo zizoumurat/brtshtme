@@ -14,7 +14,21 @@ export class CrmRecordActionService extends CrudService<CrmRecordActionModel> im
     constructor(http: HttpClient) {
         super(http, `${BASE_URL}/CrmRecordActions`);
     }
+    
+    getCalls(date: Date): Promise<CrmRecordActionModel[]> {
+        const isoDate = date.toLocaleDateString('en-CA');
+        const params = new HttpParams().set('date', isoDate);
+    
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/Calls`, { params }));
+    }
 
+    getAppointments(date: Date): Promise<CrmRecordActionModel[]> {
+        const isoDate = date.toLocaleDateString('en-CA');
+        const params = new HttpParams().set('date', isoDate);
+    
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/Appointments`, { params }));
+    }
+    
     getListByCrmRecord(crmRecordId: string): Promise<CrmRecordActionModel[]> {
         let params = new HttpParams()
             .set('crmRecordId', crmRecordId);

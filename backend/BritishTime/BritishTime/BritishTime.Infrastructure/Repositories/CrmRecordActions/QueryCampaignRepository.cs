@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Entities;
+using BritishTime.Domain.Enums;
 using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.CrmRecordActions;
 using BritishTime.Infrastructure.Context;
@@ -80,6 +81,52 @@ public class QueryCrmRecordActionRepository : IQueryCrmRecordActionRepository
         return crmRecordAction;
     }
 
+    public async Task<IList<AppointmentListDto>> GetValidAppointmentsByDateAsync(DateTime date, Guid employeeId)
+    {
+        var start = date.Date;
+        var end = date.Date.AddDays(1);
 
+        var list = await _context.CrmRecordActions
+            .Include(x => x.Employee)
+            .Include(x => x.CrmRecord)
+            .Where(r =>
+                r.EmployeeId == employeeId &&
+                r.ActionType == CrmActionType.Appointment &&
+                r.TargetDate >= start && r.TargetDate < end &&
+                !_context.CrmRecordActions.Any(x =>
+                    x.CrmRecordId == r.CrmRecordId &&
+                    x.Date > r.Date &&
+                    x.ActionType != CrmActionType.Other &&
+                    x.ActionType != CrmActionType.Appointment
+                ))
+            .Select(x => new AppointmentListDto(x.CrmRecordId, $"{x.CrmRecord.FirstName} {x.CrmRecord.LastName}", x.CrmRecord.Phone))
+            .ToListAsync();
+
+        return list;
+    }
+
+    public async Task<IList<AppointmentListDto>> GetValidCallsByDateAsync(DateTime date, Guid employeeId)
+    {
+        var start = date.Date;
+        var end = date.Date.AddDays(1);
+
+        var list = await _context.CrmRecordActions
+            .Include(x => x.Employee)
+            .Include(x => x.CrmRecord)
+            .Where(r =>
+                r.EmployeeId == employeeId &&
+                r.ActionType == CrmActionType.Callback &&
+                r.TargetDate >= start && r.TargetDate < end &&
+                !_context.CrmRecordActions.Any(x =>
+                    x.CrmRecordId == r.CrmRecordId &&
+                    x.Date > r.Date &&
+                    x.ActionType != CrmActionType.Other &&
+                    x.ActionType != CrmActionType.Callback
+                ))
+            .Select(x => new AppointmentListDto(x.CrmRecordId, $"{x.CrmRecord.FirstName} {x.CrmRecord.LastName}", x.CrmRecord.Phone))
+            .ToListAsync();
+
+        return list;
+    }
 }
 

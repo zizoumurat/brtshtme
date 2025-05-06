@@ -198,46 +198,50 @@
         <div class="mt-4 w-3/5 mx-auto">
 
           <form *ngIf="smsForm" [formGroup]="smsForm">
-            <p-fieldset legend="Telefon Numarası" class="mb-4">
-              <div class="flex items-center gap-3">
-                <div>
-                  <label for="phone1" class="mr-2">Tel 1</label>
-                  <p-radiobutton name="phoneOption" value="phone1" formControlName="phoneOption" inputId="phone1" />
-                </div>
-
-                <div *ngIf="pageForm.controls['secondPhone'].value">
-                  <label for="phone2" class="mr-2">Tel 2</label>
-                  <p-radiobutton name="phoneOption" value="phone2" formControlName="phoneOption" inputId="phone2" />
-                </div>
-
-                <div class="mr-2">
-                  <label for="manual" class="mr-2">Elle Giriş</label>
-                  <p-radiobutton name="phoneOption" value="manual" formControlName="phoneOption" inputId="manual" />
-                </div>
-
-                <div>
-                  <p-inputMask formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalid('phone')" />
-                </div>
-              </div>
-            </p-fieldset>
-            <p-fieldset legend="Mesaj">
-              <div class="flex items-center gap-3">
-                <div class="w-3/5">
-                  <textarea pTextarea id="message" formControlName="message" class="w-full"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalid('message')" rows="3"></textarea>
-                </div>
-                <div class="w-1/5 h-full flex text-center justify-center flex-col">
+            <div>
+              <p-fieldset legend="Telefon Numarası">
+                <div class="flex items-center gap-3">
                   <div>
-                    <span>{{smsForm.controls['message'].value.length}}</span>
-                    <span>/</span>
-                    <span>250</span>
+                    <label for="phone1" class="mr-2">Tel 1</label>
+                    <p-radiobutton name="phoneOption" value="phone1" formControlName="phoneOption" inputId="phone1" />
                   </div>
-                  <p-button icon="pi pi-send" size="small" label="Gönder"
-                      [disabled]="smsForm.invalid" (click)="saveAction()" />
+
+                  <div *ngIf="pageForm.controls['secondPhone'].value">
+                    <label for="phone2" class="mr-2">Tel 2</label>
+                    <p-radiobutton name="phoneOption" value="phone2" formControlName="phoneOption" inputId="phone2" />
+                  </div>
+
+                  <div class="mr-2">
+                    <label for="manual" class="mr-2">Elle Giriş</label>
+                    <p-radiobutton name="phoneOption" value="manual" formControlName="phoneOption" inputId="manual" />
+                  </div>
+
+                  <div>
+                    <p-inputMask formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('phone')" />
+                  </div>
                 </div>
-              </div>
-            </p-fieldset>
+              </p-fieldset>
+            </div>
+            <div class="mt-4">
+              <p-fieldset legend="Mesaj" class="mt-4" styleClass="mt-4">
+                <div class="flex items-center gap-3">
+                  <div class="w-4/5">
+                    <textarea pTextarea id="message" formControlName="message" class="w-full"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('message')" rows="3"></textarea>
+                  </div>
+                  <div class="w-1/5 h-full flex text-center justify-center flex-col">
+                    <div>
+                      <span>{{smsForm.controls['message'].value.length}}</span>
+                      <span>/</span>
+                      <span>250</span>
+                    </div>
+                    <p-button icon="pi pi-send" size="small" label="Gönder" [disabled]="smsForm.invalid"
+                      (click)="saveAction()" />
+                  </div>
+                </div>
+              </p-fieldset>
+            </div>
           </form>
 
         </div>

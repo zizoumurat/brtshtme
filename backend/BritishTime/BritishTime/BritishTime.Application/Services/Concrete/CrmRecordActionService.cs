@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.Internal.Mappers;
 using BritishTime.Application.Services.Abstract;
 using BritishTime.Domain.Consts;
 using BritishTime.Domain.Dtos;
@@ -141,5 +140,19 @@ public class CrmRecordActionService : ICrmRecordActionService
         var result = _queryCrmRecordActionRepository.GetListByCrmRecord(CrmRecordId);
 
         return result;
+    }
+
+    public async Task<IList<AppointmentListDto>> GetValidAppointmentsByDateAsync(DateTime date)
+    {
+        var employeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        return await _queryCrmRecordActionRepository.GetValidAppointmentsByDateAsync(date, employeeId);
+    }
+
+    public async Task<IList<AppointmentListDto>> GetValidCallsByDateAsync(DateTime date)
+    {
+        var employeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        return await _queryCrmRecordActionRepository.GetValidCallsByDateAsync(date, employeeId);
     }
 }

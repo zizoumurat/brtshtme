@@ -1,5 +1,6 @@
-using BritishTime.Application;
+﻿using BritishTime.Application;
 using BritishTime.Infrastructure;
+using BritishTime.Infrastructure.Context;
 using BritishTime.WebAPI.Middlewares;
 using DefaultCorsPolicyNugetPackage;
 using HealthChecks.UI.Client;
@@ -7,8 +8,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.OData;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using System;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -90,6 +93,13 @@ app.UseRateLimiter();
 app.UseExceptionHandler();
 
 app.MapControllers().RequireRateLimiting("fixed").RequireAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    db.Database.Migrate();
+}
+
 
 ExtensionsMiddleware.CreateFirstUser(app);
 

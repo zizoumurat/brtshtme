@@ -16,6 +16,7 @@ public class CrmRecordActionDto
     public string Description { get; set; } = string.Empty;
 }
 
+public record AppointmentListDto(Guid CrmRecordId, string Name, string Phone);
 
 public record CrmRecordActionCreateDto
 (

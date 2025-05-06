@@ -34,6 +34,18 @@ public class UserContextService : IUserContextService
         return await _userManager.FindByIdAsync(userId);
     }
 
+    public Task<Guid> GetCurrentUserEmployeeId()
+    {
+        var user = _httpContextAccessor.HttpContext?.User;
+
+        if (user == null)
+            return null; 
+
+        var userId = user.FindFirst("EmployeeId")?.Value;
+
+        return string.IsNullOrEmpty(userId) ? Task.FromResult(Guid.Empty) : Task.FromResult(Guid.Parse(userId)); 
+    }
+
     public async Task<List<string>> GetUserRolesAsync(AppUser user)
     {
         // Kullanıcının rollerini alıyoruz
