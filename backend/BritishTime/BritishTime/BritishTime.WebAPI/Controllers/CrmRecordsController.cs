@@ -3,6 +3,7 @@ using BritishTime.Application.Features.CrmRecords.Commands.DeleteCrmRecord;
 using BritishTime.Application.Features.CrmRecords.Commands.UpdateCrmRecord;
 using BritishTime.Application.Features.CrmRecordsFeatures.Queries.CheckPhone;
 using BritishTime.Application.Features.CrmRecordsFeatures.Queries.GetAllCrmRecords;
+using BritishTime.Application.Features.CrmRecordsFeatures.Queries.GetById;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Pagination;
 using BritishTime.WebAPI.Abstractions;
@@ -27,6 +28,16 @@ public sealed class CrmRecordsController : ApiController
 
         return Ok(response.result);
     }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById([FromRoute] Guid id)
+    {
+        GetByIdQuery query = new(id);
+        GetByIdQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
 
     [HttpGet("check-phone")]
     public async Task<IActionResult> GetAll([FromQuery] string phone)

@@ -93,4 +93,9 @@ public class CrmRecordService : ICrmRecordService
     {
         return await _queryCrmRecordRepository.GetByPhone(phone);
     }
+
+    public async Task<CrmRecordDto> GetByIdAsync(Guid id)
+    {
+        return await _queryCrmRecordRepository.GetByIdAsync(id);
+    }
 }
