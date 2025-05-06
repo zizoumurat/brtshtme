@@ -23,11 +23,15 @@ export class TasksComponent {
   date: Date = new Date();
 
   appointments: CrmRecordActionModel[] = [];
+  openAppointments: CrmRecordActionModel[] = [];
   calls: CrmRecordActionModel[] = [];
+  openCalls: CrmRecordActionModel[] = [];
 
   ngOnInit() {
     this.getAppointments();
+    this.getOpenAppointments();
     this.getCalls();
+    this.getOpenCalls();
   }
 
   async getAppointments() {
@@ -36,10 +40,22 @@ export class TasksComponent {
     this.appointments = result;
   }
 
+  async getOpenAppointments() {
+    var result = await this.crmRecordActionService.getOpenAppointments();
+
+    this.openAppointments = result;
+  }
+
   async getCalls() {
     var result = await this.crmRecordActionService.getCalls(this.date);
 
     this.calls = result;
+  }
+
+  async getOpenCalls() {
+    var result = await this.crmRecordActionService.getOpenCalls();
+
+    this.openCalls = result;
   }
 
   onDateChange(event: Date) {

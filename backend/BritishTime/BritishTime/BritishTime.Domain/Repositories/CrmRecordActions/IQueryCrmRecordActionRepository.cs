@@ -12,5 +12,8 @@ public interface IQueryCrmRecordActionRepository
     Task<CrmRecordActionDto> GetAsync(Expression<Func<CrmRecordAction, bool>> predicate);
     Task<IList<AppointmentListDto>> GetValidAppointmentsByDateAsync(DateTime date, Guid employeeId);
     Task<IList<AppointmentListDto>> GetValidCallsByDateAsync(DateTime date, Guid employeeId);
+    Task<IList<AppointmentListDto>> GetOpenAppointmentsAsync(Guid employeeId);
+    Task<IList<AppointmentListDto>> GetOpenCallsAsync(Guid employeeId);
+
 }
 

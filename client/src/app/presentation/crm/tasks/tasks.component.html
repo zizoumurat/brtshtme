@@ -1,11 +1,11 @@
 <div class="grid grid-cols-2 gap-4">
     <div>
         <div class="grid grid-cols-12">
-            <div class="col-span-5 bg-slate-400 text-gray-900 content-center text-center">Günlük Randevularım</div>
-            <div class="col-span-2 bg-slate-400"><p-datepicker [(ngModel)]="date" [showIcon]="true"
+            <div class="col-span-5 h-[3rem] bg-slate-400 text-gray-900 content-center text-center">Günlük Randevularım</div>
+            <div class="col-span-2 h-[3rem] bg-slate-400 content-center"><p-datepicker [(ngModel)]="date" [showIcon]="true"
                     [iconDisplay]="'input'" appendTo="body" dateFormat="dd.mm.yy"
                     (ngModelChange)="onDateChange($event)" /></div>
-            <div class="col-span-5 bg-slate-400 text-gray-900 content-center text-center">Günlük Aramalarım</div>
+            <div class="col-span-5 h-[3rem] bg-slate-400 text-gray-900 content-center text-center">Günlük Aramalarım</div>
         </div>
         <div class="grid grid-cols-2 gap-1">
             <div class="bg-blue-300 px-2 py-4">
@@ -19,13 +19,46 @@
                     </ng-template>
                 </p-table>
             </div>
-            <div class="bg-blue-200">
+            <div class="bg-blue-200 px-2 py-4">
                 <p-table [value]="calls" styleClass="!text-white">
+                    <ng-template #body let-record>
+                        <tr ngClass="!bg-transparent !text-gray-800">
+                            <td ngClass="!border-white">{{record.name}}</td>
+                            <td ngClass="!border-white">{{record.phone}}</td>
+                            <td ngClass="!border-white" style="width:1%"><p-button icon="pi pi-arrow-right"
+                                    [text]="true" /></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <div class="grid grid-cols-2">
+            <div class="h-[3rem] bg-slate-400 text-gray-900 content-center text-center">Açık Randevularım</div>
+            <div class="h-[3rem] bg-slate-400 text-gray-900 content-center text-center">Açık Aramalarım</div>
+        </div>
+        <div class="grid grid-cols-2 gap-1">
+            <div class="bg-blue-300 px-2 py-4">
+                <p-table [value]="openAppointments" styleClass="!text-white">
                     <ng-template #body let-record>
                         <tr ngClass="!bg-transparent !text-gray-800">
                             <td>{{record.name}}</td>
                             <td>{{record.phone}}</td>
                             <td style="width:1%"><p-button icon="pi pi-arrow-right" [text]="true" /></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+            <div class="bg-blue-200 px-2 py-4">
+                <p-table [value]="openCalls" styleClass="!text-white">
+                    <ng-template #body let-record>
+                        <tr ngClass="!bg-transparent !text-gray-800">
+                            <td ngClass="!border-white">{{record.name}}</td>
+                            <td ngClass="!border-white">{{record.phone}}</td>
+                            <td ngClass="!border-white" style="width:1%"><p-button icon="pi pi-arrow-right"
+                                    [text]="true" /></td>
                         </tr>
                     </ng-template>
                 </p-table>

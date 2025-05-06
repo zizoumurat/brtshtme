@@ -1,4 +1,6 @@
 ﻿using BritishTime.Application.Features.CampaignsFeatures.Queries.GetListByCrmRecord;
+using BritishTime.Application.Features.CampaignsFeatures.Queries.GetOpenAppointments;
+using BritishTime.Application.Features.CampaignsFeatures.Queries.GetOpenCalls;
 using BritishTime.Application.Features.CampaignsFeatures.Queries.GetValidAppointmentsByDate;
 using BritishTime.Application.Features.CampaignsFeatures.Queries.GetValidCallsByDate;
 using BritishTime.Application.Features.CrmRecordActions.Commands.CreateCrmRecordAction;
@@ -35,11 +37,29 @@ public sealed class CrmRecordActionsController : ApiController
         return Ok(response.result);
     }
 
+    [HttpGet("OpenAppointments")]
+    public async Task<IActionResult> GetOpenAppointments()
+    {
+        GetOpenAppointmentsQuery query = new();
+        GetOpenAppointmentsQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
     [HttpGet("Calls")]
     public async Task<IActionResult> GetCalls([FromQuery] DateTime Date)
     {
         GetValidCallsByDateQuery query = new(Date);
         GetValidCallsByDateQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
+    [HttpGet("OpenCalls")]
+    public async Task<IActionResult> GetOpenCalls()
+    {
+        GetOpenCallsQuery query = new();
+        GetOpenCallsQueryResponse response = await _mediator.Send(query);
 
         return Ok(response.result);
     }

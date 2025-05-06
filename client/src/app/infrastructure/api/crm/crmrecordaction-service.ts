@@ -22,11 +22,19 @@ export class CrmRecordActionService extends CrudService<CrmRecordActionModel> im
         return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/Calls`, { params }));
     }
 
+    getOpenCalls(): Promise<CrmRecordActionModel[]> {
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/OpenCalls`));
+    }
+
     getAppointments(date: Date): Promise<CrmRecordActionModel[]> {
         const isoDate = date.toLocaleDateString('en-CA');
         const params = new HttpParams().set('date', isoDate);
     
         return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/Appointments`, { params }));
+    }
+
+    getOpenAppointments(): Promise<CrmRecordActionModel[]> {
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/OpenAppointments`));
     }
     
     getListByCrmRecord(crmRecordId: string): Promise<CrmRecordActionModel[]> {

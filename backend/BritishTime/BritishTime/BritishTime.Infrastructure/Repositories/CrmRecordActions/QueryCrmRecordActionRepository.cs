@@ -69,7 +69,6 @@ public class QueryCrmRecordActionRepository : IQueryCrmRecordActionRepository
         return _mapper.Map<CrmRecordActionDto>(entity);
     }
 
-
     public async Task<CrmRecordActionDto> GetByIdAsync(Guid id)
     {
         var crmRecordAction = await _context.CrmRecordActions
@@ -117,6 +116,51 @@ public class QueryCrmRecordActionRepository : IQueryCrmRecordActionRepository
                 r.EmployeeId == employeeId &&
                 r.ActionType == CrmActionType.Callback &&
                 r.TargetDate >= start && r.TargetDate < end &&
+                !_context.CrmRecordActions.Any(x =>
+                    x.CrmRecordId == r.CrmRecordId &&
+                    x.Date > r.Date &&
+                    x.ActionType != CrmActionType.Other &&
+                    x.ActionType != CrmActionType.Callback
+                ))
+            .Select(x => new AppointmentListDto(x.CrmRecordId, $"{x.CrmRecord.FirstName} {x.CrmRecord.LastName}", x.CrmRecord.Phone))
+            .ToListAsync();
+
+        return list;
+    }
+
+    public async Task<IList<AppointmentListDto>> GetOpenAppointmentsAsync(Guid employeeId)
+    {
+        var today = DateTime.Now.Date;
+
+        var list = await _context.CrmRecordActions
+            .Include(x => x.Employee)
+            .Include(x => x.CrmRecord)
+            .Where(r =>
+                r.EmployeeId == employeeId &&
+                r.ActionType == CrmActionType.Appointment &&
+                r.TargetDate < today &&
+                !_context.CrmRecordActions.Any(x =>
+                    x.CrmRecordId == r.CrmRecordId &&
+                    x.Date > r.Date &&
+                    x.ActionType != CrmActionType.Other &&
+                    x.ActionType != CrmActionType.Appointment
+                ))
+            .Select(x => new AppointmentListDto(x.CrmRecordId, $"{x.CrmRecord.FirstName} {x.CrmRecord.LastName}", x.CrmRecord.Phone))
+            .ToListAsync();
+
+        return list;
+    }
+    public async Task<IList<AppointmentListDto>> GetOpenCallsAsync(Guid employeeId)
+    {
+        var today = DateTime.Now.Date;
+
+        var list = await _context.CrmRecordActions
+            .Include(x => x.Employee)
+            .Include(x => x.CrmRecord)
+            .Where(r =>
+                r.EmployeeId == employeeId &&
+                r.ActionType == CrmActionType.Callback &&
+                r.TargetDate < today &&
                 !_context.CrmRecordActions.Any(x =>
                     x.CrmRecordId == r.CrmRecordId &&
                     x.Date > r.Date &&

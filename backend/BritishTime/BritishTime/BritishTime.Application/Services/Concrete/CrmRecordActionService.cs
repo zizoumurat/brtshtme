@@ -8,6 +8,7 @@ using BritishTime.Domain.Repositories.CrmRecordActions;
 using BritishTime.Domain.Repositories.CrmRecords;
 using BritishTime.Domain.Repositories.Employees;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BritishTime.Application.Services.concrete;
 public class CrmRecordActionService : ICrmRecordActionService
@@ -140,6 +141,20 @@ public class CrmRecordActionService : ICrmRecordActionService
         var result = _queryCrmRecordActionRepository.GetListByCrmRecord(CrmRecordId);
 
         return result;
+    }
+
+    public async Task<IList<AppointmentListDto>> GetOpenAppointmentsAsync()
+    {
+        var employeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        return await _queryCrmRecordActionRepository.GetOpenAppointmentsAsync(employeeId);
+    }
+
+    public async Task<IList<AppointmentListDto>> GetOpenCallsAsync()
+    {
+        var employeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        return await _queryCrmRecordActionRepository.GetOpenCallsAsync(employeeId);
     }
 
     public async Task<IList<AppointmentListDto>> GetValidAppointmentsByDateAsync(DateTime date)
