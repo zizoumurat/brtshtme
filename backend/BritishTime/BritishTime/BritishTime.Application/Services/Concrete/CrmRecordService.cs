@@ -25,9 +25,12 @@ public class CrmRecordService : ICrmRecordService
         _queryEmployeeRepository = queryEmployeeRepository;
     }
 
-    public Task<PaginatedList<CrmRecordDto>> GetAllAsync(CrmRecordFilterDto filter, PageRequest pagination)
+    public async Task<PaginatedList<CrmRecordDto>> GetAllAsync(CrmRecordFilterDto filter, PageRequest pagination)
     {
-        var result = _queryCrmRecordRepository.GetAllAsync(filter, pagination);
+        if (filter.EmployeeId == null)
+            filter.EmployeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        var result = await _queryCrmRecordRepository.GetAllAsync(filter, pagination);
 
         return result;
     }
@@ -51,7 +54,7 @@ public class CrmRecordService : ICrmRecordService
 
             if (employee == null) throw new KeyNotFoundException("notFoundEntity");
 
-            crm.Date = DateTime.UtcNow;
+            crm.Date = DateTime.Now;
             crm.SalesRepresentativeId = employee.Id;
 
             await _commandCrmRecordRepository.AddAsync(crm);

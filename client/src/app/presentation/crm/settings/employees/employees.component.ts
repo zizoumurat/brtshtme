@@ -76,7 +76,6 @@ export class EmployeesComponent extends AppBaseComponent<EmployeeModel, IEmploye
       ]).subscribe(([employeeRoles, salaryTypes]) => {
         this.employeeRoleOptions = employeeRoles;
         this.salaryTypeOptions = salaryTypes;
-        console.log(this.salaryTypeOptions);
       });
     }
 }

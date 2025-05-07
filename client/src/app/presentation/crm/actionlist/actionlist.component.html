@@ -1,0 +1,56 @@
+<div>
+    <p-table [value]="rows" [paginator]="true" [showGridlines]="true" [rows]="maxPageRow" [totalRecords]="totalRecords"
+        [lazy]="true" responsiveLayout="scroll" (onLazyLoad)="loadData($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date">Tarih <p-sortIcon field="date" /></th>
+                <th pSortableColumn="crmRecord.firstName">Ad <p-sortIcon field="crmRecord.firstName" /></th>
+                <th pSortableColumn="crmRecord.lastName">Soyad <p-sortIcon field="crmRecord.lastName" /></th>
+                <th pSortableColumn="actionType">İşlem Türü<p-sortIcon field="actionType" /></th>
+                <th pSortableColumn="crmRecord.status">Data Durumu<p-sortIcon field="crmRecord.status" /></th>
+                <th class="actions">İşlemler</th>
+            </tr>
+            <tr>
+                <th>
+                    <p-fluid>
+                        <p-datepicker selectionMode="range" [(ngModel)]="dateRange" appendTo="body"
+                            [readonlyInput]="true" (ngModelChange)="dateRangeChanged($event)" />
+                    </p-fluid>
+                </th>
+                <th>
+                    <input pInputText type="text" (input)="onSearch($event, 'firstName')" placeholder="Arama.."
+                        class="w-full" />
+                </th>
+                <th>
+                    <input pInputText type="text" (input)="onSearch($event, 'lastName')" placeholder="Arama.."
+                        class="w-full" />
+                </th>
+                <th>
+                    <p-select [options]="actionTypeOptions" placeholder="Seçiniz" appendTo="body"
+                        (onChange)="onSearch($event,'actionType')" class="w-full" />
+                </th>
+                <th>
+                    <p-select [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
+                        (onChange)="onSearch($event,'status')" class="w-full" />
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-record>
+            <tr>
+                <td>{{ record.date | date: 'dd.MM.yyyy HH:mm' }}</td>
+                <td>{{ record.crmRecord.firstName }}</td>
+                <td>{{ record.crmRecord.lastName }}</td>
+                <td>{{ record.actionType | enumTranslate: CrmActionType :'CrmActionType' }}</td>
+                <td>{{ record.crmRecord.status | enumTranslate: CrmStatus :'CrmStatus' }}</td>
+                <td class="actions">
+                    <p-button icon="pi pi-arrow-right" (click)="showCrm(record.crmRecord.id)" [text]="true" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-formmodal *ngIf="displayModal && crmRecordId" [id]="crmRecordId" [displayModal]="displayModal"
+    (onCloseModal)="closeModal()"></app-formmodal>

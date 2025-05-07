@@ -28,6 +28,7 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     pageModal: string = '';
     private searchInputSubject = new Subject<string>();
     searchFilter: Partial<Record<string, any>> = {};
+    dateRange: [] | undefined = undefined;
 
     constructor(serviceToken: InjectionToken<S>) {
         this.recordService = inject(serviceToken);
@@ -79,7 +80,26 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
         this.displayModal = true;
     }
 
-    onSearch(value: any, field: string, isDate: boolean = false) {
+    dateRangeChanged(event: any) {
+        const selectedDates: Date[] = this.dateRange ?? [];
+
+        console.log(this.dateRange);
+        console.log(selectedDates);
+
+        if (selectedDates && selectedDates.filter(x => x != undefined).length === 2) {
+            const startDate = this.formatDate(selectedDates[0]);
+            const endDate = this.formatDate(selectedDates[1]);
+            const dateFilter = { startDate, endDate }
+            
+            this.searchFilter = { ...this.searchFilter,...dateFilter,  }
+
+            this.searchInputSubject.next(JSON.stringify(this.searchFilter));
+        }
+    }
+
+    onSearch(event: any, field: string, isDate: boolean = false) {
+        console.log(event);
+        const value = event.target?.value || event.value;
         if (value === null || value === undefined || value === '') {
             const { [field]: _, ...updatedFilter } = this.searchFilter;
             this.searchFilter = updatedFilter;
@@ -143,9 +163,9 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
         const branchId = this.pageForm.get('branchId')?.value;
         this.pageForm.reset();
 
-        if(branchId) {
+        if (branchId) {
             this.pageForm.patchValue({ branchId: branchId });
-        }   
+        }
     }
 
     isFieldInvalid(controlName: string): boolean {
@@ -156,16 +176,16 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     enumToSelectOptionsAsync<T extends object>(enumObj: T, prefix: string): Observable<SelectListItem[]> {
         const keys = Object.keys(enumObj).filter(key => isNaN(Number(key)));
         const translations$ = keys.map(key =>
-          this.translateService.get(`enums.${prefix}.${key}`)
+            this.translateService.get(`enums.${prefix}.${key}`)
         );
-      
+
         return forkJoin(translations$).pipe(
-          map(translations => {
-            return keys.map((key, index) => ({
-              name: translations[index],
-              id: enumObj[key as keyof T]
-            }) as SelectListItem);
-          })
+            map(translations => {
+                return keys.map((key, index) => ({
+                    name: translations[index],
+                    id: enumObj[key as keyof T]
+                }) as SelectListItem);
+            })
         );
     }
 }

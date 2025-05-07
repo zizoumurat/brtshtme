@@ -4,11 +4,11 @@ using BritishTime.Domain.Consts;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Entities;
 using BritishTime.Domain.Enums;
+using BritishTime.Domain.Pagination;
 using BritishTime.Domain.Repositories.CrmRecordActions;
 using BritishTime.Domain.Repositories.CrmRecords;
 using BritishTime.Domain.Repositories.Employees;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BritishTime.Application.Services.concrete;
 public class CrmRecordActionService : ICrmRecordActionService
@@ -134,6 +134,16 @@ public class CrmRecordActionService : ICrmRecordActionService
             Console.WriteLine(ex.Message);
             throw;
         }
+    }
+
+    public async Task<PaginatedList<CrmRecordActionDto>> GetAllAsync(CrmRecordActionFilterDto filter, PageRequest pagination)
+    {
+        if (filter.EmployeeId == null)
+            filter.EmployeeId = await _userContextService.GetCurrentUserEmployeeId();
+
+        var result = await _queryCrmRecordActionRepository.GetAllAsync(filter, pagination);
+
+        return result;
     }
 
     public Task<IList<CrmRecordActionDto>> GetListByCrmRecord(Guid CrmRecordId)

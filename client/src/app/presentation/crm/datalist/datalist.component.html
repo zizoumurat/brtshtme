@@ -1,0 +1,63 @@
+<div>
+    <p-table [value]="rows" [paginator]="true" [showGridlines]="true" [rows]="maxPageRow" [totalRecords]="totalRecords"
+        [lazy]="true" responsiveLayout="scroll" (onLazyLoad)="loadData($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="date">Tarih <p-sortIcon field="date" /></th>
+                <th pSortableColumn="firstName">Ad <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="lastName">Soyad <p-sortIcon field="lastName" /></th>
+                <th pSortableColumn="status">Data Durumu<p-sortIcon field="status" /></th>
+                <th pSortableColumn="dataProvider.firstName">Data Sağlayıcı<p-sortIcon field="dataProvider.firstName" />
+                </th>
+                <th pSortableColumn="region.name">Bölge<p-sortIcon field="region.name" /></th>
+                <th class="actions">İşlemler</th>
+            </tr>
+            <tr>
+                <th>
+                    <p-fluid>
+                        <p-datepicker selectionMode="range" [(ngModel)]="dateRange" appendTo="body"
+                            [readonlyInput]="true" (ngModelChange)="dateRangeChanged($event)" />
+                    </p-fluid>
+                </th>
+                <th>
+                    <input pInputText type="text" (input)="onSearch($event, 'firstName')" placeholder="Arama.."
+                        class="w-full" />
+                </th>
+                <th>
+                    <input pInputText type="text" (input)="onSearch($event, 'lastName')" placeholder="Arama.."
+                        class="w-full" />
+                </th>
+                <th>
+                    <p-select [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
+                        (onChange)="onSearch($event,'status')" class="w-full" />
+                </th>
+                <th>
+                    <p-select [options]="dataProviderOptions" placeholder="Seçiniz" appendTo="body"
+                        (onChange)="onSearch($event,'dataProviderId')" class="w-full" />
+                </th>
+                <th>
+                    <p-select [options]="regionOptions" placeholder="Seçiniz" appendTo="body"
+                        (onChange)="onSearch($event,'regionId')" class="w-full" />
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-record>
+            <tr>
+                <td>{{ record.date | date: 'dd.MM.yyyy HH:mm' }}</td>
+                <td>{{ record.firstName }}</td>
+                <td>{{ record.lastName }}</td>
+                <td>{{ record.status | enumTranslate: CrmStatus :'CrmStatus' }}</td>
+                <td>{{ record.dataProviderFirstName }} {{ record.dataProviderLastName }}</td>
+                <td>{{ record.regionName }}</td>
+                <td class="actions">
+                    <p-button icon="pi pi-arrow-right" (click)="showCrm(record.id)" [text]="true" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<app-formmodal *ngIf="displayModal && crmRecordId" [id]="crmRecordId" [displayModal]="displayModal"
+    (onCloseModal)="closeModal()"></app-formmodal>

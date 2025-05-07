@@ -1,5 +1,6 @@
 export interface User {
-  Ref: number;
+  Id: string;
+  BranchId: string;
   Email: string;
   FullName: string;
   Name: string;

@@ -32,7 +32,7 @@ internal sealed class LoginCommandHandler(
 
         if (signInResult.IsLockedOut)
         {
-            TimeSpan? timeSpan = user.LockoutEnd - DateTime.UtcNow;
+            TimeSpan? timeSpan = user.LockoutEnd - DateTime.Now;
             if (timeSpan is not null)
                 return (500, $"Şifrenizi 3 defa yanlış girdiğiniz için kullanıcı {Math.Ceiling(timeSpan.Value.TotalMinutes)} dakika süreyle bloke edilmiştir");
             else

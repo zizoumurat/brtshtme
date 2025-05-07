@@ -12,6 +12,9 @@ public record CrmRecordDto(
     Guid DataProviderId,
     Guid SalesRepresentativeId,
     Guid RegionId,
+    string RegionName,
+    string DataProviderFirstName,
+    string DataProviderLastName,
     CrmDataSource DataSource,
     bool ExcludeFromCommission,
     string Description,
@@ -34,4 +37,14 @@ public record CrmRecordCreateDto(
     Guid BranchId
 );
 
-public sealed record CrmRecordFilterDto() : SearchDto();
+public class CrmRecordFilterDto
+{
+    public Guid? EmployeeId { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
+    public CrmStatus? Status { get; set; }
+    public Guid? DataProviderId { get; set; }
+    public Guid? RegionId { get; set; }
+}

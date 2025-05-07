@@ -30,6 +30,20 @@ public class QueryCrmRecordActionRepository : IQueryCrmRecordActionRepository
 
         var count = await query.CountAsync();
 
+        if (filter != null)
+        {
+            query = query.Where(x =>
+                    (filter.StartDate == null || x.Date.Date >= filter.StartDate.Value.Date) &&
+                    (filter.EndDate == null || x.Date.Date <= filter.EndDate.Value.Date) &&
+                    (filter.Status == null || x.CrmRecord.Status == filter.Status) &&
+                    (filter.ActionType == null || x.ActionType == filter.ActionType) &&
+                    (filter.DataProviderId == null || x.CrmRecord.DataProviderId == filter.DataProviderId) &&
+                    (filter.RegionId == null || x.CrmRecord.RegionId == filter.RegionId) &&
+                    (string.IsNullOrEmpty(filter.FirstName) || x.CrmRecord.FirstName.ToLower().Contains(filter.FirstName.ToLower())) &&
+                    (string.IsNullOrEmpty(filter.LastName) || x.CrmRecord.LastName.ToLower().Contains(filter.LastName.ToLower()))
+                );
+        }
+
         var items = await query
             .MultiSort(pagination.sortByMultiName, pagination.sortByMultiOrder)
             .Skip((pagination.Page - 1) * pagination.PageSize)

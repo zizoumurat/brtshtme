@@ -4,7 +4,9 @@ using BritishTime.Application.Features.CampaignsFeatures.Queries.GetOpenCalls;
 using BritishTime.Application.Features.CampaignsFeatures.Queries.GetValidAppointmentsByDate;
 using BritishTime.Application.Features.CampaignsFeatures.Queries.GetValidCallsByDate;
 using BritishTime.Application.Features.CrmRecordActions.Commands.CreateCrmRecordAction;
+using BritishTime.Application.Features.CrmRecordActionsFeatures.Queries.GetAllCrmRecordActions;
 using BritishTime.Domain.Dtos;
+using BritishTime.Domain.Pagination;
 using BritishTime.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -19,11 +21,20 @@ public sealed class CrmRecordActionsController : ApiController
     {
     }
 
-    [HttpGet]
+    [HttpGet("get-by-crm")]
     public async Task<IActionResult> GetAll([FromQuery] Guid CrmRecordId)
     {
         GetListByCrmRecordQuery query = new(CrmRecordId);
         GetListByCrmRecordQueryResponse response = await _mediator.Send(query);
+
+        return Ok(response.result);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] CrmRecordActionFilterDto filter, [FromQuery] PageRequest pagination)
+    {
+        GetAllCrmRecordActionsQuery query = new(filter, pagination);
+        GetAllCrmRecordActionsQueryResponse response = await _mediator.Send(query);
 
         return Ok(response.result);
     }

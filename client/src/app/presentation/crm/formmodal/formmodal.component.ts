@@ -150,7 +150,6 @@ export class FormModalComponent {
   }
 
   async getCrmRecord() {
-    console.log(this.id)
     if(this.id) {
       var crmRecord = await this.crmRecordService.getById(this.id);
       this.pageForm.patchValue(crmRecord);

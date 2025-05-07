@@ -39,7 +39,7 @@ export abstract class CrudService<T extends HasId> implements ICrudService<T> {
                         // Array öğelerini farklı parametreler olarak ekliyoruz
                         params = params.append(`${key}[${index}]`, item.toString());
                     });
-                } else if (value !== null && value !== undefined && value !== "" && value !== 0) {
+                } else if (value !== null && value !== undefined && value !== "") {
                     params = params.set(key, value.toString());
                 }
             });

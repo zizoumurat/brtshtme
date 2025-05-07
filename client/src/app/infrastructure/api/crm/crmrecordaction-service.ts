@@ -41,6 +41,6 @@ export class CrmRecordActionService extends CrudService<CrmRecordActionModel> im
         let params = new HttpParams()
             .set('crmRecordId', crmRecordId);
 
-        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}`, { params }));
+        return firstValueFrom(this.http.get<CrmRecordActionModel[]>(`${this.apiUrl}/get-by-crm`, { params }));
     }
 }

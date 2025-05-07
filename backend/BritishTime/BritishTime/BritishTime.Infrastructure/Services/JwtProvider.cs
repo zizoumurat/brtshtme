@@ -30,6 +30,7 @@ internal class JwtProvider : IJwtProvider
             new Claim("Name", user.FullName),
             new Claim("Email", user.Email ?? ""),
             new Claim("UserName", user.UserName ?? ""),
+            new Claim("BranchId", user.BranchId.ToString() ?? ""),
             new Claim("EmployeeId", EmployeeId.ToString()),
         ];
 
@@ -38,7 +39,7 @@ internal class JwtProvider : IJwtProvider
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         // Token süresi
-        DateTime expires = DateTime.UtcNow.AddMonths(1);
+        DateTime expires = DateTime.Now.AddMonths(1);
 
         // Güvenlik anahtarı
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SecretKey));

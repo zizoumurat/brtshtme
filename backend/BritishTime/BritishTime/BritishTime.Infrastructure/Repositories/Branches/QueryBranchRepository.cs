@@ -25,7 +25,11 @@ public class QueryBranchRepository : IQueryBranchRepository
     {
         pagination ??= new PageRequest();
 
-        var query = _context.Set<Branch>().AsNoTracking().Where(x =>
+        var query = _context.Set<Branch>().AsNoTracking();
+
+        var count = await query.CountAsync();
+
+        query = query.Where(x =>
             (string.IsNullOrWhiteSpace(filter.Search) ||
              x.Name.ToLower().Contains(filter.Search.ToLower()) ||
              x.PhoneNumber.ToLower().Contains(filter.Search.ToLower()) ||
@@ -35,8 +39,6 @@ public class QueryBranchRepository : IQueryBranchRepository
             (filter == null || string.IsNullOrEmpty(filter.Name) || x.Name.ToLower().Contains(filter.Address.ToLower())) &&
             (filter == null || string.IsNullOrEmpty(filter.Address) || x.Address.ToLower().Contains(filter.Address.ToLower()))
         );
-
-        var count = await query.CountAsync();
 
         var items = await query
             .MultiSort(pagination.sortByMultiName, pagination.sortByMultiOrder)

@@ -71,7 +71,6 @@ export class TasksComponent {
   showCrm(crmRecordId: string) {
     this.crmRecordId = crmRecordId;
     this.displayModal = true;
-    console.log('geldi', crmRecordId)
   }
 
   closeModal() {
