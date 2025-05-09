@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
 import { CrmRecordActionModel } from '@/core/models/crm/crmrecordaction.model';
@@ -28,7 +28,7 @@ export class FormModalComponent {
   @Input() displayModal: boolean = false;
   @Input() id: string | undefined = undefined;
   @Output() onCloseModal = new EventEmitter();
-  
+
   authService = inject(AUTH_SERVICE);
   crmRecordService = inject(CRMRECORD_SERVICE);
   crmRecordActionService = inject(CRMRECORDACTION_SERVICE);
@@ -56,18 +56,25 @@ export class FormModalComponent {
 
   selectedPhoneOption: 'phone1' | 'phone2' | 'manual' = 'phone1'
 
+  saleList: any[] = [];
+
   constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) {
   }
 
 
   ngOnInit() {
-    this.getOptions();
     this.initForm();
+    this.getOptions();
     this.initActionForm();
     this.initSmsForm();
     this.getCrmRecord();
 
     this.currentUser = this.authService.getUser()?.Name || '';
+
+    this.saleList = [
+      { employeeName: 'Murat Dere', date: new Date(), amount: 5000 },
+      { employeeName: 'Murat Dere', date: new Date(), amount: 15000 },
+    ]
   }
 
   initForm(): void {
@@ -94,8 +101,6 @@ export class FormModalComponent {
         this.dataProviderOptions = await this.employeeService.getSelectList(id);
       }
     });
-
-    this.pageForm.get('phone')?.setValue('(537) 026 01 30');
 
   }
 
@@ -150,7 +155,7 @@ export class FormModalComponent {
   }
 
   async getCrmRecord() {
-    if(this.id) {
+    if (this.id) {
       var crmRecord = await this.crmRecordService.getById(this.id);
       this.pageForm.patchValue(crmRecord);
       this.getActionList();
@@ -161,8 +166,8 @@ export class FormModalComponent {
     this.onCloseModal.emit();
   }
 
-  visibleChange(value:boolean) {
-    if(!value) {
+  visibleChange(value: boolean) {
+    if (!value) {
       this.closeModal();
     }
   }
@@ -187,8 +192,6 @@ export class FormModalComponent {
 
       if (otherActionExists) {
         this.actionForm.reset();
-        console.log(this.actionForm.invalid, 'invalid mi')
-        // this.actionForm.disable();
       } else {
         this.actionForm.enable();
         this.allowedActionTypes = this.actionTypeOptions.filter(option => option.id === (CrmActionType.Other).toString());
@@ -217,6 +220,9 @@ export class FormModalComponent {
   }
 
   async checkPhone() {
+    if (this.pageForm.get('id')?.value)
+      return;
+
     const phone = this.pageForm.controls['phone'].value;
     if (!phone) return;
 
@@ -272,6 +278,11 @@ export class FormModalComponent {
     } else {
       this.actionForm.markAllAsTouched();
     }
+  }
+
+  getTotalAmount(): number {
+    if (!this.saleList || this.saleList.length === 0) return 0;
+    return this.saleList.reduce((sum, item) => sum + (item.amount || 0), 0);
   }
 
   isFieldInvalid(controlName: string): boolean {

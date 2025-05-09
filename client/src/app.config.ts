@@ -14,6 +14,10 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { dateConversionInterceptor } from '@/core/interceptors/dateConversionInterceptor';
 
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeTr from '@angular/common/locales/tr';
+
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
 import { AuthService } from '@/infrastructure/api/admin/auth-service';
 import { CALENDAR_SERVICE } from '@/core/services/admin/calendar-service';
@@ -119,6 +123,8 @@ export const appConfig: ApplicationConfig = {
             }),
             withEnabledBlockingInitialNavigation()
         ),
+
+        { provide: LOCALE_ID, useValue: 'tr-TR' },
 
         provideHttpClient(withFetch()),
         provideAnimationsAsync(),
