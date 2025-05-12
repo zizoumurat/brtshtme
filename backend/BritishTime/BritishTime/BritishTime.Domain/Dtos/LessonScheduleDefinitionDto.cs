@@ -15,7 +15,8 @@ public sealed record LessonScheduleDefinitionDto(
     List<DayOfWeek> Days,
     TimeOnly StartTime,
     TimeOnly EndTime,
-    ScheduleCategory ScheduleCategory
+    ScheduleCategory ScheduleCategory,
+    decimal Discount
 );
 
 public sealed record LessonScheduleDefinitionCreateDto(
@@ -28,7 +29,8 @@ public sealed record LessonScheduleDefinitionCreateDto(
     List<DayOfWeek> Days,
     string StartTime,
     ScheduleCategory ScheduleCategory,
-    Guid BranchId
+    Guid BranchId,
+    decimal Discount
 );
 
 public sealed record LessonScheduleDefinitionFilterDto(

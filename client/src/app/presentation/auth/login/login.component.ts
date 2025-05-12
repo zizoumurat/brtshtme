@@ -9,17 +9,22 @@ import { ButtonModule } from 'primeng/button';
 import { IAuthService } from '@/core/services/admin/auth-service';
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
 import { LoginRequest } from '@/core/models/admin/login-request';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [CommonModule, AuthLogoWidget, RouterModule, InputTextModule, FormsModule, ReactiveFormsModule, CheckboxModule, ButtonModule],
+    imports: [CommonModule, AuthLogoWidget, TranslateModule, RouterModule, InputTextModule, FormsModule, ReactiveFormsModule, CheckboxModule, ButtonModule, ToastModule],
     templateUrl: './login.component.html',
 })
 export class LoginComponent {
     private router = inject(Router);
     private fb = inject(FormBuilder);
     private authService = inject<IAuthService>(AUTH_SERVICE);
+    private messageService = inject(MessageService);
+    translateService: TranslateService = inject(TranslateService);
 
     errorMessage: string | null = null;
 
@@ -43,8 +48,15 @@ export class LoginComponent {
 
         try {
             await this.authService.login(request);
-        } catch (error) {
-            this.errorMessage = error instanceof Error ? error.message : 'Login failed!';
+        } catch (error: string[] | any) {
+            this.errorMessage = error?.join(', ') || 'Giriş başarısız oldu. Lütfen bilgilerinizi kontrol edin.';
+
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Hata',
+                detail: this.errorMessage || 'Giriş başarısız oldu. Lütfen bilgilerinizi kontrol edin.',
+                life: 3000,
+            });
         }
     }
 }

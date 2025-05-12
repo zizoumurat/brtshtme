@@ -6,7 +6,7 @@ import { SelectListItem } from '@/core/models/select-list-item.model';
 import { CrmDataSource } from '@/core/enums/crmDataSource';
 import { CrmStatus } from '@/core/enums/crmStatus';
 import { CrmActionType } from '@/core/enums/crmActionType';
-import { forkJoin } from 'rxjs';
+import { forkJoin, last } from 'rxjs';
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
 import { CRMRECORD_SERVICE } from '@/core/services/crm/crmrecord-service';
 import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
@@ -15,6 +15,7 @@ import { CrmRecordModel } from '@/core/models/crm/crmrecord.model';
 import { EMPLOYEE_SERVICE } from '@/core/services/crm/employee-service';
 import { REGION_SERVICE } from '@/core/services/crm/region-service';
 import { ConfirmationService } from 'primeng/api';
+import { br } from 'node_modules/@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-formmodal',
@@ -41,6 +42,7 @@ export class FormModalComponent {
   pageForm!: FormGroup;
   actionForm!: FormGroup;
   smsForm!: FormGroup;
+  salesForm!: FormGroup;
 
   regionOptions: SelectListItem[] = []
   dataSourceOptions: SelectListItem[] = [];
@@ -58,6 +60,8 @@ export class FormModalComponent {
 
   saleList: any[] = [];
 
+  showSalesModal: boolean = false;
+
   constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) {
   }
 
@@ -67,6 +71,7 @@ export class FormModalComponent {
     this.getOptions();
     this.initActionForm();
     this.initSmsForm();
+    this.initSalesForm();
     this.getCrmRecord();
 
     this.currentUser = this.authService.getUser()?.Name || '';
@@ -154,6 +159,52 @@ export class FormModalComponent {
     });
   }
 
+  initSalesForm(): void {
+    this.salesForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', [Validators.required]],
+      identityNumber: ['', [Validators.required, Validators.minLength(11)]],
+      birthDate: [null, Validators.required],
+      phone: ['', Validators.required],
+      secondPhone: ['', Validators.required],
+      email: ['', [Validators.email]],
+      studentType: [null, Validators.required],
+      address: [null, Validators.required],
+      cityId: [null, Validators.required],
+      districtId: [null, Validators.required],
+      branchId: [null, Validators.required],
+
+      // Veli bilgileri
+      parentName: [''],
+      parentIdentity: [''],
+      parentBirthDate: [''],
+      parentPhone: [''],
+      parentIdentityNumber: ['', [Validators.required, Validators.minLength(11)]],
+
+
+      // Lokasyon ve sunum tipi
+      city: [null, Validators.required],
+      district: [null, Validators.required],
+      deliveryType: ['offline', Validators.required], // 'offline' or 'online'
+
+      // Program bilgileri
+      program: [null, Validators.required],
+      days: [[], Validators.required],
+      hours: ['', Validators.required],
+      level: [null, Validators.required],
+
+      // Kampanya ve ödeme bilgileri
+      campaign: [null],
+      installments: [1, Validators.required],
+      paymentType: ['cash', Validators.required], // 'cash', 'check', 'credit'
+      discountReason: [null],
+
+      // Ödeme tutarı (hesaplanan, kullanıcı girmez ama gerekirse gösterilebilir)
+      totalAmount: [0],
+    });
+
+  }
+
   async getCrmRecord() {
     if (this.id) {
       var crmRecord = await this.crmRecordService.getById(this.id);
@@ -172,6 +223,11 @@ export class FormModalComponent {
     }
   }
 
+  openSalesModal() {
+    this.showSalesModal = true;
+    this.salesForm.patchValue(this.pageForm.getRawValue());
+  }
+
   async getRegionList() {
     this.regionOptions = await this.regionService.getSelectList();
   }
@@ -186,6 +242,10 @@ export class FormModalComponent {
     const lastAction = [...this.crmActions]
       .filter(x => x.actionType !== CrmActionType.Other)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+
+    if (!lastAction) {
+      return;
+    }
 
     if (lastAction.actionType == CrmActionType.Sale) {
       const otherActionExists = this.crmActions.some(a => a.actionType === CrmActionType.Other);
@@ -287,6 +347,11 @@ export class FormModalComponent {
 
   isFieldInvalid(controlName: string): boolean {
     const control = this.pageForm.get(controlName);
+    return control?.invalid && control?.touched ? true : false;
+  }
+
+  isFieldInvalidSales(controlName: string): boolean {
+    const control = this.salesForm.get(controlName);
     return control?.invalid && control?.touched ? true : false;
   }
 

@@ -122,6 +122,10 @@ public class CrmRecordActionService : ICrmRecordActionService
                 {
                     crm.Status = CrmStatus.Negative;
                 }
+                else if (crmRecordAction.ActionType == CrmActionType.Sale)
+                {
+                    crm.Status = CrmStatus.Sold;
+                }
 
                 await _crmRecordRepository.UpdateAsync(crm);
             }

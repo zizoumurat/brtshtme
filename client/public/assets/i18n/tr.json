@@ -111,9 +111,12 @@
     "noRecords": "Kayıt bulunamadı.",
     "enums": {
         "StudentType": {
-            "Adult": "Yetişkin",
-            "HighSchool": "Lise",
             "PrimarySchool": "İlkokul",
+            "MiddleSchool": "Ortaokul",
+            "HighSchoolStudent": "Lise Öğrencisi",
+            "HighSchoolGraduate": "Lise Mezunu",
+            "UniversityStudent": "Üniversite Öğrencisi",
+            "UniversityGraduate": "Üniversite Mezunu",
             "Other": "Diğer"
         },
         "EducationType": {

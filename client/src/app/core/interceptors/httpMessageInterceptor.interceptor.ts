@@ -25,10 +25,14 @@ export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
         router.navigate(['/auth/login']);
       }
       let errorMessage = '';
+      console.log(error);
       if (error.error instanceof ErrorEvent) {
         errorMessage = `Hata: ${error.error.message}`;
       }
-      else if (error.error.ErrorMessages) {
+      else if (error.error?.ErrorMessages) {
+        errorMessage = error.error.ErrorMessages.map((e: any) => `errors.${e}`).join('<br>');
+      }
+            else if (error.error.ErrorMessages) {
         errorMessage = error.error.ErrorMessages.map((e: any) => `errors.${e}`).join('<br>');
       }
       else {

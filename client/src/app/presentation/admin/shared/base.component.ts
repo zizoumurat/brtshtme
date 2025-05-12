@@ -14,6 +14,7 @@ import { debounceTime, forkJoin, map, Observable, Subject } from 'rxjs';
 })
 export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     protected recordService: S;
+    private searchInputSubject = new Subject<string>();
 
     translateService: TranslateService = inject(TranslateService);
 
@@ -26,14 +27,12 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     lastLazyLoadEvent: TableLazyLoadEvent | undefined;
     pageTitle: string = '';
     pageModal: string = '';
-    private searchInputSubject = new Subject<string>();
     searchFilter: Partial<Record<string, any>> = {};
     dateRange: [] | undefined = undefined;
 
     constructor(serviceToken: InjectionToken<S>) {
         this.recordService = inject(serviceToken);
     }
-
 
     ngOnInit() {
         this.searchInputSubject.pipe(debounceTime(300)).subscribe((searchTerm) => {
@@ -83,15 +82,12 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     dateRangeChanged(event: any) {
         const selectedDates: Date[] = this.dateRange ?? [];
 
-        console.log(this.dateRange);
-        console.log(selectedDates);
-
         if (selectedDates && selectedDates.filter(x => x != undefined).length === 2) {
             const startDate = this.formatDate(selectedDates[0]);
             const endDate = this.formatDate(selectedDates[1]);
             const dateFilter = { startDate, endDate }
-            
-            this.searchFilter = { ...this.searchFilter,...dateFilter,  }
+
+            this.searchFilter = { ...this.searchFilter, ...dateFilter, }
 
             this.searchInputSubject.next(JSON.stringify(this.searchFilter));
         }

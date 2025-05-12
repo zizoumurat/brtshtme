@@ -31,7 +31,7 @@ public sealed class EmployeesController : ApiController
 
 
     [HttpGet("select-list/{branchId}")]
-    public async Task<IActionResult> GetSelectList(Guid BranchId)
+    public async Task<IActionResult> GetSelectList([FromRoute] Guid BranchId)
     {
         GetEmployeeListQuery query = new(BranchId);
         GetEmployeeListQueryResponse response = await _mediator.Send(query);

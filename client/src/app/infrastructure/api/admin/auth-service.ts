@@ -6,10 +6,8 @@ import { LoginResponse, User } from '../../../core/models/admin/user';
 import { LoginRequest } from '../../../core/models/admin/login-request';
 import { IAuthService } from '../../../core/services/admin/auth-service';
 import { BASE_URL } from '../../../environments/environment';
-import { JwtPayload, jwtDecode } from "jwt-decode";
 import { Router } from '@angular/router';
 import { SelectListItem } from '../../../core/models/admin/select-list-item';
-import { MenuItemModel } from '../../../core/models/admin/menu-item';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +18,6 @@ export class AuthService implements IAuthService {
   private token = 'auth_token';
 
   constructor(private http: HttpClient) { }
-
 
   async getRoleList(payload: { appuserRef: number; firmRef: number; }): Promise<SelectListItem[]> {
     try {
@@ -48,8 +45,7 @@ export class AuthService implements IAuthService {
         this.http.post<{ data: LoginResponse }>(`${this.apiUrl}`, request).pipe(
           map(res => res.data),
           catchError(error => {
-            console.error('Login failed:', error);
-            return throwError(() => new Error('Login request failed. Please try again.'));
+            return throwError(() => error.error?.errorMessages || 'An unknown error occurred.');
           })
         )
       );
@@ -59,8 +55,8 @@ export class AuthService implements IAuthService {
       localStorage.setItem('user', JSON.stringify(decodedToken));
 
       this.router.navigate(['']);
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'An unknown error occurred.');
+    } catch (error: any) {
+      throw error || 'An unknown error occurred.';
     }
   }
 
