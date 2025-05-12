@@ -20,8 +20,7 @@ export class CrmComponent {
         { route: '/crm/my-data', label: 'crm.tabs.myData', icon: 'pi pi-database' },
         { route: '/crm/my-actions', label: 'crm.tabs.myTransactions', icon: 'pi pi-briefcase' },
         { route: '/crm/field-special', label: 'crm.tabs.fieldSpecial', icon: 'pi pi-map-marker' },
-        { route: '/crm/reports', label: 'crm.tabs.reports', icon: 'pi pi-chart-bar' },
-        { route: '/crm/settings', label: 'crm.tabs.settings', icon: 'pi pi-cog' }
+        { route: '/crm/reports', label: 'crm.tabs.reports', icon: 'pi pi-chart-bar' }
     ];
 
     activeTab: string = '';

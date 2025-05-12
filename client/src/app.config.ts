@@ -48,6 +48,10 @@ import { CRMRECORD_SERVICE } from '@/core/services/crm/crmrecord-service';
 import { CrmRecordService } from '@/infrastructure/api/crm/crmrecord-service';
 import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
 import { CrmRecordActionService } from '@/infrastructure/api/crm/crmrecordaction-service';
+import { CLASSROOM_SERVICE } from '@/core/services/crm/classroom-service';
+import { ClassRoomService } from '@/infrastructure/api/crm/classroom-service';
+import { LEVEL_SERVICE } from '@/core/services/crm/level-service';
+import { LevelService } from '@/infrastructure/api/crm/level-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -147,11 +151,13 @@ export const appConfig: ApplicationConfig = {
         { provide: AUTH_SERVICE, useClass: AuthService },
         { provide: CALENDAR_SERVICE, useClass: CalendarService },
         { provide: CAMPAIGN_SERVICE, useClass: CampaignService },
+        { provide: CLASSROOM_SERVICE, useClass: ClassRoomService },
         { provide: CRMRECORD_SERVICE, useClass: CrmRecordService },
         { provide: CRMRECORDACTION_SERVICE, useClass: CrmRecordActionService },
         { provide: COURSESALESETTING_SERVICE, useClass: CourseSaleSettingService },
         { provide: DISCOUNT_SERVICE, useClass: DiscountService },
         { provide: EMPLOYEE_SERVICE, useClass: EmployeeService },
+        { provide: LEVEL_SERVICE, useClass: LevelService },
         { provide: BRANCH_SERVICE, useClass: BranchService },
         { provide: BRANCHPRICINGSETTINGS_SERVICE, useClass: BranchPricingSettingsService },
         { provide: REGION_SERVICE, useClass: RegionService },

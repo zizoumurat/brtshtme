@@ -63,7 +63,10 @@
             "branches": "Şubeler",
             "employees": "Personeller",
             "regionDefinitions": "Bölge Tanımları",
+            "classrooms": "Derslikler",
+            "levels": "Seviyeler",
             "users": "Kullanıcılar",
+            "teachers": "Öğretmenler",
             "classScheduleDefinitions": "Ders Programı Tanımları",
             "bonusSettings": {
                 "bonusSettings": "Primlendirme Ayarları",

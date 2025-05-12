@@ -48,8 +48,8 @@ export class AppMenu {
                 },
                 {
                     label: 'Ayarlar',
-                    icon: 'pi pi-conf',
-                    routerLink: ['/srm']
+                    icon: 'pi pi-cog',
+                    routerLink: ['/settings']
                 },
             ]
         }

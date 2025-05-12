@@ -13,7 +13,7 @@ export const PricingParametersRoutes: Routes = [
         path: 'reference',
         data: { breadcrumb: 'Referans Değerler' },
         loadChildren: () =>
-          import('@/presentation/crm/settings/pricingParameters/reference/reference.routes').then(
+          import('@/presentation/settings/pricingParameters/reference/reference.routes').then(
             (m) => m.ReferenceRoutes
           ),
       },
@@ -21,7 +21,7 @@ export const PricingParametersRoutes: Routes = [
         path: 'balance',
         data: { breadcrumb: 'Denge Ayarları' },
         loadChildren: () =>
-          import('@/presentation/crm/settings/pricingParameters/balance/balance.routes').then(
+          import('@/presentation/settings/pricingParameters/balance/balance.routes').then(
             (m) => m.BalanceRoutes
           ),
       },

@@ -15,13 +15,6 @@ export const CrmRoutes: Routes = [
       { path: 'tasks', component: TasksComponent, data: { breadcrumb: 'Görevlerim' } },
       { path: 'my-data', component: DataListComponent, data: { breadcrumb: 'Datalarım' } },
       { path: 'my-actions', component: ActionListComponent, data: { breadcrumb: 'İşlemlerim' } },
-      {
-        path: 'settings',
-        loadChildren: () =>
-          import('@/presentation/crm/settings/settings.routes').then(
-            (m) => m.SettingsRoutes
-          ),
-      },
     ]
   }
 ];

@@ -25,6 +25,13 @@ export const appRoutes: Routes = [
                     ),
             },
             {
+                path: 'settings',
+                loadChildren: () =>
+                    import('@/presentation/settings/settings.routes').then(
+                        (m) => m.SettingsRoutes
+                    ),
+            },
+            {
                 path: 'calendar',
                 loadChildren: () =>
                     import('@/presentation/admin/calendar/calendar.routes').then(

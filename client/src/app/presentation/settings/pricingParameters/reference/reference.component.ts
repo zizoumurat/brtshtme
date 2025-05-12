@@ -38,7 +38,7 @@ export class ReferenceComponent {
   }
 
   navigate(path: string) {
-    this.router.navigate(['/crm/settings/pricing-parameters/reference', path]);
+    this.router.navigate(['/settings/pricing-parameters/reference', path]);
     this.activeTab = path;
   }
 }

@@ -21,13 +21,16 @@ export class SettingsComponent {
   items: MenuItem[] | undefined;
 
   menuItems = [
-    { label: 'crm.settings.branches', routerLink: '/crm/settings/branches'},
-    { label: 'crm.settings.employees', routerLink: '/crm/settings/employees' },
-    { label: 'crm.settings.regionDefinitions', routerLink: '/crm/settings/regions' },
-    { label: 'crm.settings.users', routerLink: '/crm/settings/users' },
-    { label: 'crm.settings.bonusSettings.bonusSettings', routerLink: '/crm/settings/bonus-settings' },
-    { label: 'crm.settings.classScheduleDefinitions', routerLink: '/crm/settings/schedule-settings' },
-    { label: 'crm.settings.pricingParameters.label', routerLink: '/crm/settings/pricing-parameters' }
+    { label: 'crm.settings.branches', routerLink: 'branches'},
+    { label: 'crm.settings.employees', routerLink: 'employees' },
+    { label: 'crm.settings.users', routerLink: 'users' },
+    { label: 'crm.settings.teachers', routerLink: 'users' },
+    { label: 'crm.settings.regionDefinitions', routerLink: 'regions' },
+    { label: 'crm.settings.classrooms', routerLink: 'classrooms' },
+    { label: 'crm.settings.levels', routerLink: 'levels' },
+    { label: 'crm.settings.bonusSettings.bonusSettings', routerLink: 'bonus-settings' },
+    { label: 'crm.settings.classScheduleDefinitions', routerLink: 'schedule-settings' },
+    { label: 'crm.settings.pricingParameters.label', routerLink: 'pricing-parameters' }
   ];
 
   ngOnInit(): void {

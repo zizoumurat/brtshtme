@@ -4,21 +4,21 @@ import { SharedComponentModule } from '@/presentation/admin/shared/shared-compon
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-pricing-parameters',
+  selector: 'app-bonus-settings',
   standalone: true,
   imports: [
     DefaultTableOptionsDirective,
     SharedComponentModule
   ],
-  templateUrl: './pricingParameters.component.html'
+  templateUrl: './bonusSettings.component.html'
 })
-export class PricingParametersComponent {
+export class BonusSettingsComponent {
 
   constructor(private router: Router) { }
 
   tabs = [
-    { route: 'reference', label: 'crm.settings.pricingParameters.reference.label', icon: 'pi pi-check-square' },
-    { route: 'balance', label: 'crm.settings.pricingParameters.balance.label', icon: 'pi pi-check-square' },
+    { route: 'sales-representative', label: 'crm.settings.bonusSettings.salesRepresentative', icon: 'pi pi-check-square' },
+    { route: 'data-provider', label: 'crm.settings.bonusSettings.dataProvider', icon: 'pi pi-check-square' },
   ];
 
   activeTab: string = '';
@@ -29,7 +29,7 @@ export class PricingParametersComponent {
 
   setActiveTab(): void {
     const currentRoute = this.router.url;
-    this.activeTab = this.tabs.find(tab => currentRoute.includes(tab.route))?.route || '';
+    this.activeTab = this.tabs.find(tab => currentRoute.endsWith(tab.route))?.route || '';
   }
 
   get currentRoute(): string {
@@ -37,7 +37,7 @@ export class PricingParametersComponent {
   }
 
   navigate(path: string) {
-    this.router.navigate(['/crm/settings/bonus-settings/', path]);
+    this.router.navigate(['/settings/bonus-settings/', path]);
     this.activeTab = path;
   }
 }
