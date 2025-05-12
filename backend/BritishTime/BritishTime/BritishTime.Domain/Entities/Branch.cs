@@ -14,6 +14,7 @@ public sealed class Branch : Entity
     public int LevelDurationInHours { get; set; } 
     public ICollection<AppUser> Users { get; set; } = new List<AppUser>();
     public ICollection<Campaign> Campaigns { get; set; } = new List<Campaign>();
+    public ICollection<ClassRoom> ClassRooms { get; set; } = new List<ClassRoom>();
     public ICollection<CourseSaleSetting> CourseSaleSettings { get; set; } = new List<CourseSaleSetting>();
     public ICollection<Discount> Discounts { get; set; } = new List<Discount>();
     public ICollection<Employee> Employees { get; set; }

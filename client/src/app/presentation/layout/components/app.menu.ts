@@ -44,7 +44,7 @@ export class AppMenu {
                 {
                     label: 'Muhasebe',
                     icon: 'pi pi-th-large',
-                    routerLink: ['/srm']
+                    routerLink: ['/accounting']
                 },
                 {
                     label: 'Ayarlar',

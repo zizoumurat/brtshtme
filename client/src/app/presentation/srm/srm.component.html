@@ -1,0 +1,18 @@
+<p-card>
+  <p-tabs [value]="activeTab">
+    <p-tablist>
+      @for(tab of tabs; track tab.route){
+      <p-tab [value]="tab.route" [routerLink]="tab.route">
+        <i [class]="tab.icon"></i>
+        <span>{{ tab.label | translate }}</span>
+      </p-tab>
+      }
+    </p-tablist>
+  </p-tabs>
+
+  <div class="mt-8">
+    <router-outlet></router-outlet>
+  </div>
+</p-card>
+
+<app-formmodal *ngIf="displayModal" [displayModal]="displayModal" (onCloseModal)="closeModal()"></app-formmodal>

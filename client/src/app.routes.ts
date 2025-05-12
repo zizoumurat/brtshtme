@@ -25,6 +25,13 @@ export const appRoutes: Routes = [
                     ),
             },
             {
+                path: 'srm',
+                loadChildren: () =>
+                    import('@/presentation/srm/srm.routes').then(
+                        (m) => m.SrmRoutes
+                    ),
+            },
+            {
                 path: 'settings',
                 loadChildren: () =>
                     import('@/presentation/settings/settings.routes').then(

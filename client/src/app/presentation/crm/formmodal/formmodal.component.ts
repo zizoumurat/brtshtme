@@ -217,9 +217,19 @@ export class FormModalComponent {
     this.onCloseModal.emit();
   }
 
+  closeSalesModal() {
+    this.showSalesModal = false;
+  }
+
   visibleChange(value: boolean) {
     if (!value) {
       this.closeModal();
+    }
+  }
+
+  visibleChangeSalesModal(value: boolean) {
+    if (!value) {
+      this.closeSalesModal();
     }
   }
 

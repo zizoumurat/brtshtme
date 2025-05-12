@@ -89,6 +89,12 @@
             }
         }
     },
+    "srm": {
+        "tabs": {
+            "students": "Öğrenci İşlemleri",
+            "classes": "Sınıf İşlemleri"
+        }
+    },
     "results": {
         "added": "Kayıt başarıyla tamamlandı.",
         "updated": "Bilgiler başarıyla güncellendi.",

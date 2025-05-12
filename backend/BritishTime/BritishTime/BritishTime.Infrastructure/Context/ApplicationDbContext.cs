@@ -16,11 +16,13 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<Branch> Branches => Set<Branch>();
     public DbSet<BranchPricingSetting> BranchPricingSettings => Set<BranchPricingSetting>();
     public DbSet<Campaign> Campaigns => Set<Campaign>();
+    public DbSet<ClassRoom> ClassRooms => Set<ClassRoom>();
     public DbSet<CrmRecord> CrmRecords => Set<CrmRecord>();
     public DbSet<CrmRecordAction> CrmRecordActions => Set<CrmRecordAction>();
     public DbSet<CourseSaleSetting> CourseSaleSettings => Set<CourseSaleSetting>();
     public DbSet<Discount> Discounts => Set<Discount>();
     public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Level> Levels => Set<Level>();
     public DbSet<IncentiveSetting> IncentiveSettings => Set<IncentiveSetting>();
     public DbSet<InstallmentSetting> InstallmentSettings => Set<InstallmentSetting>();
     public DbSet<LessonScheduleDefinition> LessonScheduleDefinitions => Set<LessonScheduleDefinition>();

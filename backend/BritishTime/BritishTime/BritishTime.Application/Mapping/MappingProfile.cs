@@ -23,6 +23,9 @@ public sealed class MappingProfile : Profile
         CreateMap<CampaignDto, Campaign>().ReverseMap();
         CreateMap<CampaignCreateDto, Campaign>();
 
+        CreateMap<ClassRoomDto, ClassRoom>().ReverseMap();
+        CreateMap<ClassRoomCreateDto, ClassRoom>();
+
         CreateMap<CourseSaleSettingDto, CourseSaleSetting>().ReverseMap();
         CreateMap<CourseSaleSettingCreateDto, CourseSaleSetting>();
 
@@ -38,6 +41,9 @@ public sealed class MappingProfile : Profile
             .ForMember(dest => dest.Days, opt => opt.MapFrom(src => src.Days.Select(d => (DayOfWeek)d).ToList()))
             .ForMember(dest => dest.StartTime, opt => opt.MapFrom(src => TimeOnly.Parse(src.StartTime)))
             .ForMember(dest => dest.EndTime, opt => opt.Ignore());
+
+        CreateMap<LevelDto, Level>().ReverseMap();
+        CreateMap<LevelCreateDto, Level>();
 
         CreateMap<RegionDto, Region>().ReverseMap();
         CreateMap<RegionCreateDto, Region>();
