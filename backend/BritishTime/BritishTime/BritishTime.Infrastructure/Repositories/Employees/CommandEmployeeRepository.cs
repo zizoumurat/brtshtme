@@ -15,8 +15,16 @@ public class CommandEmployeeRepository : ICommandEmployeeRepository
 
     public async Task AddAsync(Employee Employee)
     {
-        _context.Employees.Add(Employee);
-        await _context.SaveChangesAsync();
+        try
+        {
+            _context.Employees.Add(Employee);
+            await _context.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
     }
 
     public async Task UpdateAsync(Employee Employee)

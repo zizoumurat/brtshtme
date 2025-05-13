@@ -1,4 +1,6 @@
-﻿using BritishTime.Domain.Entities;
+﻿using BritishTime.Application.Services.Abstract;
+using BritishTime.Domain.Entities;
+using BritishTime.Domain.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace BritishTime.WebAPI.Middlewares;
@@ -11,6 +13,7 @@ public static class ExtensionsMiddleware
         {
             var userManager = scoped.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
             var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
+            var employeeService = scoped.ServiceProvider.GetRequiredService<IEmployeeService>();
 
             var systemRoles = new[] { "Admin", "CRM", "SRM", "Muhasebe" };
 

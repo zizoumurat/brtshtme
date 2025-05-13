@@ -64,6 +64,19 @@ namespace BritishTime.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Levels",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(40)", nullable: false),
+                    Definition = table.Column<string>(type: "nvarchar(40)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Levels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Regions",
                 columns: table => new
                 {
@@ -172,6 +185,26 @@ namespace BritishTime.Infrastructure.Migrations
                     table.PrimaryKey("PK_Campaigns", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Campaigns_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ClassRooms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(40)", nullable: false),
+                    Capacity = table.Column<int>(type: "int", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClassRooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClassRooms_Branches_BranchId",
                         column: x => x.BranchId,
                         principalTable: "Branches",
                         principalColumn: "Id",
@@ -390,6 +423,84 @@ namespace BritishTime.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CrmRecords",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(20)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", nullable: false),
+                    SecondPhone = table.Column<string>(type: "nvarchar(20)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", nullable: true),
+                    DataProviderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SalesRepresentativeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RegionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DataSource = table.Column<int>(type: "int", nullable: false),
+                    ExcludeFromCommission = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrmRecords", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrmRecords_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CrmRecords_Employees_DataProviderId",
+                        column: x => x.DataProviderId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CrmRecords_Employees_SalesRepresentativeId",
+                        column: x => x.SalesRepresentativeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CrmRecords_Regions_RegionId",
+                        column: x => x.RegionId,
+                        principalTable: "Regions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CrmRecordActions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CrmRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ActionType = table.Column<int>(type: "int", nullable: false),
+                    TargetDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CrmRecordActions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CrmRecordActions_CrmRecords_CrmRecordId",
+                        column: x => x.CrmRecordId,
+                        principalTable: "CrmRecords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CrmRecordActions_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Branches",
                 columns: new[] { "Id", "Address", "BreakDurationInMinutes", "Description", "Email", "LessonDurationInMinutes", "LevelDurationInHours", "Name", "PhoneNumber" },
@@ -450,9 +561,44 @@ namespace BritishTime.Infrastructure.Migrations
                 column: "BranchId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClassRooms_BranchId",
+                table: "ClassRooms",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseSaleSettings_BranchId",
                 table: "CourseSaleSettings",
                 column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecordActions_CrmRecordId",
+                table: "CrmRecordActions",
+                column: "CrmRecordId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecordActions_EmployeeId",
+                table: "CrmRecordActions",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecords_BranchId",
+                table: "CrmRecords",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecords_DataProviderId",
+                table: "CrmRecords",
+                column: "DataProviderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecords_RegionId",
+                table: "CrmRecords",
+                column: "RegionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CrmRecords_SalesRepresentativeId",
+                table: "CrmRecords",
+                column: "SalesRepresentativeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Discounts_BranchId",
@@ -500,13 +646,16 @@ namespace BritishTime.Infrastructure.Migrations
                 name: "Campaigns");
 
             migrationBuilder.DropTable(
+                name: "ClassRooms");
+
+            migrationBuilder.DropTable(
                 name: "CourseSaleSettings");
 
             migrationBuilder.DropTable(
-                name: "Discounts");
+                name: "CrmRecordActions");
 
             migrationBuilder.DropTable(
-                name: "Employees");
+                name: "Discounts");
 
             migrationBuilder.DropTable(
                 name: "IncentiveSettings");
@@ -518,13 +667,22 @@ namespace BritishTime.Infrastructure.Migrations
                 name: "LessonScheduleDefinitions");
 
             migrationBuilder.DropTable(
-                name: "Regions");
+                name: "Levels");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "CrmRecords");
+
+            migrationBuilder.DropTable(
+                name: "Employees");
+
+            migrationBuilder.DropTable(
+                name: "Regions");
 
             migrationBuilder.DropTable(
                 name: "Branches");

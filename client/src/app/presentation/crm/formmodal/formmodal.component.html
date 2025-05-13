@@ -92,7 +92,8 @@
               <div class="col-span-12 md:col-span-4">
                 <label for="status">Durumu</label>
                 <p-select id="status" [options]="crmStatusOptions" formControlName="status" placeholder="Seçiniz"
-                  appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('status')" class="w-full" />
+                  appendTo="body" optionValue="id" optionLabel="name"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('status')" class="w-full"></p-select>
                 <app-validation-message [control]="pageForm.controls['status']" />
               </div>
 
@@ -277,6 +278,212 @@
 
 </app-dialog>
 
+<app-dialog [(visible)]="showSalesModal" header="Satış Yap" (visibleChange)="visibleChangeSalesModal($emit)"
+  [breakpoints]="{ '1920px': '40vw', '1366px': '50vw', '960px': '65vw', '640px': '95vw' }">
+  <form [formGroup]="salesForm">
+
+    <p-stepper [value]="activeStep" class="basis-[50rem]" [linear]="true">
+      <p-step-list>
+        <p-step [value]="1">Öğrenci ve Veli Bilgileri</p-step>
+        <p-step [value]="2">Eğitim Bilgileri</p-step>
+        <p-step [value]="3">Senet Bilgileri</p-step>
+      </p-step-list>
+
+      <p-step-panels>
+
+        <p-step-panel [value]="1" [formGroup]="salesForm.get('step1')">
+
+          <ng-template #content let-activateCallback="activateCallback">
+
+            <p-fieldset legend="Öğrenci Bilgileri">
+              <p-fluid>
+                <div class="grid grid-cols-12 gap-4">
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="firstName">Ad</label>
+                    <input pInputText formControlName="firstName"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstName')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['firstName']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="lastName">Soyad</label>
+                    <input pInputText formControlName="lastName"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lastName')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['lastName']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="identityNumber">T.C Kimlik</label>
+                    <p-inputMask formControlName="identityNumber" [mask]="'99999999999'"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('identityNumber')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['identityNumber']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="birthDate">Doğum Tarihi</label>
+                    <p-datepicker id="birthDate" formControlName="birthDate" appendTo="body" dateFormat="dd.mm.yy"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('birthDate')" class="w-full" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['birthDate']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="phone">Telefon</label>
+                    <p-inputMask id="phone" formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('phone')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['phone']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="secondPhone">2.Telefon</label>
+                    <p-inputMask id="secondPhone" formControlName="secondPhone" class="w-full"
+                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('secondPhone')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['secondPhone']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="email">E-Posta</label>
+                    <input id="email" type="email" pInputText formControlName="email"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('email')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['email']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="studentType">Tahsil Durumu</label>
+                    <p-select id="studentType" [options]="studentTypeOptions" class="w-full"
+                      formControlName="studentType" placeholder="Seçiniz" appendTo="body"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('studentType')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['studentType']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4 col-start-1 md:col-start-1">
+                    <label for="city">İl</label>
+                    <p-select id="city" [options]="cityOptions" class="w-full" formControlName="city"
+                      placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('city')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['city']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="district">İlçe</label>
+                    <p-select id="district" [options]="districtOptions" class="w-full" formControlName="district"
+                      placeholder="Seçiniz" appendTo="body"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('district')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['district']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-8 col-start-1 md:col-start-1">
+                    <label for="address">Adres</label>
+                    <textarea pTextarea id="address" formControlName="address"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('address')" rows="3"></textarea>
+                    <app-validation-message [control]="salesForm.get('step1').controls['address']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label class="text-red-400">Sözleşmeyi Kim İmzalayacak?</label>
+                    <div class="flex flex-wrap gap-4 mt-4">
+
+                      <div class="flex items-center">
+                        <p-radiobutton name="signatory" value="student" formControlName="signatory" inputId="student" />
+                        <label for="student" class="ml-2">Öğrenci</label>
+                      </div>
+
+                      <div class="flex items-center">
+                        <p-radiobutton name="signatory" value="parent" formControlName="signatory" inputId="parent" />
+                        <label for="parent" class="ml-2">Veli</label>
+                      </div>
+
+                    </div>
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentFirstName']" />
+                  </div>
+
+                </div>
+              </p-fluid>
+            </p-fieldset>
+
+            <p-fieldset legend="Veli Bilgileri" class="mt-4">
+              <p-fluid>
+                <div class="grid grid-cols-12 gap-4">
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="parentFirstName">Ad</label>
+                    <input pInputText formControlName="parentFirstName"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentFirstName')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentFirstName']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="parentLastName">Soyad</label>
+                    <input pInputText formControlName="parentLastName"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentLastName')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentLastName']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="parentIdentityNumber">T.C Kimlik</label>
+                    <p-inputMask formControlName="parentIdentityNumber" [mask]="'99999999999'"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentIdentityNumber')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentIdentityNumber']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="parentBirthDate">Doğum Tarihi</label>
+                    <p-datepicker id="parentBirthDate" formControlName="parentBirthDate" appendTo="body"
+                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentBirthDate')"
+                      class="w-full" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentBirthDate']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-4">
+                    <label for="parentPhone">Telefon</label>
+                    <p-inputMask id="parentPhone" formControlName="parentPhone" class="w-full"
+                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentPhone')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['parentPhone']" />
+                  </div>
+
+                </div>
+              </p-fluid>
+            </p-fieldset>
+
+            <div class="flex pt-6 justify-end">
+              <p-button label="İleri" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextStep()" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="flex flex-col h-48">
+              <div
+                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                Content II
+              </div>
+            </div>
+            <div class="flex pt-6 justify-between">
+              <p-button label="Back" severity="secondary" icon="pi pi-arrow-left" (onClick)="activateCallback(1)" />
+              <p-button label="Next" icon="pi pi-arrow-right" iconPos="right" (onClick)="activateCallback(3)" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            <div class="flex flex-col h-48">
+              <div
+                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+                Content III
+              </div>
+            </div>
+            <div class="flex pt-6 justify-start">
+              <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="activateCallback(2)" />
+            </div>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+
+  </form>
+</app-dialog>
+
 <p-confirmdialog #cd>
   <ng-template #headless let-message let-onAccept="onAccept" let-onReject="onReject">
     <div class="flex flex-col items-center p-8 bg-surface-0 dark:bg-surface-900 rounded">
@@ -297,206 +504,3 @@
     </div>
   </ng-template>
 </p-confirmdialog>
-
-<app-dialog [(visible)]="showSalesModal" header="Satış Yap" (visibleChange)="visibleChangeSalesModal($emit)"
-  [breakpoints]="{ '1920px': '40vw', '1366px': '50vw', '960px': '65vw', '640px': '95vw' }">
-  <form [formGroup]="salesForm">
-
-    <div class="grid grid-cols-12 gap-4">
-      <div class="col-span-12 md:col-span-6">
-        <p-fieldset legend="Öğrenci Bilgileri">
-          <p-fluid>
-            <div class="card flex flex-col gap-4">
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Ad</label>
-                <div class="col-span-12 md:col-span-8">
-                  <input pInputText formControlName="firstName"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstName')" />
-                  <app-validation-message [control]="salesForm.controls['firstName']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Soyad</label>
-                <div class="col-span-12 md:col-span-8">
-                  <input pInputText formControlName="lastName"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lastName')" />
-                  <app-validation-message [control]="salesForm.controls['lastName']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">T.C Kimlik</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-inputMask formControlName="identityNumber" [mask]="'99999999999'"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('identityNumber')" />
-                  <app-validation-message [control]="salesForm.controls['identityNumber']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Doğum Tarihi</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-datepicker id="birthDate" formControlName="birthDate" appendTo="body" dateFormat="dd.mm.yy"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('birthDate')" class="w-full" />
-                  <app-validation-message [control]="salesForm.controls['birthDate']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Telefon</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-inputMask id="phone" formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('phone')" />
-                  <app-validation-message [control]="salesForm.controls['phone']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">2.Telefon</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-inputMask id="secondPhone" formControlName="secondPhone" class="w-full" [mask]="'(999) 999 99 99'"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('secondPhone')" />
-                  <app-validation-message [control]="salesForm.controls['secondPhone']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">E-Posta</label>
-                <div class="col-span-12 md:col-span-8">
-                  <input id="email" type="email" pInputText formControlName="email"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('email')" />
-                  <app-validation-message [control]="salesForm.controls['email']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Tahsil Durumu</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-select id="studentType" [options]="studentTypeOptions" class="w-full" formControlName="studentType"
-                    placeholder="Seçiniz" appendTo="body"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('studentType')" />
-                  <app-validation-message [control]="salesForm.controls['studentType']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-
-                <div class="col-span-12 md:col-span-6">
-                  <label class="block mb-1">İl</label>
-                  <p-select id="city" [options]="cityOptions" class="w-full" formControlName="city"
-                    placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('city')" />
-                  <app-validation-message [control]="salesForm.controls['city']" />
-                </div>
-
-                <div class="col-span-12 md:col-span-6">
-                  <label class="block mb-1">İlçe</label>
-                  <p-select id="district" [options]="districtOptions" class="w-full" formControlName="district"
-                    placeholder="Seçiniz" appendTo="body"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('district')" />
-                  <app-validation-message [control]="salesForm.controls['district']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Adres</label>
-                <div class="col-span-12">
-                  <textarea pTextarea id="address" formControlName="address"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('address')" rows="3"></textarea>
-                  <app-validation-message [control]="salesForm.controls['address']" />
-                </div>
-              </div>
-
-            </div>
-          </p-fluid>
-        </p-fieldset>
-      </div>
-
-      <div class="col-span-12 md:col-span-6">
-        <p-fieldset legend="Veli Bilgileri">
-          <p-fluid>
-            <div class="card flex flex-col gap-4">
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Ad</label>
-                <div class="col-span-12 md:col-span-8">
-                  <input pInputText formControlName="firstName"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstName')" />
-                  <app-validation-message [control]="salesForm.controls['firstName']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Soyad</label>
-                <div class="col-span-12 md:col-span-8">
-                  <input pInputText formControlName="lastName"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lastName')" />
-                  <app-validation-message [control]="salesForm.controls['lastName']" />
-                </div>
-              </div>
-
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Doğum Tarihi</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-datepicker id="birthDate" formControlName="birthDate" appendTo="body" dateFormat="dd.mm.yy"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('birthDate')" class="w-full" />
-                  <app-validation-message [control]="salesForm.controls['birthDate']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Telefon</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-inputMask id="phone" formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('phone')" />
-                  <app-validation-message [control]="salesForm.controls['phone']" />
-                </div>
-              </div>
-
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Tahsil Durumu</label>
-                <div class="col-span-12 md:col-span-8">
-                  <p-select id="studentType" [options]="studentTypeOptions" class="w-full" formControlName="studentType"
-                    placeholder="Seçiniz" appendTo="body"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('studentType')" />
-                  <app-validation-message [control]="salesForm.controls['studentType']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-
-                <div class="col-span-12 md:col-span-6">
-                  <label class="block mb-1">İl</label>
-                  <p-select id="city" [options]="cityOptions" class="w-full" formControlName="city"
-                    placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('city')" />
-                  <app-validation-message [control]="salesForm.controls['city']" />
-                </div>
-
-                <div class="col-span-12 md:col-span-6">
-                  <label class="block mb-1">İlçe</label>
-                  <p-select id="district" [options]="districtOptions" class="w-full" formControlName="district"
-                    placeholder="Seçiniz" appendTo="body"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('district')" />
-                  <app-validation-message [control]="salesForm.controls['district']" />
-                </div>
-              </div>
-
-              <div class="grid grid-cols-12 gap-2">
-                <label class="flex items-center col-span-12 mb-2 md:col-span-4 md:mb-0">Adres</label>
-                <div class="col-span-12">
-                  <textarea pTextarea id="address" formControlName="address"
-                    [class.ng-dirty.ng-invalid]="isFieldInvalidSales('address')" rows="3"></textarea>
-                  <app-validation-message [control]="salesForm.controls['address']" />
-                </div>
-              </div>
-
-            </div>
-          </p-fluid>
-        </p-fieldset>
-      </div>
-    </div>
-  </form>
-</app-dialog>

@@ -1,71 +1,86 @@
-import { ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { forkJoin } from 'rxjs';
+
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
+import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
+
 import { CrmRecordActionModel } from '@/core/models/crm/crmrecordaction.model';
 import { SelectListItem } from '@/core/models/select-list-item.model';
+import { CrmRecordModel } from '@/core/models/crm/crmrecord.model';
+
 import { CrmDataSource } from '@/core/enums/crmDataSource';
 import { CrmStatus } from '@/core/enums/crmStatus';
 import { CrmActionType } from '@/core/enums/crmActionType';
-import { forkJoin, last } from 'rxjs';
+
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
 import { CRMRECORD_SERVICE } from '@/core/services/crm/crmrecord-service';
 import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
-import { UtilsHelper } from '@/core/helpers/utils.hlper';
-import { CrmRecordModel } from '@/core/models/crm/crmrecord.model';
 import { EMPLOYEE_SERVICE } from '@/core/services/crm/employee-service';
 import { REGION_SERVICE } from '@/core/services/crm/region-service';
+
+import { UtilsHelper } from '@/core/helpers/utils.hlper';
 import { ConfirmationService } from 'primeng/api';
-import { br } from 'node_modules/@fullcalendar/core/internal-common';
+import { StudentType } from '@/core/enums/studentType';
 
 @Component({
   selector: 'app-formmodal',
   standalone: true,
-  imports: [
-    SharedComponentModule,
-  ],
+  imports: [SharedComponentModule, DefaultSelectOptionDirective],
   templateUrl: './formmodal.component.html'
 })
 export class FormModalComponent {
-  @Input() displayModal: boolean = false;
-  @Input() id: string | undefined = undefined;
+  // Inputs & Outputs
+  @Input() displayModal = false;
+  @Input() id?: string;
   @Output() onCloseModal = new EventEmitter();
 
+  // Services (DI via inject)
   authService = inject(AUTH_SERVICE);
   crmRecordService = inject(CRMRECORD_SERVICE);
   crmRecordActionService = inject(CRMRECORDACTION_SERVICE);
-  regionService = inject(REGION_SERVICE);
   employeeService = inject(EMPLOYEE_SERVICE);
+  regionService = inject(REGION_SERVICE);
   utilsHelper = inject(UtilsHelper);
 
-  CrmActionType = CrmActionType;
+  constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) { }
 
+  // Forms
   pageForm!: FormGroup;
   actionForm!: FormGroup;
   smsForm!: FormGroup;
   salesForm!: FormGroup;
 
-  regionOptions: SelectListItem[] = []
+  // Select Options
+  regionOptions: SelectListItem[] = [];
   dataSourceOptions: SelectListItem[] = [];
   dataProviderOptions: SelectListItem[] = [];
   crmStatusOptions: SelectListItem[] = [];
   actionTypeOptions: SelectListItem[] = [];
   allowedActionTypes: SelectListItem[] = [];
+  studentTypeOptions: SelectListItem[] = [];
 
+
+  // Stepper & UI
+  activeStep = 1;
+  showSalesModal = false;
+
+  // CRM & Sales
+  crmActions: CrmRecordActionModel[] = [];
+  saleList: any[] = [];
+  selectedPhoneOption: 'phone1' | 'phone2' | 'manual' = 'phone1';
   currentDate: Date = new Date();
   currentUser: string = '';
+  CrmActionType = CrmActionType;
 
-  crmActions: CrmRecordActionModel[] = [];
-
-  selectedPhoneOption: 'phone1' | 'phone2' | 'manual' = 'phone1'
-
-  saleList: any[] = [];
-
-  showSalesModal: boolean = false;
-
-  constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) {
-  }
-
-
+  // Lifecycle
   ngOnInit() {
     this.initForm();
     this.getOptions();
@@ -75,13 +90,13 @@ export class FormModalComponent {
     this.getCrmRecord();
 
     this.currentUser = this.authService.getUser()?.Name || '';
-
     this.saleList = [
       { employeeName: 'Murat Dere', date: new Date(), amount: 5000 },
-      { employeeName: 'Murat Dere', date: new Date(), amount: 15000 },
-    ]
+      { employeeName: 'Murat Dere', date: new Date(), amount: 15000 }
+    ];
   }
 
+  // Form Initialization
   initForm(): void {
     this.pageForm = this.fb.group({
       id: [null],
@@ -106,7 +121,6 @@ export class FormModalComponent {
         this.dataProviderOptions = await this.employeeService.getSelectList(id);
       }
     });
-
   }
 
   initActionForm(): void {
@@ -145,14 +159,10 @@ export class FormModalComponent {
       if (selected === 'phone1') {
         this.smsForm.get('phone')?.setValue(this.pageForm.controls['phone'].value);
         this.smsForm.controls['phone'].disable();
-      }
-
-      if (selected === 'phone2') {
+      } else if (selected === 'phone2') {
         this.smsForm.get('phone')?.setValue(this.pageForm.controls['secondPhone'].value);
         this.smsForm.controls['phone'].disable();
-      }
-
-      if (selected === 'manual') {
+      } else if (selected === 'manual') {
         this.smsForm.get('phone')?.setValue('');
         this.smsForm.controls['phone'].enable();
       }
@@ -161,89 +171,72 @@ export class FormModalComponent {
 
   initSalesForm(): void {
     this.salesForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', [Validators.required]],
-      identityNumber: ['', [Validators.required, Validators.minLength(11)]],
-      birthDate: [null, Validators.required],
-      phone: ['', Validators.required],
-      secondPhone: ['', Validators.required],
-      email: ['', [Validators.email]],
-      studentType: [null, Validators.required],
-      address: [null, Validators.required],
-      cityId: [null, Validators.required],
-      districtId: [null, Validators.required],
-      branchId: [null, Validators.required],
-
-      // Veli bilgileri
-      parentName: [''],
-      parentIdentity: [''],
-      parentBirthDate: [''],
-      parentPhone: [''],
-      parentIdentityNumber: ['', [Validators.required, Validators.minLength(11)]],
-
-
-      // Lokasyon ve sunum tipi
-      city: [null, Validators.required],
-      district: [null, Validators.required],
-      deliveryType: ['offline', Validators.required], // 'offline' or 'online'
-
-      // Program bilgileri
+      step1: this.fb.group({
+        firstName: ['', Validators.required],
+        lastName: ['', Validators.required],
+        identityNumber: ['', [Validators.required, Validators.minLength(11)]],
+        birthDate: [null, Validators.required],
+        phone: ['', Validators.required],
+        secondPhone: ['', Validators.required],
+        email: ['', Validators.email],
+        studentType: [null, Validators.required],
+        address: [null, Validators.required],
+        cityId: [null, Validators.required],
+        districtId: [null, Validators.required],
+        branchId: [null, Validators.required],
+        signatory: ['student', Validators.required],
+        parentFirstName: [''],
+        parentLastName: [''],
+        parentIdentityNumber: ['', [Validators.required, Validators.minLength(11)]],
+        parentBirthDate: [''],
+        parentPhone: [''],
+        city: [null, Validators.required],
+        district: [null, Validators.required],
+      }),
+      deliveryType: ['offline', Validators.required],
       program: [null, Validators.required],
       days: [[], Validators.required],
       hours: ['', Validators.required],
       level: [null, Validators.required],
-
-      // Kampanya ve ödeme bilgileri
       campaign: [null],
       installments: [1, Validators.required],
-      paymentType: ['cash', Validators.required], // 'cash', 'check', 'credit'
+      paymentType: ['cash', Validators.required],
       discountReason: [null],
-
-      // Ödeme tutarı (hesaplanan, kullanıcı girmez ama gerekirse gösterilebilir)
       totalAmount: [0],
     });
-
   }
 
-  async getCrmRecord() {
-    if (this.id) {
-      var crmRecord = await this.crmRecordService.getById(this.id);
-      this.pageForm.patchValue(crmRecord);
-      this.getActionList();
-    }
-  }
-
-  closeModal() {
-    this.onCloseModal.emit();
-  }
-
-  closeSalesModal() {
-    this.showSalesModal = false;
-  }
-
-  visibleChange(value: boolean) {
-    if (!value) {
-      this.closeModal();
-    }
-  }
-
-  visibleChangeSalesModal(value: boolean) {
-    if (!value) {
-      this.closeSalesModal();
-    }
-  }
-
-  openSalesModal() {
-    this.showSalesModal = true;
-    this.salesForm.patchValue(this.pageForm.getRawValue());
+  // API/Service Calls
+  getOptions() {
+    this.getRegionList();
+    forkJoin([
+      this.utilsHelper.enumToSelectOptionsAsync(CrmDataSource, 'CrmDataSource'),
+      this.utilsHelper.enumToSelectOptionsAsync(CrmStatus, 'CrmStatus'),
+      this.utilsHelper.enumToSelectOptionsAsync(CrmActionType, 'CrmActionType'),
+      this.utilsHelper.enumToSelectOptionsAsync(StudentType, 'StudentType'),
+    ]).subscribe(([crmDataSources, crmStatuses, crmActionTypes, studentTypes]) => {
+      this.dataSourceOptions = crmDataSources;
+      this.crmStatusOptions = crmStatuses;
+      this.actionTypeOptions = crmActionTypes;
+      this.studentTypeOptions = studentTypes;
+    });
   }
 
   async getRegionList() {
     this.regionOptions = await this.regionService.getSelectList();
   }
 
+  async getCrmRecord() {
+    if (this.id) {
+      const crmRecord = await this.crmRecordService.getById(this.id);
+      this.pageForm.patchValue(crmRecord);
+      this.actionForm.patchValue({ crmRecordId: this.pageForm.controls['id'].value });
+      this.getActionList();
+    }
+  }
+
   async getActionList() {
-    var list = await this.crmRecordActionService.getListByCrmRecord(this.pageForm.controls['id'].value) as CrmRecordActionModel[];
+    const list = await this.crmRecordActionService.getListByCrmRecord(this.pageForm.controls['id'].value) as CrmRecordActionModel[];
     this.crmActions = list.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
     this.checkActionPermission();
   }
@@ -253,13 +246,10 @@ export class FormModalComponent {
       .filter(x => x.actionType !== CrmActionType.Other)
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
-    if (!lastAction) {
-      return;
-    }
+    if (!lastAction) return;
 
-    if (lastAction.actionType == CrmActionType.Sale) {
+    if (lastAction.actionType === CrmActionType.Sale) {
       const otherActionExists = this.crmActions.some(a => a.actionType === CrmActionType.Other);
-
       if (otherActionExists) {
         this.actionForm.reset();
       } else {
@@ -275,59 +265,36 @@ export class FormModalComponent {
     }
   }
 
-  getOptions() {
-    this.getRegionList();
-
-    forkJoin([
-      this.utilsHelper.enumToSelectOptionsAsync(CrmDataSource, 'CrmDataSource'),
-      this.utilsHelper.enumToSelectOptionsAsync(CrmStatus, 'CrmStatus'),
-      this.utilsHelper.enumToSelectOptionsAsync(CrmActionType, 'CrmActionType'),
-    ]).subscribe(([crmDataSources, crmStatuses, crmActionTypes]) => {
-      this.dataSourceOptions = crmDataSources;
-      this.crmStatusOptions = crmStatuses;
-      this.actionTypeOptions = crmActionTypes;
-    });
+  // Modal & Sales
+  openSalesModal() {
+    this.showSalesModal = true;
+    this.salesForm.patchValue(this.pageForm.getRawValue());
   }
 
-  async checkPhone() {
-    if (this.pageForm.get('id')?.value)
-      return;
-
-    const phone = this.pageForm.controls['phone'].value;
-    if (!phone) return;
-
-    var existingCrm = await this.crmRecordService.checkPhone(phone);
-
-    if (!existingCrm) {
-      return;
-    }
-
-    this.pageForm.patchValue(existingCrm);
-    this.actionForm.patchValue({ crmRecordId: existingCrm.id });
-    this.smsForm.get('phone')?.setValue(this.pageForm.controls['phone'].value);
-    this.smsForm.controls['phone'].disable();
-
-    this.getActionList();
-
-    this.confirmationService.confirm({});
-
-    this.pageForm.controls['email'].enable();
-    this.pageForm.controls['secondPhone'].enable();
-
-    Object.keys(this.pageForm.controls).forEach(controlName => {
-      if (controlName !== 'email' && controlName !== 'secondPhone') {
-        this.pageForm.controls[controlName].disable();
-      }
-    });
+  closeSalesModal() {
+    this.showSalesModal = false;
   }
 
+  closeModal() {
+    this.onCloseModal.emit();
+  }
+
+  visibleChange(value: boolean) {
+    if (!value) this.closeModal();
+  }
+
+  visibleChangeSalesModal(value: boolean) {
+    if (!value) this.closeSalesModal();
+  }
+
+  // Save Operations
   async saveRecord() {
     if (this.pageForm.valid) {
       const formData = this.pageForm.getRawValue() as CrmRecordModel;
+
       if (formData.id) {
         await this.crmRecordService.update(formData);
-      }
-      else {
+      } else {
         const result = await this.crmRecordService.create(formData);
         this.pageForm.patchValue({ id: result.id });
       }
@@ -350,6 +317,34 @@ export class FormModalComponent {
     }
   }
 
+  // Validation & Utilities
+  async checkPhone() {
+    if (this.pageForm.get('id')?.value) return;
+
+    const phone = this.pageForm.controls['phone'].value;
+    if (!phone) return;
+
+    const existingCrm = await this.crmRecordService.checkPhone(phone);
+    if (!existingCrm) return;
+
+    this.pageForm.patchValue(existingCrm);
+    this.actionForm.patchValue({ crmRecordId: existingCrm.id });
+    this.smsForm.get('phone')?.setValue(this.pageForm.controls['phone'].value);
+    this.smsForm.controls['phone'].disable();
+
+    this.getActionList();
+    this.confirmationService.confirm({});
+
+    this.pageForm.controls['email'].enable();
+    this.pageForm.controls['secondPhone'].enable();
+
+    Object.keys(this.pageForm.controls).forEach(controlName => {
+      if (controlName !== 'email' && controlName !== 'secondPhone') {
+        this.pageForm.controls[controlName].disable();
+      }
+    });
+  }
+
   getTotalAmount(): number {
     if (!this.saleList || this.saleList.length === 0) return 0;
     return this.saleList.reduce((sum, item) => sum + (item.amount || 0), 0);
@@ -361,9 +356,17 @@ export class FormModalComponent {
   }
 
   isFieldInvalidSales(controlName: string): boolean {
-    const control = this.salesForm.get(controlName);
+    const control = this.salesForm.get('step1')?.get(controlName) || this.salesForm.get('step2')?.get(controlName) || this.salesForm.get('step3')?.get(controlName);
     return control?.invalid && control?.touched ? true : false;
   }
 
+  nextStep() {
+    const stepForm = this.salesForm.get('step' + this.activeStep);
+    console.log(stepForm);
+    if (stepForm?.valid) {
+      this.activeStep = 1;
+    } else {
+      stepForm?.markAllAsTouched();
+    }
+  }
 }
-

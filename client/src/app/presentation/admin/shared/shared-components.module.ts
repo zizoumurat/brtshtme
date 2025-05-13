@@ -39,6 +39,7 @@ import { PasswordModule } from 'primeng/password';
 import { FieldsetModule } from 'primeng/fieldset';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SplitterModule } from 'primeng/splitter';
+import { StepperModule } from 'primeng/stepper';
 
 @NgModule({
   imports: [
@@ -82,7 +83,8 @@ import { SplitterModule } from 'primeng/splitter';
     PasswordModule,
     FieldsetModule,
     RadioButtonModule,
-    SplitterModule 
+    SplitterModule,
+    StepperModule
   ],
   exports: [
     CommonModule,
@@ -125,7 +127,8 @@ import { SplitterModule } from 'primeng/splitter';
     PasswordModule,
     FieldsetModule,
     RadioButtonModule,
-    SplitterModule 
+    SplitterModule,
+    StepperModule
   ]
 })
 export class SharedComponentModule { }

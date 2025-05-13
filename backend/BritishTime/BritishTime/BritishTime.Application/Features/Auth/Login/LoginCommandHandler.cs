@@ -51,7 +51,7 @@ internal sealed class LoginCommandHandler(
 
         var employee = await _queryEmployeeRepository.GetAllAsync(x => x.AppUserId == user.Id).FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
-        if (employee is null)
+        if (user.Email != "admin@admin.com" && employee is null)
         {
             return (500, "Kullanıcı bulunamadı");
         }

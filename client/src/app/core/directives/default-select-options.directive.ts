@@ -1,14 +1,14 @@
-import { Directive, OnInit } from '@angular/core';
+import { Directive, AfterViewInit } from '@angular/core';
 import { Select } from 'primeng/select';
 
 @Directive({
   selector: 'p-select:not([optionLabel]):not([optionValue]), p-multiselect:not([optionLabel]):not([optionValue])',
   standalone: true
 })
-export class DefaultSelectOptionDirective implements OnInit {
+export class DefaultSelectOptionDirective implements AfterViewInit {
   constructor(private select: Select) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     if (!this.select.optionLabel) {
       this.select.optionLabel = 'name';
     }

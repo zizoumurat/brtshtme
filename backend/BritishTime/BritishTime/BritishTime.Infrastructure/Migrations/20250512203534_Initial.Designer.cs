@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BritishTime.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250504142820_CrmRecordAction")]
-    partial class CrmRecordAction
+    [Migration("20250512203534_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -262,6 +262,29 @@ namespace BritishTime.Infrastructure.Migrations
                     b.HasIndex("BranchId");
 
                     b.ToTable("Campaigns");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.ClassRoom", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("ClassRooms");
                 });
 
             modelBuilder.Entity("BritishTime.Domain.Entities.CourseSaleSetting", b =>
@@ -596,6 +619,24 @@ namespace BritishTime.Infrastructure.Migrations
                     b.ToTable("LessonScheduleDefinitions");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Level", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Definition")
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Levels");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.Region", b =>
                 {
                     b.Property<Guid>("Id")
@@ -746,6 +787,17 @@ namespace BritishTime.Infrastructure.Migrations
                 {
                     b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
                         .WithMany("Campaigns")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.ClassRoom", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
+                        .WithMany("ClassRooms")
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -913,6 +965,8 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Navigation("BranchPricingSettings");
 
                     b.Navigation("Campaigns");
+
+                    b.Navigation("ClassRooms");
 
                     b.Navigation("CourseSaleSettings");
 
