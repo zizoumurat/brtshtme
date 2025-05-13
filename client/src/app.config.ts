@@ -15,8 +15,6 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { dateConversionInterceptor } from '@/core/interceptors/dateConversionInterceptor';
 
 import { LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import localeTr from '@angular/common/locales/tr';
 
 import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
 import { AuthService } from '@/infrastructure/api/admin/auth-service';
@@ -52,6 +50,8 @@ import { CLASSROOM_SERVICE } from '@/core/services/crm/classroom-service';
 import { ClassRoomService } from '@/infrastructure/api/crm/classroom-service';
 import { LEVEL_SERVICE } from '@/core/services/crm/level-service';
 import { LevelService } from '@/infrastructure/api/crm/level-service';
+import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
+import { LocationService } from '@/infrastructure/api/crm/location-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -158,6 +158,7 @@ export const appConfig: ApplicationConfig = {
         { provide: DISCOUNT_SERVICE, useClass: DiscountService },
         { provide: EMPLOYEE_SERVICE, useClass: EmployeeService },
         { provide: LEVEL_SERVICE, useClass: LevelService },
+        { provide: LOCATION_SERVICE, useClass: LocationService },
         { provide: BRANCH_SERVICE, useClass: BranchService },
         { provide: BRANCHPRICINGSETTINGS_SERVICE, useClass: BranchPricingSettingsService },
         { provide: REGION_SERVICE, useClass: RegionService },

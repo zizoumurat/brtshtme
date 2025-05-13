@@ -52,9 +52,9 @@
 
               <div class="col-span-12 md:col-span-4">
                 <label for="dataSource">Data Kaynağı</label>
-                <p-select id="dataSource" [options]="dataSourceOptions" formControlName="dataSource"
-                  placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('dataSource')"
-                  class="w-full" />
+                <p-select id="dataSource" optionValue="id" optionLabel="name" [options]="dataSourceOptions"
+                  formControlName="dataSource" placeholder="Seçiniz" appendTo="body"
+                  [class.ng-dirty.ng-invalid]="isFieldInvalid('dataSource')" class="w-full" />
                 <app-validation-message [control]="pageForm.controls['dataSource']" />
               </div>
 
@@ -357,18 +357,18 @@
                   </div>
 
                   <div class="col-span-12 md:col-span-4 col-start-1 md:col-start-1">
-                    <label for="city">İl</label>
-                    <p-select id="city" [options]="cityOptions" class="w-full" formControlName="city"
-                      placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('city')" />
-                    <app-validation-message [control]="salesForm.get('step1').controls['city']" />
+                    <label for="cityId">İl</label>
+                    <p-select id="cityId" [options]="cityOptions" class="w-full" formControlName="cityId"
+                      placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('cityId')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['cityId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
-                    <label for="district">İlçe</label>
-                    <p-select id="district" [options]="districtOptions" class="w-full" formControlName="district"
+                    <label for="districtId">İlçe</label>
+                    <p-select id="districtId" [options]="districtOptions" class="w-full" formControlName="districtId"
                       placeholder="Seçiniz" appendTo="body"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('district')" />
-                    <app-validation-message [control]="salesForm.get('step1').controls['district']" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('districtId')" />
+                    <app-validation-message [control]="salesForm.get('step1').controls['districtId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-8 col-start-1 md:col-start-1">

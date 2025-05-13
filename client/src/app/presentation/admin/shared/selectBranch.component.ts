@@ -42,6 +42,9 @@ export class SelectBranchComponent implements OnInit {
   // Şubeleri API'den çekme
   async loadBranches() {
     this.branchOptions = await this.branchService.getUserBranchList();
+
+    if(this.branchOptions)
+      this.form.get('branchId')?.setValue(this.branchOptions[0].id);
   }
 
   // Form kontrolünün geçerliliğini kontrol et

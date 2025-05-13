@@ -6,7 +6,7 @@ import {
   Input,
   Output
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
@@ -29,6 +29,7 @@ import { REGION_SERVICE } from '@/core/services/crm/region-service';
 import { UtilsHelper } from '@/core/helpers/utils.hlper';
 import { ConfirmationService } from 'primeng/api';
 import { StudentType } from '@/core/enums/studentType';
+import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
 
 @Component({
   selector: 'app-formmodal',
@@ -47,6 +48,7 @@ export class FormModalComponent {
   crmRecordService = inject(CRMRECORD_SERVICE);
   crmRecordActionService = inject(CRMRECORDACTION_SERVICE);
   employeeService = inject(EMPLOYEE_SERVICE);
+  locationService = inject(LOCATION_SERVICE);
   regionService = inject(REGION_SERVICE);
   utilsHelper = inject(UtilsHelper);
 
@@ -66,7 +68,8 @@ export class FormModalComponent {
   actionTypeOptions: SelectListItem[] = [];
   allowedActionTypes: SelectListItem[] = [];
   studentTypeOptions: SelectListItem[] = [];
-
+  cityOptions: SelectListItem[] = [];
+  districtOptions: SelectListItem[] = [];
 
   // Stepper & UI
   activeStep = 1;
@@ -172,13 +175,13 @@ export class FormModalComponent {
   initSalesForm(): void {
     this.salesForm = this.fb.group({
       step1: this.fb.group({
-        firstName: ['', Validators.required],
-        lastName: ['', Validators.required],
+        firstName: [{ value: null, disabled: true }, Validators.required],
+        lastName: [{ value: null, disabled: true }, Validators.required],
         identityNumber: ['', [Validators.required, Validators.minLength(11)]],
         birthDate: [null, Validators.required],
-        phone: ['', Validators.required],
-        secondPhone: ['', Validators.required],
-        email: ['', Validators.email],
+        phone: [{ value: null, disabled: true }, Validators.required],
+        secondPhone: [''],
+        email: [{ value: null, disabled: true }, Validators.required],
         studentType: [null, Validators.required],
         address: [null, Validators.required],
         cityId: [null, Validators.required],
@@ -187,11 +190,9 @@ export class FormModalComponent {
         signatory: ['student', Validators.required],
         parentFirstName: [''],
         parentLastName: [''],
-        parentIdentityNumber: ['', [Validators.required, Validators.minLength(11)]],
+        parentIdentityNumber: [''],
         parentBirthDate: [''],
         parentPhone: [''],
-        city: [null, Validators.required],
-        district: [null, Validators.required],
       }),
       deliveryType: ['offline', Validators.required],
       program: [null, Validators.required],
@@ -204,11 +205,18 @@ export class FormModalComponent {
       discountReason: [null],
       totalAmount: [0],
     });
+
+    this.salesForm.get('step1')?.get('cityId')?.valueChanges.subscribe(id => {
+      if (id) {
+        this.getDistrictList(id);
+      }
+    });
   }
 
   // API/Service Calls
-  getOptions() {
+  async getOptions() {
     this.getRegionList();
+    this.getCityList();
     forkJoin([
       this.utilsHelper.enumToSelectOptionsAsync(CrmDataSource, 'CrmDataSource'),
       this.utilsHelper.enumToSelectOptionsAsync(CrmStatus, 'CrmStatus'),
@@ -226,12 +234,22 @@ export class FormModalComponent {
     this.regionOptions = await this.regionService.getSelectList();
   }
 
+  async getCityList() {
+    this.cityOptions = await this.locationService.getCityList();
+  }
+
+  async getDistrictList(cityId: number) {
+    this.districtOptions = await this.locationService.getDistrictList(cityId);
+  }
+
   async getCrmRecord() {
     if (this.id) {
       const crmRecord = await this.crmRecordService.getById(this.id);
       this.pageForm.patchValue(crmRecord);
       this.actionForm.patchValue({ crmRecordId: this.pageForm.controls['id'].value });
       this.getActionList();
+
+      this.salesForm.get('step1')?.patchValue(this.pageForm.value);
     }
   }
 
@@ -363,8 +381,10 @@ export class FormModalComponent {
   nextStep() {
     const stepForm = this.salesForm.get('step' + this.activeStep);
     console.log(stepForm);
+
     if (stepForm?.valid) {
-      this.activeStep = 1;
+      this.activeStep++;
+      console.log('artırıldı')
     } else {
       stepForm?.markAllAsTouched();
     }
