@@ -28,6 +28,11 @@ public class QueryCampaignRepository : IQueryCampaignRepository
 
         var count = await query.CountAsync();
 
+        if (filter != null)
+        {
+            query = query.Where(x => (filter.isActive == null || x.IsActive == filter.isActive));
+        }
+
         var items = await query
             .MultiSort(pagination.sortByMultiName, pagination.sortByMultiOrder)
             .Skip((pagination.Page - 1) * pagination.PageSize)
