@@ -72,7 +72,7 @@ export class FormModalComponent {
   districtOptions: SelectListItem[] = [];
 
   // Stepper & UI
-  activeStep = 1;
+  activeStep = 2;
   showSalesModal = false;
 
   // CRM & Sales
@@ -184,7 +184,7 @@ export class FormModalComponent {
         email: [{ value: null, disabled: true }, Validators.required],
         studentType: [null, Validators.required],
         address: [null, Validators.required],
-        cityId: [null, Validators.required],
+        cityId: [34, Validators.required],
         districtId: [null, Validators.required],
         branchId: [null, Validators.required],
         signatory: ['student', Validators.required],
@@ -194,22 +194,51 @@ export class FormModalComponent {
         parentBirthDate: [''],
         parentPhone: [''],
       }),
-      deliveryType: ['offline', Validators.required],
-      program: [null, Validators.required],
-      days: [[], Validators.required],
-      hours: ['', Validators.required],
-      level: [null, Validators.required],
-      campaign: [null],
-      installments: [1, Validators.required],
-      paymentType: ['cash', Validators.required],
-      discountReason: [null],
-      totalAmount: [0],
+      step2: this.fb.group({
+        contractType: [null, Validators.required],
+        educationType:[null, Validators.required],
+        lessonScheduleId: [null, Validators.required],
+        educationDuration: [null, Validators.required],
+        campaignId: [null],
+        installmentCount:[null, Validators.required],
+        paymentMethod:[null, Validators.required],
+        discountId: [null],
+        downPayment:[null],
+        isCash:[false],
+        installmentAmount:[null, Validators.required],
+        totalAmount:[null, Validators.required]
+      }),
     });
 
     this.salesForm.get('step1')?.get('cityId')?.valueChanges.subscribe(id => {
       if (id) {
         this.getDistrictList(id);
       }
+    });
+
+    this.salesForm.get('step1')?.get('cityId')?.setValue('34');
+
+    this.salesForm.get('step1')?.get('signatory')?.valueChanges.subscribe(signatory => {
+      const isStudent = signatory === 'student';
+      const controlsToUpdate = [
+        'parentFirstName',
+        'parentLastName',
+        'parentIdentityNumber',
+        'parentBirthDate',
+        'parentPhone'
+      ];
+
+      controlsToUpdate.forEach(controlName => {
+        const control = this.salesForm.get('step1')?.get(controlName) as FormControl;
+
+        if (isStudent) {
+          control.clearValidators();
+          control.updateValueAndValidity();
+        } else {
+          control.setValidators([Validators.required]);
+          control.updateValueAndValidity();
+        }
+      });
     });
   }
 
@@ -380,13 +409,19 @@ export class FormModalComponent {
 
   nextStep() {
     const stepForm = this.salesForm.get('step' + this.activeStep);
-    console.log(stepForm);
 
     if (stepForm?.valid) {
       this.activeStep++;
-      console.log('artırıldı')
     } else {
       stepForm?.markAllAsTouched();
     }
+  }
+
+  prevStep() {
+    this.activeStep--;
+  }
+
+  completeStep() {
+
   }
 }
