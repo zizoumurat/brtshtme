@@ -7,6 +7,7 @@ export interface LessonScheduleDefinitionModel {
   id: string;
   studentType: StudentType;
   educationType: EducationType;
+  schedule: string;
   scheduleCode: string;
   dayCount: number;
   dayHour: number;

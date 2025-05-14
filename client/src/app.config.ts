@@ -52,6 +52,8 @@ import { LEVEL_SERVICE } from '@/core/services/crm/level-service';
 import { LevelService } from '@/infrastructure/api/crm/level-service';
 import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
 import { LocationService } from '@/infrastructure/api/crm/location-service';
+import { SALES_SERVICE } from '@/core/services/crm/sales-service';
+import { SalesService } from '@/infrastructure/api/crm/sales-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -166,6 +168,7 @@ export const appConfig: ApplicationConfig = {
         { provide: INSTALLMENTSETTING_SERVICE, useClass: InstallmentSettingService },
         { provide: LESSONSCHEDULEDEFINITION_SERVICE, useClass: LessonScheduleDefinitionService },
         { provide: APPUSER_SERVICE, useClass: AppUserService },
+        { provide: SALES_SERVICE, useClass: SalesService },
 
         ConfirmationService,
         MessageService

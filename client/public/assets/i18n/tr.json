@@ -106,7 +106,9 @@
         "roleNotFound": "Rol bulunamadı",
         "userNotFound": "Kullanıcı bulunamadı",
         "duplicatePhone": "Telefon numarası başka bir kayıtta zaten mevcut",
-        "duplicateMail": "E-posta adresi başka bir kayıtta zaten mevcut"
+        "duplicateMail": "E-posta adresi başka bir kayıtta zaten mevcut",
+        "branchDefinitionsMissing": "Şube tanımlamaları eksik. Lütfen yöneticinizle iletişime geçin.",
+        "branchPricingSettingsMissing":"Şube fiyatlandırma parametreleri eksik. Lütfen yöneticinizle iletişime geçin."
     },
     "minAmount": "Minimum Tutar",
     "maxAmount": "Maksimum Tutar",

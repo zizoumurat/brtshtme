@@ -30,11 +30,12 @@ import { UtilsHelper } from '@/core/helpers/utils.hlper';
 import { ConfirmationService } from 'primeng/api';
 import { StudentType } from '@/core/enums/studentType';
 import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
+import { SalesModalComponent } from '../salesmodal/salesmodal.component';
 
 @Component({
   selector: 'app-formmodal',
   standalone: true,
-  imports: [SharedComponentModule, DefaultSelectOptionDirective],
+  imports: [SharedComponentModule, SalesModalComponent, DefaultSelectOptionDirective],
   templateUrl: './formmodal.component.html'
 })
 export class FormModalComponent {
@@ -54,11 +55,12 @@ export class FormModalComponent {
 
   constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) { }
 
+  selectedCrmRecord: CrmRecordModel | undefined;
+
   // Forms
   pageForm!: FormGroup;
   actionForm!: FormGroup;
   smsForm!: FormGroup;
-  salesForm!: FormGroup;
 
   // Select Options
   regionOptions: SelectListItem[] = [];
@@ -71,9 +73,7 @@ export class FormModalComponent {
   cityOptions: SelectListItem[] = [];
   districtOptions: SelectListItem[] = [];
 
-  // Stepper & UI
-  activeStep = 2;
-  showSalesModal = false;
+  displaySalesModal = false;
 
   // CRM & Sales
   crmActions: CrmRecordActionModel[] = [];
@@ -89,7 +89,6 @@ export class FormModalComponent {
     this.getOptions();
     this.initActionForm();
     this.initSmsForm();
-    this.initSalesForm();
     this.getCrmRecord();
 
     this.currentUser = this.authService.getUser()?.Name || '';
@@ -172,80 +171,8 @@ export class FormModalComponent {
     });
   }
 
-  initSalesForm(): void {
-    this.salesForm = this.fb.group({
-      step1: this.fb.group({
-        firstName: [{ value: null, disabled: true }, Validators.required],
-        lastName: [{ value: null, disabled: true }, Validators.required],
-        identityNumber: ['', [Validators.required, Validators.minLength(11)]],
-        birthDate: [null, Validators.required],
-        phone: [{ value: null, disabled: true }, Validators.required],
-        secondPhone: [''],
-        email: [{ value: null, disabled: true }, Validators.required],
-        studentType: [null, Validators.required],
-        address: [null, Validators.required],
-        cityId: [34, Validators.required],
-        districtId: [null, Validators.required],
-        branchId: [null, Validators.required],
-        signatory: ['student', Validators.required],
-        parentFirstName: [''],
-        parentLastName: [''],
-        parentIdentityNumber: [''],
-        parentBirthDate: [''],
-        parentPhone: [''],
-      }),
-      step2: this.fb.group({
-        contractType: [null, Validators.required],
-        educationType:[null, Validators.required],
-        lessonScheduleId: [null, Validators.required],
-        educationDuration: [null, Validators.required],
-        campaignId: [null],
-        installmentCount:[null, Validators.required],
-        paymentMethod:[null, Validators.required],
-        discountId: [null],
-        downPayment:[null],
-        isCash:[false],
-        installmentAmount:[null, Validators.required],
-        totalAmount:[null, Validators.required]
-      }),
-    });
-
-    this.salesForm.get('step1')?.get('cityId')?.valueChanges.subscribe(id => {
-      if (id) {
-        this.getDistrictList(id);
-      }
-    });
-
-    this.salesForm.get('step1')?.get('cityId')?.setValue('34');
-
-    this.salesForm.get('step1')?.get('signatory')?.valueChanges.subscribe(signatory => {
-      const isStudent = signatory === 'student';
-      const controlsToUpdate = [
-        'parentFirstName',
-        'parentLastName',
-        'parentIdentityNumber',
-        'parentBirthDate',
-        'parentPhone'
-      ];
-
-      controlsToUpdate.forEach(controlName => {
-        const control = this.salesForm.get('step1')?.get(controlName) as FormControl;
-
-        if (isStudent) {
-          control.clearValidators();
-          control.updateValueAndValidity();
-        } else {
-          control.setValidators([Validators.required]);
-          control.updateValueAndValidity();
-        }
-      });
-    });
-  }
-
-  // API/Service Calls
   async getOptions() {
     this.getRegionList();
-    this.getCityList();
     forkJoin([
       this.utilsHelper.enumToSelectOptionsAsync(CrmDataSource, 'CrmDataSource'),
       this.utilsHelper.enumToSelectOptionsAsync(CrmStatus, 'CrmStatus'),
@@ -263,14 +190,6 @@ export class FormModalComponent {
     this.regionOptions = await this.regionService.getSelectList();
   }
 
-  async getCityList() {
-    this.cityOptions = await this.locationService.getCityList();
-  }
-
-  async getDistrictList(cityId: number) {
-    this.districtOptions = await this.locationService.getDistrictList(cityId);
-  }
-
   async getCrmRecord() {
     if (this.id) {
       const crmRecord = await this.crmRecordService.getById(this.id);
@@ -278,7 +197,7 @@ export class FormModalComponent {
       this.actionForm.patchValue({ crmRecordId: this.pageForm.controls['id'].value });
       this.getActionList();
 
-      this.salesForm.get('step1')?.patchValue(this.pageForm.value);
+      this.selectedCrmRecord = this.pageForm.getRawValue() as CrmRecordModel;
     }
   }
 
@@ -314,12 +233,11 @@ export class FormModalComponent {
 
   // Modal & Sales
   openSalesModal() {
-    this.showSalesModal = true;
-    this.salesForm.patchValue(this.pageForm.getRawValue());
+    this.displaySalesModal = true;
   }
 
   closeSalesModal() {
-    this.showSalesModal = false;
+    this.displaySalesModal = false;
   }
 
   closeModal() {
@@ -400,28 +318,5 @@ export class FormModalComponent {
   isFieldInvalid(controlName: string): boolean {
     const control = this.pageForm.get(controlName);
     return control?.invalid && control?.touched ? true : false;
-  }
-
-  isFieldInvalidSales(controlName: string): boolean {
-    const control = this.salesForm.get('step1')?.get(controlName) || this.salesForm.get('step2')?.get(controlName) || this.salesForm.get('step3')?.get(controlName);
-    return control?.invalid && control?.touched ? true : false;
-  }
-
-  nextStep() {
-    const stepForm = this.salesForm.get('step' + this.activeStep);
-
-    if (stepForm?.valid) {
-      this.activeStep++;
-    } else {
-      stepForm?.markAllAsTouched();
-    }
-  }
-
-  prevStep() {
-    this.activeStep--;
-  }
-
-  completeStep() {
-
   }
 }
