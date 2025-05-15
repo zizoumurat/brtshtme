@@ -32,6 +32,7 @@ import { CalculatePaymentModel } from '@/core/models/calculatePayment.model';
 import { BRANCH_SERVICE } from '@/core/services/crm/branch-service';
 import { ContractType } from '@/core/enums/contractType';
 import { EducationType } from '@/core/enums/educationType';
+import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-salesmodal',
@@ -55,6 +56,8 @@ export class SalesModalComponent {
     installmentSettingService = inject(INSTALLMENTSETTING_SERVICE);
     salesService = inject(SALES_SERVICE);
     branchService = inject(BRANCH_SERVICE);
+    messageService = inject(MessageService);
+
 
     utilsHelper = inject(UtilsHelper);
 
@@ -62,6 +65,10 @@ export class SalesModalComponent {
 
     // Forms
     salesForm!: FormGroup;
+
+    totalAmount: number | undefined;
+    installmentAmount: number | undefined;
+    installments: any[] | undefined;
 
     // Select Options
     studentTypeOptions: SelectListItem[] = [];
@@ -123,8 +130,6 @@ export class SalesModalComponent {
                 downPayment: [null],
                 deposit: [null],
                 firstInstallmentDate: [null, Validators.required],
-                installmentAmount: [{ value: null, disabled: true }],
-                totalAmount: [{ value: null, disabled: true }]
             }),
         });
 
@@ -135,9 +140,10 @@ export class SalesModalComponent {
         });
 
         this.salesForm.get('step2')?.valueChanges.subscribe(values => {
+            this.totalAmount = undefined;
+            this.installmentAmount = undefined;
+            this.installments = undefined;
         });
-
-
 
         this.salesForm.get('step1')?.get('signatory')?.valueChanges.subscribe(signatory => {
 
@@ -327,6 +333,14 @@ export class SalesModalComponent {
         const stepForm = this.salesForm.get('step' + this.activeStep);
 
         if (stepForm?.valid) {
+            if (this.activeStep == 2 && !this.totalAmount) {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Hata',
+                    detail: 'Hesaplama Yapmadınız'
+                });
+                return;
+            }
             this.activeStep++;
         } else {
             stepForm?.markAllAsTouched();
@@ -339,7 +353,7 @@ export class SalesModalComponent {
 
     async calculate() {
 
-        if(this.salesForm.get('step2')?.invalid) {
+        if (this.salesForm.get('step2')?.invalid) {
             this.salesForm.get('step2')?.markAllAsTouched();
 
             return;
@@ -359,8 +373,9 @@ export class SalesModalComponent {
 
         const response = await this.salesService.calculateSalesAmount(data);
 
-        this.salesForm.get('step2')?.get('totalAmount')?.setValue(response.totalAmount);
-        this.salesForm.get('step2')?.get('installmentAmount')?.setValue(response.installmentAmount);
+        this.totalAmount = (response.totalAmount);
+        this.installmentAmount = (response.financedAmount);
+        this.installments = response.installments;
     }
 
     async completeStep() {

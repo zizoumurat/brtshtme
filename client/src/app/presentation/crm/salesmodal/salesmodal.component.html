@@ -335,24 +335,25 @@
                 <hr class="mt-6 mb-6 border-red-700">
 
                 <div class="grid grid-cols-12 gap-4">
-                  <div class="col-span-12 md:col-span-4 md:col-start-3">
-                    <label for="installmentAmount">Taksitlendirilen Miktar</label>
-                    <p-inputNumber inputId="installmentAmount" formControlName="installmentAmount" mode="currency"
-                      currency="TRY" locale="tr-TR"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('installmentAmount')" />
-                    <app-validation-message [control]="salesForm.get('step2').controls['installmentAmount']" />
+                  <div class="col-span-12 text-center md:col-span-4 md:col-start-3">
+                    <label>Taksitlendirilen Miktar</label>
+                    <input type="text" class="!text-rose-600 !text-lg !text-center" pInputText
+                      [value]="installmentAmount | currency:'TRY'" [disabled]="true" />
                   </div>
 
-                  <div class="col-span-12 md:col-span-4">
-                    <label for="totalAmount">Genel Toplam</label>
-                    <p-inputNumber inputId="totalAmount" formControlName="totalAmount" mode="currency" currency="TRY"
-                      locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('totalAmount')" />
-                    <app-validation-message [control]="salesForm.get('step2').controls['totalAmount']" />
+                  <div class="col-span-12 text-center md:col-span-4">
+                    <label>Genel Toplam</label>
+                    <input type="text" class="!text-rose-700 !text-lg text-center" pInputText
+                      [value]="totalAmount | currency:'TRY'" [disabled]="true" />
+
                   </div>
 
                   <div class="col-span-12 md:col-span-2">
-                    <label for="">&nbsp;</label>
-                    <p-button label="Hesapla" icon="pi pi-calculator" iconPos="left" severity="success" (onClick)="calculate()" />
+                    <div class="flex flex-col h-full justify-center">
+                      <label for="">&nbsp;</label>
+                      <p-button styleClass="w-full" label="Hesapla" icon="pi pi-calculator" iconPos="left" severity="success"
+                        (onClick)="calculate()" />
+                    </div>
                   </div>
                 </div>
               </p-fluid>
