@@ -9,7 +9,6 @@ using BritishTime.WebAPI.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BritishTime.WebAPI.Controllers;
 

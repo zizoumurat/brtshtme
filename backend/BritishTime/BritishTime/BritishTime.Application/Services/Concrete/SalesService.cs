@@ -32,27 +32,25 @@ public class SalesService : ISalesService
     public async Task<CalculatePaymentResultDto> CalculatePayment(CalculatePaymentDto model)
     {
         var branch = await _queryBranchRepository.GetByIdAsync(model.BranchId);
-
-        if (branch == null)
+        if (branch is null)
             throw new Exception("notFoundEntity");
 
         if (branch.LessonDurationInMinutes <= 0)
             throw new Exception("branchDefinitionsMissing");
 
         var lessonScheduleDefinition = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(model.LessonScheduleId);
-
         if (lessonScheduleDefinition == null)
             throw new Exception("notFoundEntity");
 
         var branchPricingSetting = await _queryBranchPricingSettingRepository.GetByBranchId(model.BranchId);
-
-        if (branch.LessonDurationInMinutes <= 0)
+        if (branchPricingSetting is null)
             throw new Exception("branchPricingSettingsMissing");
 
         decimal hourlyRate = branchPricingSetting.HourlyRate;
         int totalHours = branch.LevelDurationInHours * model.LevelCount;
         decimal baseAmount = totalHours * hourlyRate;
 
+        // Kampanya indirimi
         if (model.CampaignId.HasValue)
         {
             var campaign = await _queryCampaignRepository.GetByIdAsync(model.CampaignId.Value);
@@ -60,6 +58,7 @@ public class SalesService : ISalesService
                 baseAmount *= campaign.DiscountRate;
         }
 
+        // Gerekçeli indirim
         if (model.DiscountId.HasValue)
         {
             var discount = await _queryDiscountRepository.GetByIdAsync(model.DiscountId.Value);
@@ -69,22 +68,47 @@ public class SalesService : ISalesService
 
         decimal finalAmount = baseAmount;
 
+        // Peşin ödeme indirimi
         if (model.PaymentMethod == Domain.Enums.PaymentMethod.Cash)
         {
             finalAmount *= branchPricingSetting.CashPrepaymentDiscount;
         }
 
-        if (model.PaymentMethod == Domain.Enums.PaymentMethod.CreditCard)
+        // Kredi kartı taksitlendirme indirimi
+        if (model.PaymentMethod == Domain.Enums.PaymentMethod.CreditCard && model.InstallmentCount > 1)
         {
             finalAmount *= branchPricingSetting.CreditCardInstallmentDiscount;
         }
 
+        decimal downPayment = model.DownPayment ?? 0m;
+        decimal financedAmount = finalAmount - downPayment;
+
+        // Taksit varsa: vade farkı ekle
         if (model.InstallmentCount.HasValue && model.InstallmentCount > 1)
         {
             decimal interestRate = branchPricingSetting.InstallmentRate;
-            finalAmount *= (decimal)Math.Pow((double)interestRate, model.InstallmentCount.Value);
+            financedAmount *= (decimal)Math.Pow((double)interestRate, model.InstallmentCount.Value);
         }
 
-        return new(finalAmount, 0);
+        var installments = new List<InstallmentDto>();
+
+        if (model.InstallmentCount.HasValue && model.InstallmentCount > 0 && financedAmount > 0)
+        {
+            decimal installmentAmount = Math.Round(financedAmount / model.InstallmentCount.Value, 2);
+            DateTime baseDate = model.FirstInstallmentDate ?? DateTime.Today;
+
+            for (int i = 0; i < model.InstallmentCount.Value; i++)
+            {
+                var dueDate = (i == 0 && downPayment > 0) ? DateTime.Today : baseDate.AddDays(30 * i);
+                installments.Add(new InstallmentDto(dueDate, installmentAmount));
+            }
+        }
+
+        return new CalculatePaymentResultDto(
+            TotalAmount: finalAmount,
+            FinancedAmount: financedAmount,
+            Installments: installments
+        );
     }
+
 }

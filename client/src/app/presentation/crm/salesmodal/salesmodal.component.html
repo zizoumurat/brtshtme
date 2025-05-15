@@ -178,7 +178,7 @@
                 <div class="grid grid-cols-12 gap-4 my-4">
 
                   <div class="col-span-12 md:col-span-6">
-                    <div class="flex flex-wrap gap-4 mt-4">
+                    <div class="flex flex-wrap gap-4">
 
                       <div class="flex items-center">
                         <p-radiobutton name="contractType" value="0" formControlName="contractType" inputId="genel" />
@@ -192,11 +192,11 @@
                       </div>
 
                     </div>
-                    <app-validation-message [control]="salesForm.get('step2').controls['firstName']" />
+                    <app-validation-message [control]="salesForm.get('step2').controls['contractType']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-6">
-                    <div class="flex flex-wrap gap-4 mt-4">
+                    <div class="flex flex-wrap gap-4">
 
                       <div class="flex items-center">
                         <p-radiobutton name="educationType" value="0" formControlName="educationType"
@@ -211,10 +211,10 @@
                       </div>
 
                     </div>
-                    <app-validation-message [control]="salesForm.get('step2').controls['firstName']" />
+                    <app-validation-message [control]="salesForm.get('step2').controls['educationType']" />
                   </div>
-
                 </div>
+
               </p-fluid>
             </p-fieldset>
 
@@ -225,14 +225,35 @@
                   <p-fluid>
                     <div class="grid grid-cols-12 gap-4">
 
-                      <div class="col-span-12 md:col-span-6">
+                      <div class="col-span-12">
                         <p-select id="lessonScheduleId" [options]="lessonScheduleOptions" optionValue="id"
                           optionLabel="schedule" formControlName="lessonScheduleId" placeholder="Seçiniz"
                           appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lessonScheduleId')"
-                          class="w-full" />
+                          class="w-full">
+                          <ng-template let-item #item>
+                            <div class="flex items-center gap-2">
+                              <div class="w-[140px] border-solid border-black border-r">{{ item.schedule }}</div>
+                              <div class="w-[140px] border-solid border-black border-r">{{ item.days | dayShortNames }}
+                              </div>
+                              <div class="w-[80px]">{{ item.startTime | timeShort }} - {{ item.endTime | timeShort }}
+                              </div>
+                            </div>
+                          </ng-template>
+                        </p-select>
                         <app-validation-message [control]="salesForm.get('step2').controls['lessonScheduleId']" />
                       </div>
 
+                      <div *ngIf="lessonSchedule" class="col-span-12 md:col-span-6">
+                        <label>Günler</label>
+                        <input type="text" pInputText [value]="lessonSchedule?.days | dayShortNames"
+                          [disabled]="true" />
+                      </div>
+                      <div *ngIf="lessonSchedule" class="col-span-12 md:col-span-6">
+                        <label>Saatler</label>
+                        <input type="text" pInputText
+                          [value]="(lessonSchedule?.startTime | timeShort) + ' - ' + (lessonSchedule?.endTime | timeShort)"
+                          [disabled]="true" />
+                      </div>
                     </div>
                   </p-fluid>
                 </p-fieldset>
@@ -243,7 +264,7 @@
                   <p-fluid>
                     <div class="grid grid-cols-12 gap-4">
 
-                      <div class="col-span-12 md:col-span-6">
+                      <div class="col-span-12">
                         <p-select id="educationDuration" [options]="educationDurationOptions"
                           formControlName="educationDuration" placeholder="Seçiniz" appendTo="body"
                           [class.ng-dirty.ng-invalid]="isFieldInvalidSales('educationDuration')" class="w-full" />

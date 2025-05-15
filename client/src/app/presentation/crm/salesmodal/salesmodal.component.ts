@@ -29,6 +29,9 @@ import { InstallmentSettingModel } from '@/core/models/crm/installmentSetting.mo
 import { PaymentMethod } from '@/core/enums/paymentMethod';
 import { SALES_SERVICE } from '@/core/services/crm/sales-service';
 import { CalculatePaymentModel } from '@/core/models/calculatePayment.model';
+import { BRANCH_SERVICE } from '@/core/services/crm/branch-service';
+import { ContractType } from '@/core/enums/contractType';
+import { EducationType } from '@/core/enums/educationType';
 
 @Component({
     selector: 'app-salesmodal',
@@ -51,6 +54,7 @@ export class SalesModalComponent {
     discountService = inject(DISCOUNT_SERVICE);
     installmentSettingService = inject(INSTALLMENTSETTING_SERVICE);
     salesService = inject(SALES_SERVICE);
+    branchService = inject(BRANCH_SERVICE);
 
     utilsHelper = inject(UtilsHelper);
 
@@ -70,6 +74,8 @@ export class SalesModalComponent {
     campaignOptions: SelectListItem[] = [];
     discountOptions: SelectListItem[] = [];
     installmentCountOptions: SelectListItem[] = [];
+
+    lessonSchedule: LessonScheduleDefinitionModel | undefined;
 
     // Lifecycle
     ngOnInit() {
@@ -101,8 +107,8 @@ export class SalesModalComponent {
                 parentPhone: [''],
             }),
             step2: this.fb.group({
-                contractType: [null, Validators.required],
-                educationType: [null, Validators.required],
+                contractType: [ContractType.General, Validators.required],
+                educationType: [EducationType.InPerson, Validators.required],
                 lessonScheduleId: [null, Validators.required],
                 educationDuration: [null, Validators.required],
                 campaignId: [null],
@@ -110,7 +116,7 @@ export class SalesModalComponent {
                 paymentMethod: [null, Validators.required],
                 discountId: [null],
                 downPayment: [null],
-                deposit:[null],
+                deposit: [null],
                 installmentAmount: [{ value: null, disabled: true }],
                 totalAmount: [{ value: null, disabled: true }]
             }),
@@ -154,6 +160,10 @@ export class SalesModalComponent {
 
         this.salesForm.get('step2')?.get('paymentMethod')?.valueChanges.subscribe(_ => {
             this.getInstallmentCount();
+        });
+
+        this.salesForm.get('step2')?.get('lessonScheduleId')?.valueChanges.subscribe(id => {
+            this.lessonSchedule = this.lessonScheduleOptions.find(x => x.id == id) || undefined;
         });
 
         this.salesForm.get('step2')?.get('paymentMethod')?.setValue(PaymentMethod.Cash);
@@ -205,10 +215,11 @@ export class SalesModalComponent {
         paginationFilter.sortByMultiName = ['level'];
         var result = await this.installmentSettingService.getAll(paginationFilter, { 'branchId': this.crmRecord?.branchId });
         this.installmentSettingOptions = result.items;
+        console.log(this.installmentSettingOptions);
 
         if (this.installmentSettingOptions) {
             const sortedOptions = this.installmentSettingOptions.slice().sort((a, b) => b.level - a.level);
-            const highestLevelOption = sortedOptions[0].level;
+            const highestLevelOption = sortedOptions[0]?.level | 0;
 
             this.educationDurationOptions = Array.from({ length: highestLevelOption }, (_, i) => ({
                 id: String(i + 1),
@@ -258,7 +269,7 @@ export class SalesModalComponent {
 
         this.installmentCountOptions = Array.from({ length: installmentCount }, (_, i) => ({
             id: String(i + 1),
-            name: `${i + 1} Taksit`
+            name: i === 0 ? 'Peşin' : `${i + 1} Taksit`
         }));
     }
 
@@ -296,16 +307,21 @@ export class SalesModalComponent {
     }
 
     async completeStep() {
+        if (!this.salesForm.get('step2')?.valid) {
+            this.salesForm.get('step2')?.markAllAsTouched();
+            return;
+        }
+
         const data = {
-            lessonScheduleId:this.salesForm.get('step2')?.get('lessonScheduleId')?.value,
+            lessonScheduleId: this.salesForm.get('step2')?.get('lessonScheduleId')?.value,
             branchId: this.crmRecord?.branchId,
-            levelCount:this.salesForm.get('step2')?.get('educationDuration')?.value,
-            installmentCount:this.salesForm.get('step2')?.get('installmentCount')?.value,
+            levelCount: this.salesForm.get('step2')?.get('educationDuration')?.value,
+            installmentCount: this.salesForm.get('step2')?.get('installmentCount')?.value,
             paymentMethod: Number(this.salesForm.get('step2')?.get('paymentMethod')?.value),
-            campaignId:this.salesForm.get('step2')?.get('campaignId')?.value,
-            discountId:this.salesForm.get('step2')?.get('discountId')?.value,
+            campaignId: this.salesForm.get('step2')?.get('campaignId')?.value,
+            discountId: this.salesForm.get('step2')?.get('discountId')?.value,
         } as CalculatePaymentModel;
-        
+
         const response = await this.salesService.calculateSalesAmount(data);
 
         this.salesForm.get('step2')?.get('totalAmount')?.setValue(response.totalAmount);
