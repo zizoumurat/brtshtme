@@ -70,8 +70,8 @@
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="studentType">Tahsil Durumu</label>
-                    <p-select id="studentType" [options]="studentTypeOptions" class="w-full"
-                      formControlName="studentType" placeholder="Seçiniz" appendTo="body"
+                    <p-select id="studentType" [options]="studentTypeOptions" class="w-full" optionValue="id"
+                      optionLabel="name" formControlName="studentType" placeholder="Seçiniz" appendTo="body"
                       [class.ng-dirty.ng-invalid]="isFieldInvalidSales('studentType')" />
                     <app-validation-message [control]="salesForm.get('step1').controls['studentType']" />
                   </div>
@@ -79,7 +79,7 @@
                   <div class="col-span-12 md:col-span-4 col-start-1 md:col-start-1">
                     <label for="cityId">İl</label>
                     <p-select id="cityId" [options]="cityOptions" class="w-full" formControlName="cityId"
-                      placeholder="Seçiniz" appendTo="body"
+                      placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
                       [class.ng-dirty.ng-invalid]="isFieldInvalidSales('cityId')" />
                     <app-validation-message [control]="salesForm.get('step1').controls['cityId']" />
                   </div>
@@ -87,7 +87,7 @@
                   <div class="col-span-12 md:col-span-4">
                     <label for="districtId">İlçe</label>
                     <p-select id="districtId" [options]="districtOptions" class="w-full" formControlName="districtId"
-                      placeholder="Seçiniz" appendTo="body"
+                      placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
                       [class.ng-dirty.ng-invalid]="isFieldInvalidSales('districtId')" />
                     <app-validation-message [control]="salesForm.get('step1').controls['districtId']" />
                   </div>
@@ -266,8 +266,9 @@
 
                       <div class="col-span-12">
                         <p-select id="educationDuration" [options]="educationDurationOptions"
-                          formControlName="educationDuration" placeholder="Seçiniz" appendTo="body"
-                          [class.ng-dirty.ng-invalid]="isFieldInvalidSales('educationDuration')" class="w-full" />
+                          formControlName="educationDuration" placeholder="Seçiniz" appendTo="body" optionValue="id"
+                          optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('educationDuration')"
+                          class="w-full" />
                         <app-validation-message [control]="salesForm.get('step2').controls['educationDuration']" />
                       </div>
 
@@ -285,7 +286,7 @@
                   <div class="col-span-12 md:col-span-6">
                     <label for="campaignId">Kampanya</label>
                     <p-select id="campaignId" [options]="campaignOptions" formControlName="campaignId"
-                      placeholder="Seçiniz" appendTo="body"
+                      placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
                       [class.ng-dirty.ng-invalid]="isFieldInvalidSales('campaignId')" class="w-full" />
                     <app-validation-message [control]="salesForm.get('step2').controls['campaignId']" />
                   </div>
@@ -293,41 +294,34 @@
                   <div class="col-span-12 md:col-span-6">
                     <label for="discountId">Gerekçeli İndirim</label>
                     <p-select id="discountId" [options]="discountOptions" formControlName="discountId"
-                      placeholder="Seçiniz" appendTo="body"
+                      placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
                       [class.ng-dirty.ng-invalid]="isFieldInvalidSales('discountId')" class="w-full" />
                     <app-validation-message [control]="salesForm.get('step2').controls['discountId']" />
                   </div>
 
-                  <div class="col-span-12 md:col-span-6">
+                  <div class="col-span-12 md:col-span-3">
                     <label for="paymentMethod">Ödeme Türü</label>
-                    <div class="flex flex-wrap gap-4 mt-4">
-
-                      <div class="flex items-center">
-                        <p-radiobutton name="paymentMethod" value="0" formControlName="paymentMethod" inputId="cash" />
-                        <label for="cash" class="ml-2">Nakit</label>
-                      </div>
-
-                      <div class="flex items-center">
-                        <p-radiobutton name="paymentMethod" value="1" formControlName="paymentMethod" inputId="note" />
-                        <label for="note" class="ml-2">Senet</label>
-                      </div>
-
-                      <div class="flex items-center">
-                        <p-radiobutton name="paymentMethod" value="2" formControlName="paymentMethod"
-                          inputId="creditCard" />
-                        <label for="creditCard" class="ml-2">Kredi Kartı</label>
-                      </div>
-
-                    </div>
-                    <app-validation-message [control]="salesForm.get('step2').controls['paymentType']" />
+                    <p-select id="paymentMethod" [options]="paymentMethodOptions" formControlName="paymentMethod"
+                      optionValue="id" optionLabel="name" placeholder="Seçiniz" appendTo="body"
+                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('paymentMethod')" class="w-full" />
+                    <app-validation-message [control]="salesForm.get('step2').controls['paymentMethod']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-3">
                     <label for="installmentCount">Taksit Sayısı</label>
                     <p-select id="installmentCount" [options]="installmentCountOptions"
-                      formControlName="installmentCount" placeholder="Seçiniz" appendTo="body"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('installmentCount')" class="w-full" />
+                      formControlName="installmentCount" placeholder="Seçiniz" appendTo="body" optionValue="id"
+                      optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('installmentCount')"
+                      class="w-full" />
                     <app-validation-message [control]="salesForm.get('step2').controls['installmentCount']" />
+                  </div>
+
+                  <div class="col-span-12 md:col-span-3">
+                    <label for="firstInstallmentDate">İlk Vade Tarihi</label>
+                    <p-datepicker id="firstInstallmentDate" formControlName="firstInstallmentDate" appendTo="body"
+                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstInstallmentDate')"
+                      class="w-full" />
+                    <app-validation-message [control]="salesForm.get('step2').controls['firstInstallmentDate']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-3">
@@ -355,12 +349,17 @@
                       locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('totalAmount')" />
                     <app-validation-message [control]="salesForm.get('step2').controls['totalAmount']" />
                   </div>
+
+                  <div class="col-span-12 md:col-span-2">
+                    <label for="">&nbsp;</label>
+                    <p-button label="Hesapla" icon="pi pi-calculator" iconPos="left" severity="success" (onClick)="calculate()" />
+                  </div>
                 </div>
               </p-fluid>
             </p-fieldset>
 
             <div class="flex pt-6 justify-between">
-              <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="completeStep()" />
+              <p-button label="Geri" icon="pi pi-arrow-left" iconPos="left" (onClick)="prevStep()" />
               <p-button label="İleri" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextStep()" />
             </div>
 
@@ -376,7 +375,7 @@
               </div>
             </div>
             <div class="flex pt-6 justify-between">
-              <p-button label="Back" icon="pi pi-arrow-left" iconPos="right" (onClick)="completeStep()" />
+              <p-button label="Geri" icon="pi pi-arrow-left" iconPos="left" (onClick)="prevStep()" />
               <p-button label="İleri" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextStep()" />
             </div>
           </ng-template>

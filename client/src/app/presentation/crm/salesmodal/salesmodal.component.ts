@@ -74,6 +74,11 @@ export class SalesModalComponent {
     campaignOptions: SelectListItem[] = [];
     discountOptions: SelectListItem[] = [];
     installmentCountOptions: SelectListItem[] = [];
+    paymentMethodOptions: SelectListItem[] = [
+        { id: PaymentMethod.Cash.toString(), name: 'Nakit' },
+        { id: PaymentMethod.Note.toString(), name: 'Senet' },
+        { id: PaymentMethod.CreditCard.toString(), name: 'Kredi Kartı' }
+    ];
 
     lessonSchedule: LessonScheduleDefinitionModel | undefined;
 
@@ -117,6 +122,7 @@ export class SalesModalComponent {
                 discountId: [null],
                 downPayment: [null],
                 deposit: [null],
+                firstInstallmentDate: [null, Validators.required],
                 installmentAmount: [{ value: null, disabled: true }],
                 totalAmount: [{ value: null, disabled: true }]
             }),
@@ -128,7 +134,10 @@ export class SalesModalComponent {
             }
         });
 
-        this.salesForm.get('step1')?.get('cityId')?.setValue('34');
+        this.salesForm.get('step2')?.valueChanges.subscribe(values => {
+        });
+
+
 
         this.salesForm.get('step1')?.get('signatory')?.valueChanges.subscribe(signatory => {
 
@@ -154,20 +163,43 @@ export class SalesModalComponent {
             });
         });
 
+        this.salesForm.get('step1')?.patchValue(this.crmRecord);
+        this.salesForm.get('step1')?.get('cityId')?.setValue('34');
+
         this.salesForm.get('step2')?.get('educationDuration')?.valueChanges.subscribe(_ => {
             this.getInstallmentCount();
         });
 
-        this.salesForm.get('step2')?.get('paymentMethod')?.valueChanges.subscribe(_ => {
+        this.salesForm.get('step2')?.get('installmentCount')?.valueChanges.subscribe(value => {
+            this.depositAndDateControl();
+        });
+
+        this.salesForm.get('step2')?.get('paymentMethod')?.valueChanges.subscribe(value => {
             this.getInstallmentCount();
+            this.depositAndDateControl();
         });
 
         this.salesForm.get('step2')?.get('lessonScheduleId')?.valueChanges.subscribe(id => {
             this.lessonSchedule = this.lessonScheduleOptions.find(x => x.id == id) || undefined;
         });
 
-        this.salesForm.get('step2')?.get('paymentMethod')?.setValue(PaymentMethod.Cash);
+        this.salesForm.get('step2')?.get('paymentMethod')?.setValue(PaymentMethod.Cash.toString());
 
+    }
+
+    depositAndDateControl() {
+        const paymentMethod = this.salesForm.get('step2')?.get('paymentMethod')?.value;
+        const installmentCount = this.salesForm.get('step2')?.get('installmentCount')?.value;
+        if (paymentMethod == PaymentMethod.Cash || installmentCount == 1) {
+            this.salesForm.get('step2')?.get('deposit')?.setValue(null);
+            this.salesForm.get('step2')?.get('deposit')?.disable();
+            this.salesForm.get('step2')?.get('firstInstallmentDate')?.setValue(null);
+            this.salesForm.get('step2')?.get('firstInstallmentDate')?.disable();
+        }
+        else {
+            this.salesForm.get('step2')?.get('deposit')?.enable();
+            this.salesForm.get('step2')?.get('firstInstallmentDate')?.enable();
+        }
     }
 
     // API/Service Calls
@@ -215,7 +247,6 @@ export class SalesModalComponent {
         paginationFilter.sortByMultiName = ['level'];
         var result = await this.installmentSettingService.getAll(paginationFilter, { 'branchId': this.crmRecord?.branchId });
         this.installmentSettingOptions = result.items;
-        console.log(this.installmentSettingOptions);
 
         if (this.installmentSettingOptions) {
             const sortedOptions = this.installmentSettingOptions.slice().sort((a, b) => b.level - a.level);
@@ -306,9 +337,11 @@ export class SalesModalComponent {
         this.activeStep--;
     }
 
-    async completeStep() {
-        if (!this.salesForm.get('step2')?.valid) {
+    async calculate() {
+
+        if(this.salesForm.get('step2')?.invalid) {
             this.salesForm.get('step2')?.markAllAsTouched();
+
             return;
         }
 
@@ -320,11 +353,17 @@ export class SalesModalComponent {
             paymentMethod: Number(this.salesForm.get('step2')?.get('paymentMethod')?.value),
             campaignId: this.salesForm.get('step2')?.get('campaignId')?.value,
             discountId: this.salesForm.get('step2')?.get('discountId')?.value,
+            downPayment: this.salesForm.get('step2')?.get('downPayment')?.value,
+            firstInstallmentDate: this.salesForm.get('step2')?.get('firstInstallmentDate')?.value,
         } as CalculatePaymentModel;
 
         const response = await this.salesService.calculateSalesAmount(data);
 
         this.salesForm.get('step2')?.get('totalAmount')?.setValue(response.totalAmount);
         this.salesForm.get('step2')?.get('installmentAmount')?.setValue(response.installmentAmount);
+    }
+
+    async completeStep() {
+
     }
 }
