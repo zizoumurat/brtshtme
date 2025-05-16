@@ -7,7 +7,7 @@ import {
     Output
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
 import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
@@ -45,6 +45,9 @@ export class SalesModalComponent {
     @Input() displayModal = false;
     @Input() crmRecord: CrmRecordModel | undefined;
     @Output() onCloseModal = new EventEmitter();
+
+
+    private destroy$ = new Subject<void>();
 
     activeStep = 2;
 
@@ -95,6 +98,19 @@ export class SalesModalComponent {
         this.initSalesForm();
     }
 
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    get step1(): FormGroup {
+        return this.salesForm.get('step1') as FormGroup;
+    }
+
+    get step2(): FormGroup {
+        return this.salesForm.get('step2') as FormGroup;
+    }
+
 
     initSalesForm(): void {
         this.salesForm = this.fb.group({
@@ -133,78 +149,92 @@ export class SalesModalComponent {
             }),
         });
 
-        this.salesForm.get('step1')?.get('cityId')?.valueChanges.subscribe(id => {
-            if (id) {
-                this.getDistrictList(id);
-            }
-        });
-
-        this.salesForm.get('step2')?.valueChanges.subscribe(values => {
-            this.totalAmount = undefined;
-            this.installmentAmount = undefined;
-            this.installments = undefined;
-        });
-
-        this.salesForm.get('step1')?.get('signatory')?.valueChanges.subscribe(signatory => {
-
-            const isStudent = signatory === 'student';
-            const controlsToUpdate = [
-                'parentFirstName',
-                'parentLastName',
-                'parentIdentityNumber',
-                'parentBirthDate',
-                'parentPhone'
-            ];
-
-            controlsToUpdate.forEach(controlName => {
-                const control = this.salesForm.get('step1')?.get(controlName) as FormControl;
-
-                if (isStudent) {
-                    control.clearValidators();
-                    control.updateValueAndValidity();
-                } else {
-                    control.setValidators([Validators.required]);
-                    control.updateValueAndValidity();
+        this.step1.get('cityId')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(id => {
+                if (id) {
+                    this.getDistrictList(id);
                 }
             });
-        });
 
-        this.salesForm.get('step1')?.patchValue(this.crmRecord);
-        this.salesForm.get('step1')?.get('cityId')?.setValue('34');
+        this.step2.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(values => {
+                this.totalAmount = undefined;
+                this.installmentAmount = undefined;
+                this.installments = undefined;
+            });
 
-        this.salesForm.get('step2')?.get('educationDuration')?.valueChanges.subscribe(_ => {
-            this.getInstallmentCount();
-        });
+        this.step1.get('signatory')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(signatory => {
 
-        this.salesForm.get('step2')?.get('installmentCount')?.valueChanges.subscribe(value => {
-            this.depositAndDateControl();
-        });
+                const isStudent = signatory === 'student';
+                const controlsToUpdate = [
+                    'parentFirstName',
+                    'parentLastName',
+                    'parentIdentityNumber',
+                    'parentBirthDate',
+                    'parentPhone'
+                ];
 
-        this.salesForm.get('step2')?.get('paymentMethod')?.valueChanges.subscribe(value => {
-            this.getInstallmentCount();
-            this.depositAndDateControl();
-        });
+                controlsToUpdate.forEach(controlName => {
+                    const control = this.step1.get(controlName) as FormControl;
 
-        this.salesForm.get('step2')?.get('lessonScheduleId')?.valueChanges.subscribe(id => {
-            this.lessonSchedule = this.lessonScheduleOptions.find(x => x.id == id) || undefined;
-        });
+                    if (isStudent) {
+                        control.clearValidators();
+                        control.updateValueAndValidity();
+                    } else {
+                        control.setValidators([Validators.required]);
+                        control.updateValueAndValidity();
+                    }
+                });
+            });
 
-        this.salesForm.get('step2')?.get('paymentMethod')?.setValue(PaymentMethod.Cash.toString());
+        this.step1.patchValue({ ...this.crmRecord });
+        this.step1.get('cityId')?.setValue('34');
+
+        this.step2.get('educationDuration')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(_ => {
+                this.getInstallmentCount();
+            });
+
+        this.step2.get('installmentCount')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+                this.depositAndDateControl();
+            });
+
+        this.step2.get('paymentMethod')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(value => {
+                this.getInstallmentCount();
+                this.depositAndDateControl();
+            });
+
+        this.step2.get('lessonScheduleId')?.valueChanges
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(id => {
+                this.lessonSchedule = this.lessonScheduleOptions.find(x => x.id == id) || undefined;
+            });
+
+        this.step2.get('paymentMethod')?.setValue(PaymentMethod.Cash.toString());
 
     }
 
     depositAndDateControl() {
-        const paymentMethod = this.salesForm.get('step2')?.get('paymentMethod')?.value;
-        const installmentCount = this.salesForm.get('step2')?.get('installmentCount')?.value;
+        const paymentMethod = this.step2.get('paymentMethod')?.value;
+        const installmentCount = this.step2.get('installmentCount')?.value;
         if (paymentMethod == PaymentMethod.Cash || installmentCount == 1) {
-            this.salesForm.get('step2')?.get('deposit')?.setValue(null);
-            this.salesForm.get('step2')?.get('deposit')?.disable();
-            this.salesForm.get('step2')?.get('firstInstallmentDate')?.setValue(null);
-            this.salesForm.get('step2')?.get('firstInstallmentDate')?.disable();
+            this.step2.get('deposit')?.setValue(null);
+            this.step2.get('deposit')?.disable();
+            this.step2.get('firstInstallmentDate')?.setValue(null);
+            this.step2.get('firstInstallmentDate')?.disable();
         }
         else {
-            this.salesForm.get('step2')?.get('deposit')?.enable();
-            this.salesForm.get('step2')?.get('firstInstallmentDate')?.enable();
+            this.step2.get('deposit')?.enable();
+            this.step2.get('firstInstallmentDate')?.enable();
         }
     }
 
@@ -276,9 +306,9 @@ export class SalesModalComponent {
     }
 
     getInstallmentCount() {
-        const educationDuration = this.salesForm.get('step2')?.get('educationDuration')?.value;
-        const paymentMethod = this.salesForm.get('step2')?.get('paymentMethod')?.value;
-        const control = this.salesForm.get('step2')?.get('installmentCount') as FormControl;
+        const educationDuration = this.step2.get('educationDuration')?.value;
+        const paymentMethod = this.step2.get('paymentMethod')?.value;
+        const control = this.step2.get('installmentCount') as FormControl;
 
         control.setValue(null);
         this.installmentCountOptions = [];
@@ -312,6 +342,7 @@ export class SalesModalComponent {
 
     closeSalesModal() {
         this.onCloseModal.emit();
+        this.destroy$.next();
     }
 
 
@@ -325,7 +356,7 @@ export class SalesModalComponent {
 
 
     isFieldInvalidSales(controlName: string): boolean {
-        const control = this.salesForm.get('step1')?.get(controlName) || this.salesForm.get('step2')?.get(controlName) || this.salesForm.get('step3')?.get(controlName);
+        const control = this.step1.get(controlName) || this.step2.get(controlName);
         return control?.invalid && control?.touched ? true : false;
     }
 
@@ -353,22 +384,22 @@ export class SalesModalComponent {
 
     async calculate() {
 
-        if (this.salesForm.get('step2')?.invalid) {
-            this.salesForm.get('step2')?.markAllAsTouched();
+        if (this.step2.invalid) {
+            this.step2.markAllAsTouched();
 
             return;
         }
 
         const data = {
-            lessonScheduleId: this.salesForm.get('step2')?.get('lessonScheduleId')?.value,
+            lessonScheduleId: this.step2.get('lessonScheduleId')?.value,
             branchId: this.crmRecord?.branchId,
-            levelCount: this.salesForm.get('step2')?.get('educationDuration')?.value,
-            installmentCount: this.salesForm.get('step2')?.get('installmentCount')?.value,
-            paymentMethod: Number(this.salesForm.get('step2')?.get('paymentMethod')?.value),
-            campaignId: this.salesForm.get('step2')?.get('campaignId')?.value,
-            discountId: this.salesForm.get('step2')?.get('discountId')?.value,
-            downPayment: this.salesForm.get('step2')?.get('downPayment')?.value,
-            firstInstallmentDate: this.salesForm.get('step2')?.get('firstInstallmentDate')?.value,
+            levelCount: this.step2.get('educationDuration')?.value,
+            installmentCount: this.step2.get('installmentCount')?.value,
+            paymentMethod: Number(this.step2.get('paymentMethod')?.value),
+            campaignId: this.step2.get('campaignId')?.value,
+            discountId: this.step2.get('discountId')?.value,
+            downPayment: this.step2.get('downPayment')?.value,
+            firstInstallmentDate: this.step2.get('firstInstallmentDate')?.value,
         } as CalculatePaymentModel;
 
         const response = await this.salesService.calculateSalesAmount(data);
