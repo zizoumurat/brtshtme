@@ -14,14 +14,15 @@ public sealed record CalculatePaymentDto(
     PaymentMethod PaymentMethod,
     Guid? CampaignId,
     Guid? DiscountId,
-    decimal? DownPayment,              
-    DateTime? FirstInstallmentDate     
+    decimal? Deposit,
+    DateTime? FirstInstallmentDate,
+    ContractType ContractType,
+    EducationType EducationType,
+    Signatory Signatory
 );
-
-public sealed record InstallmentDto(DateTime DueDate, decimal Amount);
 
 public sealed record CalculatePaymentResultDto(
     decimal TotalAmount,
     decimal FinancedAmount,
-    List<InstallmentDto> Installments
+    List<InstallmentListDto> Installments
 );

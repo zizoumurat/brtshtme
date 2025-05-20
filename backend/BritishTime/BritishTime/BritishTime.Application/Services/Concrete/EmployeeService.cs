@@ -31,7 +31,6 @@ public class EmployeeService : IEmployeeService
         var existingUser = await _queryEmployeeRepository.IsExistingAsync(x => x.IdentityNumber == employeeDto.IdentityNumber || x.Email == employeeDto.Email || x.Phone1 == employeeDto.Phone1);
         if (existingUser) throw new KeyNotFoundException("notFoundEntity");
 
-
         var employee = _mapper.Map<Employee>(employeeDto);
         await _commandEmployeeRepository.AddAsync(employee);
         return _mapper.Map<EmployeeDto>(employee);

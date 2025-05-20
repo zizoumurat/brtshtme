@@ -36,7 +36,7 @@ export class SrmComponent {
 
     setActiveTab(): void {
         const currentRoute = this.router.url;
-        this.activeTab = this.tabs.find(tab => currentRoute.endsWith(tab.route))?.route || '';
+        this.activeTab = this.tabs.find(tab => currentRoute.includes(tab.route))?.route || '';
     }
 
     navigate(path: string) {

@@ -1,17 +1,16 @@
 
 
 export enum EmployeeRole {
-  Owner,
-  Manager,
-  EducationConsultant,
-  SecurityGuard ,
-  PublicRelations ,
-  Cleaner,
-  LegalService,
-  Teacher,
-  Driver,
+  Administrator,
   BoothStaff,
+  Cleaner,
+  Driver,
+  EducationConsultant,
+  LegalService,
   Other,
+  PublicRelations,
+  SecurityGuard,
+  Teacher
 }
 
 export enum UserRole {
@@ -19,5 +18,6 @@ export enum UserRole {
   CRM = 'CRM',
   SRM = 'SRM',
   Muhasebe = 'Muhasebe',
+  Teacher = 'Teacher',
 }
 

@@ -1,3 +1,4 @@
+import { MinTodayDirective } from '@/core/directives/minToday-directive';
 import { PaginationFilterModel } from '@/core/models/admin/paginationFilterModel';
 import { SelectListItem } from '@/core/models/select-list-item.model';
 import { ICrudService } from '@/core/services/admin/crud-service';
@@ -7,11 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { debounceTime, forkJoin, map, Observable, Subject } from 'rxjs';
 
-@Component({
-    selector: 'app-base',
-    template: '',
-    styleUrls: [],
-})
+
 export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     protected recordService: S;
     private searchInputSubject = new Subject<string>();
@@ -144,10 +141,10 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
         };
 
         if (this.pageForm.value.id) {
-            await this.recordService.update(this.pageForm.value);
+            await this.recordService.update(this.pageForm.getRawValue());
         }
         else {
-            await this.recordService.create(this.pageForm.value);
+            await this.recordService.create(this.pageForm.getRawValue());
         }
 
         this.loadData(this.lastLazyLoadEvent);

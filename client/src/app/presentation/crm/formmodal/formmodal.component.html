@@ -44,7 +44,7 @@
 
               <div class="col-span-12 md:col-span-4">
                 <label for="dataProviderId">Data Sağlayıcı</label>
-                <p-select id="dataProviderId" [options]="dataProviderOptions" formControlName="dataProviderId"
+                <p-select [showClear]="true" id="dataProviderId" [options]="dataProviderOptions" formControlName="dataProviderId"
                   placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('dataProviderId')"
                   class="w-full" />
                 <app-validation-message [control]="pageForm.controls['dataProviderId']" />
@@ -52,7 +52,7 @@
 
               <div class="col-span-12 md:col-span-4">
                 <label for="dataSource">Data Kaynağı</label>
-                <p-select id="dataSource" optionValue="id" optionLabel="name" [options]="dataSourceOptions"
+                <p-select [showClear]="true" id="dataSource" optionValue="id" optionLabel="name" [options]="dataSourceOptions"
                   formControlName="dataSource" placeholder="Seçiniz" appendTo="body"
                   [class.ng-dirty.ng-invalid]="isFieldInvalid('dataSource')" class="w-full" />
                 <app-validation-message [control]="pageForm.controls['dataSource']" />
@@ -60,7 +60,7 @@
 
               <div class="col-span-12 md:col-span-4">
                 <label for="regionId">Bölge</label>
-                <p-select id="regionId" [options]="regionOptions" formControlName="regionId" placeholder="Seçiniz"
+                <p-select [showClear]="true" id="regionId" [options]="regionOptions" formControlName="regionId" placeholder="Seçiniz"
                   appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('regionId')" class="w-full" />
                 <app-validation-message [control]="pageForm.controls['regionId']" />
               </div>
@@ -91,7 +91,7 @@
 
               <div class="col-span-12 md:col-span-4">
                 <label for="status">Durumu</label>
-                <p-select id="status" [options]="crmStatusOptions" formControlName="status" placeholder="Seçiniz"
+                <p-select [showClear]="true" id="status" [options]="crmStatusOptions" formControlName="status" placeholder="Seçiniz"
                   appendTo="body" optionValue="id" optionLabel="name"
                   [class.ng-dirty.ng-invalid]="isFieldInvalid('status')" class="w-full"></p-select>
                 <app-validation-message [control]="pageForm.controls['status']" />
@@ -162,7 +162,7 @@
                   <td>{{ currentUser }}</td>
                   <td>{{ currentDate | date: 'dd.MM.yyyy' }}</td>
                   <td>
-                    <p-select id="actionType" [options]="actionTypeOptions" formControlName="actionType"
+                    <p-select [showClear]="true" id="actionType" [options]="actionTypeOptions" formControlName="actionType"
                       placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('actionType')"
                       class="w-full" />
                     <app-validation-message [control]="actionForm.controls['actionType']" />

@@ -16,11 +16,11 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="firstName">Şube <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="branch.name">Şube <p-sortIcon field="branch.name" /></th>
                 <th pSortableColumn="firstName">Ad <p-sortIcon field="firstName" /></th>
                 <th pSortableColumn="lastName">Soyad <p-sortIcon field="lastName" /></th>
                 <th pSortableColumn="email">E-posta <p-sortIcon field="email" /></th>
-                <th pSortableColumn="position">Rol <p-sortIcon field="position" /></th>
+                <th>Rol</th>
                 <th class="actions">İşlemler</th>
             </tr>
         </ng-template>
@@ -30,7 +30,7 @@
                 <td>{{ record.firstName }}</td>
                 <td>{{ record.lastName }}</td>
                 <td>{{ record.email }}</td>
-                <td>{{ record.role }}</td>
+                <td>{{ record.role| enumTranslate: UserRole :'UserRole' }}</td>
                 <td class="actions">
                     <p-button pTooltip="Sil" tooltipPosition="top" icon="pi pi-trash" severity="danger"
                         (click)="deleteRecord(record.id)" />
@@ -48,7 +48,7 @@
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6">
                     <label for="employeeId">Personel</label>
-                    <p-select id="employeeId" [options]="employeeOptions" formControlName="employeeId" placeholder="Seçiniz" appendTo="body" appendTo="body"
+                    <p-select [showClear]="true" id="employeeId" [options]="employeeOptions" formControlName="employeeId" placeholder="Seçiniz" appendTo="body" appendTo="body"
                         [class.ng-dirty.ng-invalid]="isFieldInvalid('employeeId')" class="w-full" />
                     <app-validation-message [control]="pageForm.controls['employeeId']" />
                 </div>

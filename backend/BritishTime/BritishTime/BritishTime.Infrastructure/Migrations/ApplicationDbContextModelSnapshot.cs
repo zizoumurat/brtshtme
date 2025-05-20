@@ -284,6 +284,130 @@ namespace BritishTime.Infrastructure.Migrations
                     b.ToTable("ClassRooms");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Contract", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CampaignId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("ContractType")
+                        .HasColumnType("int");
+
+                    b.Property<decimal?>("Deposit")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid?>("DiscountId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EducationType")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("InstallmentCount")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("LessonScheduleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("LevelCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Signatory")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("UsedLevelCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("DiscountId");
+
+                    b.HasIndex("LessonScheduleId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Contracts");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.CourseClass", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Capacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ClassType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("ClassroomId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(400)
+                        .HasColumnType("nvarchar(400)");
+
+                    b.Property<int>("EducationType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("LessonScheduleDefinitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("LevelId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<int>("ScheduleType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Unit")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("ClassroomId");
+
+                    b.HasIndex("LessonScheduleDefinitionId");
+
+                    b.HasIndex("LevelId");
+
+                    b.ToTable("CourseClasses", (string)null);
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.CourseSaleSetting", b =>
                 {
                     b.Property<Guid>("Id")
@@ -445,6 +569,9 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Property<Guid?>("AppUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("ApplyOvertime")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("datetime2");
 
@@ -452,7 +579,7 @@ namespace BritishTime.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<decimal?>("ExtraPayment")
                         .HasColumnType("decimal(18,2)");
@@ -472,14 +599,17 @@ namespace BritishTime.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(40)");
 
+                    b.Property<decimal?>("OvertimeHourlyRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal?>("OvertimeQuota")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("Phone1")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Phone2")
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Phone3")
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("Role")
@@ -493,6 +623,9 @@ namespace BritishTime.Infrastructure.Migrations
 
                     b.Property<int>("SalaryType")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("SpecialLessonHourlyRate")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -534,6 +667,28 @@ namespace BritishTime.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IncentiveSettings");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Installment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("ContractId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("DueDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("Installments");
                 });
 
             modelBuilder.Entity("BritishTime.Domain.Entities.InstallmentSetting", b =>
@@ -583,9 +738,8 @@ namespace BritishTime.Infrastructure.Migrations
                         .HasPrecision(5, 2)
                         .HasColumnType("decimal(5,2)");
 
-                    b.Property<string>("EducationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("EducationType")
+                        .HasColumnType("int");
 
                     b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
@@ -594,9 +748,8 @@ namespace BritishTime.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("ScheduleCategory")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ScheduleCategory")
+                        .HasColumnType("int");
 
                     b.Property<string>("ScheduleCode")
                         .IsRequired()
@@ -605,9 +758,8 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
-                    b.Property<string>("StudentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("StudentType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -634,6 +786,40 @@ namespace BritishTime.Infrastructure.Migrations
                     b.ToTable("Levels");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Payment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid?>("InstallmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PaymentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InstallmentId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.Region", b =>
                 {
                     b.Property<Guid>("Id")
@@ -649,6 +835,95 @@ namespace BritishTime.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Regions");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Student", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("BranchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("CrmRecordId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DistrictId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("IdentityNumber")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("ParentBirthDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ParentFirstName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ParentIdentityNumber")
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
+                    b.Property<string>("ParentLastName")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("ParentPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Phone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("SecondPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<int>("StudentType")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.HasIndex("CrmRecordId")
+                        .IsUnique()
+                        .HasFilter("[CrmRecordId] IS NOT NULL");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -802,6 +1077,67 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Contract", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Campaign", "Campaign")
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("BritishTime.Domain.Entities.Discount", "Discount")
+                        .WithMany()
+                        .HasForeignKey("DiscountId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("BritishTime.Domain.Entities.LessonScheduleDefinition", "LessonScheduleDefinition")
+                        .WithMany()
+                        .HasForeignKey("LessonScheduleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BritishTime.Domain.Entities.Student", "Student")
+                        .WithMany("Contracts")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Campaign");
+
+                    b.Navigation("Discount");
+
+                    b.Navigation("LessonScheduleDefinition");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.CourseClass", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
+                        .WithMany("CourseClasses")
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BritishTime.Domain.Entities.ClassRoom", null)
+                        .WithMany()
+                        .HasForeignKey("ClassroomId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("BritishTime.Domain.Entities.LessonScheduleDefinition", null)
+                        .WithMany()
+                        .HasForeignKey("LessonScheduleDefinitionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BritishTime.Domain.Entities.Level", null)
+                        .WithMany()
+                        .HasForeignKey("LevelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.CourseSaleSetting", b =>
                 {
                     b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
@@ -889,6 +1225,17 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Installment", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Contract", "Contract")
+                        .WithMany("Installments")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Contract");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.InstallmentSetting", b =>
                 {
                     b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
@@ -909,6 +1256,50 @@ namespace BritishTime.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Branch");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Payment", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Installment", "Installment")
+                        .WithMany("Payments")
+                        .HasForeignKey("InstallmentId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("BritishTime.Domain.Entities.Student", "Student")
+                        .WithMany("Payments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Installment");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Student", b =>
+                {
+                    b.HasOne("BritishTime.Domain.Entities.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("BritishTime.Domain.Entities.CrmRecord", "CrmRecord")
+                        .WithOne()
+                        .HasForeignKey("BritishTime.Domain.Entities.Student", "CrmRecordId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("BritishTime.Domain.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Branch");
+
+                    b.Navigation("CrmRecord");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -965,6 +1356,8 @@ namespace BritishTime.Infrastructure.Migrations
 
                     b.Navigation("ClassRooms");
 
+                    b.Navigation("CourseClasses");
+
                     b.Navigation("CourseSaleSettings");
 
                     b.Navigation("Discounts");
@@ -978,9 +1371,26 @@ namespace BritishTime.Infrastructure.Migrations
                     b.Navigation("Users");
                 });
 
+            modelBuilder.Entity("BritishTime.Domain.Entities.Contract", b =>
+                {
+                    b.Navigation("Installments");
+                });
+
             modelBuilder.Entity("BritishTime.Domain.Entities.CrmRecord", b =>
                 {
                     b.Navigation("Actions");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Installment", b =>
+                {
+                    b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("BritishTime.Domain.Entities.Student", b =>
+                {
+                    b.Navigation("Contracts");
+
+                    b.Navigation("Payments");
                 });
 #pragma warning restore 612, 618
         }

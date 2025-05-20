@@ -26,11 +26,11 @@
                         class="w-full" />
                 </th>
                 <th>
-                    <p-select [options]="actionTypeOptions" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" [options]="actionTypeOptions" placeholder="Seçiniz" appendTo="body"
                         (onChange)="onSearch($event,'actionType')" class="w-full" />
                 </th>
                 <th>
-                    <p-select [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
                         (onChange)="onSearch($event,'status')" class="w-full" />
                 </th>
                 <th></th>

@@ -2,15 +2,16 @@
 
 public enum EmployeeRole
 {
-    Owner,
-    Manager,
-    EducationConsultant,
-    SecurityGuard,
-    PublicRelations,
-    Cleaner,
-    LegalService,
-    Teacher,
-    Driver,
+    Administrator,
     BoothStaff,
-    Other
+    Cleaner,
+    Driver,
+    EducationConsultant,
+    LegalService,
+    Other,
+    PublicRelations,
+    SecurityGuard,
+    Teacher
 }
+
+

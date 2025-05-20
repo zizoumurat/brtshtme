@@ -1,5 +1,6 @@
 ﻿using BritishTime.Application.Services.Abstract;
 using BritishTime.Domain.Dtos;
+using BritishTime.Domain.Enums;
 using BritishTime.Domain.Repositories.Branches;
 using BritishTime.Domain.Repositories.BranchPricingSettings;
 using BritishTime.Domain.Repositories.Campaigns;
@@ -29,86 +30,102 @@ public class SalesService : ISalesService
         _queryDiscountRepository = queryDiscountRepository;
     }
 
-    public async Task<CalculatePaymentResultDto> CalculatePayment(CalculatePaymentDto model)
+    public async Task<CalculatePaymentResultDto> CalculatePayment(CalculatePaymentDto request)
     {
-        var branch = await _queryBranchRepository.GetByIdAsync(model.BranchId);
-        if (branch is null)
-            throw new Exception("notFoundEntity");
+        var branch = await _queryBranchRepository.GetByIdAsync(request.BranchId)
+                     ?? throw new Exception("notFoundEntity");
 
         if (branch.LessonDurationInMinutes <= 0)
             throw new Exception("branchDefinitionsMissing");
 
-        var lessonScheduleDefinition = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(model.LessonScheduleId);
-        if (lessonScheduleDefinition == null)
-            throw new Exception("notFoundEntity");
+        var lessonScheduleDefinition = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(request.LessonScheduleId)
+                                       ?? throw new Exception("notFoundEntity");
 
-        var branchPricingSetting = await _queryBranchPricingSettingRepository.GetByBranchId(model.BranchId);
-        if (branchPricingSetting is null)
-            throw new Exception("branchPricingSettingsMissing");
+        var pricing = await _queryBranchPricingSettingRepository.GetByBranchId(request.BranchId)
+                     ?? throw new Exception("branchPricingSettingsMissing");
 
-        decimal hourlyRate = branchPricingSetting.HourlyRate;
-        int totalHours = branch.LevelDurationInHours * model.LevelCount;
+        decimal hourlyRate = pricing.HourlyRate;
+        int totalHours = branch.LevelDurationInHours * request.LevelCount;
+
+        // 🔄 baseAmount'ta floor KULLANILMIYOR
         decimal baseAmount = totalHours * hourlyRate;
 
-        // Kampanya indirimi
-        if (model.CampaignId.HasValue)
+        // 1. Kampanya ve gerekçeli indirimleri uygula
+        decimal discountedAmount = baseAmount;
+
+        if (request.CampaignId.HasValue)
         {
-            var campaign = await _queryCampaignRepository.GetByIdAsync(model.CampaignId.Value);
+            var campaign = await _queryCampaignRepository.GetByIdAsync(request.CampaignId.Value);
             if (campaign != null)
-                baseAmount *= campaign.DiscountRate;
+                discountedAmount *= campaign.DiscountRate;
         }
 
-        // Gerekçeli indirim
-        if (model.DiscountId.HasValue)
+        if (request.DiscountId.HasValue)
         {
-            var discount = await _queryDiscountRepository.GetByIdAsync(model.DiscountId.Value);
+            var discount = await _queryDiscountRepository.GetByIdAsync(request.DiscountId.Value);
             if (discount != null)
-                baseAmount *= discount.DiscountRate;
+                discountedAmount *= discount.DiscountRate;
         }
 
-        decimal finalAmount = baseAmount;
+        // 2. Peşinatı düş
+        decimal deposit = request.Deposit ?? 0m;
+        decimal remainingAmount = discountedAmount - deposit;
 
-        // Peşin ödeme indirimi
-        if (model.PaymentMethod == Domain.Enums.PaymentMethod.Cash)
+        // 3. Taksit varsa vade farkı uygula
+        decimal financedAmount = remainingAmount;
+
+        if (request.InstallmentCount.HasValue && request.InstallmentCount > 1)
         {
-            finalAmount *= branchPricingSetting.CashPrepaymentDiscount;
+            decimal interest = pricing.InstallmentRate;
+            financedAmount *= (decimal)Math.Pow((double)interest, request.InstallmentCount.Value);
         }
 
-        // Kredi kartı taksitlendirme indirimi
-        if (model.PaymentMethod == Domain.Enums.PaymentMethod.CreditCard && model.InstallmentCount > 1)
+        // 4. Ödeme yöntemine göre indirim uygula
+        if (request.PaymentMethod == PaymentMethod.Cash)
         {
-            finalAmount *= branchPricingSetting.CreditCardInstallmentDiscount;
+            financedAmount *= pricing.CashPrepaymentDiscount;
+        }
+        else if (request.PaymentMethod == PaymentMethod.CreditCard && request.InstallmentCount > 1)
+        {
+            financedAmount *= pricing.CreditCardInstallmentDiscount;
         }
 
-        decimal downPayment = model.DownPayment ?? 0m;
-        decimal financedAmount = finalAmount - downPayment;
+        // 🔄 Nihai floor sadece burada
+        financedAmount = Math.Floor(financedAmount);
 
-        // Taksit varsa: vade farkı ekle
-        if (model.InstallmentCount.HasValue && model.InstallmentCount > 1)
+        // 5. Toplam tutar: finans edilen + peşinat
+        decimal totalAmount = financedAmount + deposit;
+
+        // 6. Taksitleri oluştur
+        var installments = new List<InstallmentListDto>();
+        DateTime baseDate = request.FirstInstallmentDate ?? DateTime.Today;
+
+        if(request.PaymentMethod == PaymentMethod.Cash)
         {
-            decimal interestRate = branchPricingSetting.InstallmentRate;
-            financedAmount *= (decimal)Math.Pow((double)interestRate, model.InstallmentCount.Value);
+            installments.Add(new InstallmentListDto(DateTime.Today, financedAmount, true));
+        }
+        if (deposit > 0)
+        {
+            installments.Add(new InstallmentListDto(DateTime.Today, deposit, true));
         }
 
-        var installments = new List<InstallmentDto>();
-
-        if (model.InstallmentCount.HasValue && model.InstallmentCount > 0 && financedAmount > 0)
+        if (request.InstallmentCount.HasValue && request.InstallmentCount > 0 && financedAmount > 0)
         {
-            decimal installmentAmount = Math.Round(financedAmount / model.InstallmentCount.Value, 2);
-            DateTime baseDate = model.FirstInstallmentDate ?? DateTime.Today;
+            decimal installmentAmount = Math.Round(financedAmount / request.InstallmentCount.Value, 2);
 
-            for (int i = 0; i < model.InstallmentCount.Value; i++)
+            for (int i = 0; i < request .InstallmentCount.Value; i++)
             {
-                var dueDate = (i == 0 && downPayment > 0) ? DateTime.Today : baseDate.AddDays(30 * i);
-                installments.Add(new InstallmentDto(dueDate, installmentAmount));
+                var dueDate = baseDate.AddDays(30 * i);
+                installments.Add(new InstallmentListDto(dueDate, installmentAmount));
             }
         }
 
         return new CalculatePaymentResultDto(
-            TotalAmount: finalAmount,
+            TotalAmount: totalAmount,
             FinancedAmount: financedAmount,
             Installments: installments
         );
     }
+
 
 }

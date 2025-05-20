@@ -16,12 +16,12 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="firstName">Şube <p-sortIcon field="firstName" /></th>
+                <th pSortableColumn="branch.name">Şube <p-sortIcon field="branch.name" /></th>
                 <th pSortableColumn="firstName">Ad <p-sortIcon field="firstName" /></th>
                 <th pSortableColumn="lastName">Soyad <p-sortIcon field="lastName" /></th>
                 <th pSortableColumn="email">E-posta <p-sortIcon field="email" /></th>
                 <th pSortableColumn="phone">Telefon <p-sortIcon field="phone" /></th>
-                <th pSortableColumn="position">Rol <p-sortIcon field="position" /></th>
+                <th pSortableColumn="role">Rol <p-sortIcon field="role" /></th>
                 <th class="actions">İşlemler</th>
             </tr>
         </ng-template>
@@ -32,7 +32,7 @@
                 <td>{{ record.lastName }}</td>
                 <td>{{ record.email }}</td>
                 <td>{{ record.phone1 }}</td>
-                <td>{{ record.role | enumTranslate: EmployeeRole :'EmployeeRole' }}</td>
+                <td>{{ record.role | enumTranslate: EmployeeRole : 'EmployeeRole' }}</td>
                 <td class="actions">
                     <p-button pTooltip="Düzenle" tooltipPosition="top" icon="pi pi-pencil" severity="success"
                         (click)="handleEdit(record.id)" />
@@ -78,9 +78,10 @@
                 </div>
 
                 <div class="col-span-12 md:col-span-4">
-                    <label for="role">Rol</label>
-                    <p-select id="role" [options]="employeeRoleOptions" formControlName="role" placeholder="Seçiniz" appendTo="body"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('role')" class="w-full" />
+                    <label for="role">Görevi</label>
+                    <p-select [showClear]="true" id="role" [options]="employeeRoleOptions" formControlName="role"
+                        placeholder="Seçiniz" appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('role')"
+                        class="w-full" />
                     <app-validation-message [control]="pageForm.controls['role']" />
                 </div>
 
@@ -99,7 +100,7 @@
                     <app-validation-message [control]="pageForm.controls['birthDate']" />
                 </div>
 
-                <!-- Phone1, Phone2, Phone3 -->
+                <!-- Phone1, Phone2 -->
                 <div class="col-span-12 md:col-span-4">
                     <label for="phone1">Telefon 1</label>
                     <p-inputMask id="phone1" formControlName="phone1" class="w-full" [mask]="'(999) 999 99 99'"
@@ -114,13 +115,6 @@
                     <app-validation-message [control]="pageForm.controls['phone2']" />
                 </div>
 
-                <div class="col-span-12 md:col-span-4">
-                    <label for="phone3">Telefon 3</label>
-                    <p-inputMask id="phone3" formControlName="phone3" class="w-full" [mask]="'(999) 999 99 99'"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('phone3')" />
-                    <app-validation-message [control]="pageForm.controls['phone3']" />
-                </div>
-
                 <!-- Email & Address -->
                 <div class="col-span-12 md:col-span-4">
                     <label for="email">E-posta</label>
@@ -129,7 +123,7 @@
                     <app-validation-message [control]="pageForm.controls['email']" />
                 </div>
 
-                <div class="col-span-12   md:col-span-8">
+                <div class="col-span-12">
                     <label for="address">Adres</label>
                     <textarea pTextarea id="address" formControlName="address"
                         [class.ng-dirty.ng-invalid]="isFieldInvalid('address')" rows="3"></textarea>
@@ -139,30 +133,61 @@
                 <!-- Salary Type -->
                 <div class="col-span-12 md:col-span-4">
                     <label for="salaryType">Maaş Tipi</label>
-                    <p-select id="salaryType" [options]="salaryTypeOptions" formControlName="salaryType" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" id="salaryType" [options]="salaryTypeOptions" optionValue="id"
+                        optionLabel="name" formControlName="salaryType" placeholder="Seçiniz" appendTo="body"
                         class="w-full" [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryType')" />
                     <app-validation-message [control]="pageForm.controls['salaryType']" />
                 </div>
 
                 <!-- Salary Amount, Extra Payment, Salary Note -->
-                <div class="col-span-12 md:col-span-4">
-                    <label for="salaryAmount">Maaş Tutarı</label>
-                    <input id="salaryAmount" type="number" pInputText formControlName="salaryAmount"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryAmount')" />
+                <div *ngIf="!isUndefinedSalary" class="col-span-12 md:col-span-4">
+                    <label for="salaryAmount">Miktar</label>
+                    <p-inputNumber inputId="salaryAmount" formControlName="salaryAmount" mode="currency" currency="TRY"
+                        locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryAmount')" />
                     <app-validation-message [control]="pageForm.controls['salaryAmount']" />
                 </div>
 
-                <div class="col-span-12 md:col-span-4">
-                    <label for="extraPayment">Ek Ödeme</label>
-                    <input id="extraPayment" type="number" pInputText formControlName="extraPayment"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('extraPayment')" />
+                <div *ngIf="!isUndefinedSalary && isTeacher && isHourlySalary" class="col-span-12 md:col-span-4">
+                    <label for="specialLessonHourlyRate">Özel Ders Ek Ücret</label>
+                    <p-inputNumber inputId="specialLessonHourlyRate" formControlName="specialLessonHourlyRate"
+                        mode="currency" currency="TRY" locale="tr-TR"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('specialLessonHourlyRate')" />
+                    <app-validation-message [control]="pageForm.controls['specialLessonHourlyRate']" />
+                </div>
+
+                <div *ngIf="!isUndefinedSalary && isTeacher && isMonthlySalary && showSalaryFields"
+                    class="col-span-12 md:col-span-12">
+                    <div class="flex items-center h-full">
+                        <p-checkbox formControlName="applyOvertime" inputId="applyOvertime" [binary]="true" />
+                        <label for="applyOvertime" class="ml-2">Over Time Uygulanıyor mu?</label>
+                    </div>
+                </div>
+
+                <div class="col-span-12 md:col-span-6"
+                    *ngIf="!isUndefinedSalary && isTeacher && isMonthlySalary && showSalaryFields && pageForm.get('applyOvertime')?.value">
+                    <label for="overtimeQuota">Overtime Kota</label>
+                    <input id="overtimeQuota" type="number" pInputText formControlName="overtimeQuota" />
+                </div>
+
+                <div class="col-span-12 md:col-span-6"
+                    *ngIf="!isUndefinedSalary && isTeacher && isMonthlySalary && showSalaryFields && pageForm.get('applyOvertime')?.value">
+                    <label for="overtimeHourlyRate">Overtime Saat Ücreti</label>
+                    <p-inputNumber inputId="overtimeHourlyRate" formControlName="overtimeHourlyRate" mode="currency"
+                        currency="TRY" locale="tr-TR"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('overtimeHourlyRate')" />
+                </div>
+
+                <div *ngIf="!isUndefinedSalary" class="col-span-12 md:col-span-6">
+                    <label for="salaryNote">Ek Ödeme</label>
+                    <p-inputNumber inputId="extraPayment" formControlName="extraPayment" mode="currency" currency="TRY"
+                        locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalid('extraPayment')" />
                     <app-validation-message [control]="pageForm.controls['extraPayment']" />
                 </div>
 
-                <div class="col-span-12">
+                <div *ngIf="!isUndefinedSalary" class="col-span-12 md:col-span-6">
                     <label for="salaryNote">Açıklama</label>
-                    <textarea pTextarea id="salaryNote" formControlName="salaryNote"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryNote')" rows="3"></textarea>
+                    <input id="salaryNote" pInputText formControlName="salaryNote"
+                        [class.ng-dirty.ng-invalid]="isFieldInvalid('salaryNote')" />
                     <app-validation-message [control]="pageForm.controls['salaryNote']" />
                 </div>
             </div>

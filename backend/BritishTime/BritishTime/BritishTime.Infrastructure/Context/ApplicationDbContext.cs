@@ -17,6 +17,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<BranchPricingSetting> BranchPricingSettings => Set<BranchPricingSetting>();
     public DbSet<Campaign> Campaigns => Set<Campaign>();
     public DbSet<ClassRoom> ClassRooms => Set<ClassRoom>();
+    public DbSet<CourseClass> CourseClasses => Set<CourseClass>();
     public DbSet<CrmRecord> CrmRecords => Set<CrmRecord>();
     public DbSet<CrmRecordAction> CrmRecordActions => Set<CrmRecordAction>();
     public DbSet<CourseSaleSetting> CourseSaleSettings => Set<CourseSaleSetting>();
@@ -27,6 +28,11 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<InstallmentSetting> InstallmentSettings => Set<InstallmentSetting>();
     public DbSet<LessonScheduleDefinition> LessonScheduleDefinitions => Set<LessonScheduleDefinition>();
     public DbSet<Region> Regions => Set<Region>();
+    public DbSet<Student> Students => Set<Student>();
+    public DbSet<Payment> Payments => Set<Payment>();
+    public DbSet<Installment> Installments => Set<Installment>();
+    public DbSet<Contract> Contracts => Set<Contract>();
+
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

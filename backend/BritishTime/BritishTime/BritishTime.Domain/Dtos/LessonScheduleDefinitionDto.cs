@@ -4,7 +4,7 @@ namespace BritishTime.Domain.Dtos;
 
 public sealed record LessonScheduleDefinitionDto(
     Guid Id,
-    StudentType StudentType,
+    ScheduleType StudentType,
     EducationType EducationType,
     Guid BranchId,
     string BranchName,
@@ -21,7 +21,7 @@ public sealed record LessonScheduleDefinitionDto(
 
 public sealed record LessonScheduleDefinitionCreateDto(
     Guid? Id,
-    StudentType StudentType,
+    ScheduleType StudentType,
     EducationType EducationType,
     string Schedule,
     string ScheduleCode,
@@ -34,7 +34,7 @@ public sealed record LessonScheduleDefinitionCreateDto(
 );
 
 public sealed record LessonScheduleDefinitionFilterDto(
-    StudentType? StudentType,
+    ScheduleType? StudentType,
     EducationType? EducationType,
     ScheduleCategory? ScheduleCategory
 ) : SearchDto;

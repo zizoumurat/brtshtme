@@ -7,7 +7,7 @@ import {
   Output
 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
 import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
@@ -27,10 +27,11 @@ import { EMPLOYEE_SERVICE } from '@/core/services/crm/employee-service';
 import { REGION_SERVICE } from '@/core/services/crm/region-service';
 
 import { UtilsHelper } from '@/core/helpers/utils.hlper';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { StudentType } from '@/core/enums/studentType';
 import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
 import { SalesModalComponent } from '../salesmodal/salesmodal.component';
+import { EventService } from '@/core/services/event.service';
 
 @Component({
   selector: 'app-formmodal',
@@ -44,6 +45,7 @@ export class FormModalComponent {
   @Input() id?: string;
   @Output() onCloseModal = new EventEmitter();
 
+  private destroy$ = new Subject<void>();
   // Services (DI via inject)
   authService = inject(AUTH_SERVICE);
   crmRecordService = inject(CRMRECORD_SERVICE);
@@ -52,6 +54,8 @@ export class FormModalComponent {
   locationService = inject(LOCATION_SERVICE);
   regionService = inject(REGION_SERVICE);
   utilsHelper = inject(UtilsHelper);
+  messageService = inject(MessageService);
+  eventService = inject(EventService);
 
   constructor(private fb: FormBuilder, private confirmationService: ConfirmationService) { }
 
@@ -91,11 +95,23 @@ export class FormModalComponent {
     this.initSmsForm();
     this.getCrmRecord();
 
+    this.eventService.on('crmActionRefresh')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.getActionList();
+        this.getCrmRecord();
+      });
+
     this.currentUser = this.authService.getUser()?.Name || '';
     this.saleList = [
       { employeeName: 'Murat Dere', date: new Date(), amount: 5000 },
       { employeeName: 'Murat Dere', date: new Date(), amount: 15000 }
     ];
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   // Form Initialization
@@ -254,32 +270,44 @@ export class FormModalComponent {
 
   // Save Operations
   async saveRecord() {
-    if (this.pageForm.valid) {
-      const formData = this.pageForm.getRawValue() as CrmRecordModel;
 
-      if (formData.id) {
-        await this.crmRecordService.update(formData);
-      } else {
-        const result = await this.crmRecordService.create(formData);
-        this.pageForm.patchValue({ id: result.id });
-      }
-
-      this.displayModal = false;
-    } else {
+    if (!this.pageForm.valid) {
       this.pageForm.markAllAsTouched();
+
+      return;
     }
+
+    const formData = this.pageForm.getRawValue() as CrmRecordModel;
+
+    if (formData.id) {
+      await this.crmRecordService.update(formData);
+    } else {
+      const result = await this.crmRecordService.create(formData);
+      this.pageForm.patchValue({ id: result.id });
+    }
+
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Başarılı',
+      detail: formData.id ? `results.updated` : `results.added`,
+    });
+    this.displayModal = false;
+    this.eventService.trigger('crmRefresh');
   }
 
   async saveAction() {
-    if (this.actionForm.valid) {
-      const formData = this.actionForm.getRawValue() as CrmRecordActionModel;
-      await this.crmRecordActionService.create(formData);
-      this.actionForm.reset();
-      this.actionForm.patchValue({ crmRecordId: this.pageForm.controls['id'].value });
-      this.getActionList();
-    } else {
+
+    if (!this.actionForm.valid) {
       this.actionForm.markAllAsTouched();
+
+      return;
     }
+
+    const formData = this.actionForm.getRawValue() as CrmRecordActionModel;
+    await this.crmRecordActionService.create(formData);
+    this.actionForm.reset();
+    this.actionForm.patchValue({ crmRecordId: this.pageForm.controls['id'].value });
+    this.eventService.trigger('crmActionRefresh');
   }
 
   // Validation & Utilities

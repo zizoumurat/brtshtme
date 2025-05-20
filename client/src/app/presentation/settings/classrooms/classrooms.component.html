@@ -16,7 +16,7 @@
         </ng-template>
         <ng-template pTemplate="header">
             <tr>
-                <th pSortableColumn="branchId">Şube <p-sortIcon field="branch.name" /></th>
+                <th pSortableColumn="branch.name">Şube <p-sortIcon field="branch.name" /></th>
                 <th pSortableColumn="name">Tanım <p-sortIcon field="name" /></th>
                 <th pSortableColumn="capacity">Kapasite <p-sortIcon field="capacity" /></th>
                 <th class="actions">İşlemler</th>
@@ -49,7 +49,7 @@
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6 mb-4">
                     <label for="branchId">Şube</label>
-                    <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
+                    <p-select [showClear]="true" id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
                         placeholder="Seçiniz" appendTo="body"
                         [class.ng-dirty.ng-invalid]="isFieldInvalid('branchId')" />
                     <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>

@@ -11,7 +11,14 @@ export const SrmRoutes: Routes = [
     children: [
       { path: '', redirectTo: 'students', pathMatch: 'full' },
       { path: 'students', component: StudentsComponent, data: { breadcrumb: 'Öğrenci İşlemleri' } },
-      { path: 'classes', component: ClassesComponent, data: { breadcrumb: 'Sınıf İşlemleri' } },
+      {
+        path: 'classes',
+        data: { breadcrumb: 'Sınıf İşlemleri' },
+        loadChildren: () =>
+          import('@/presentation/srm/classes/classes.routes').then(
+            (m) => m.ClassesRoutes
+          ),
+      },
     ]
   }
 ];

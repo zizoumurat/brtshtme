@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { SelectListItem } from '@/core/models/select-list-item.model';
 import { AppUserModel } from '@/core/models/crm/appuser.model';
 import { IAppUserService } from '@/core/services/crm/appuser.service';
+import { UnassignedEmployeeModel } from '@/core/models/crm/employee.model';
 
 
 @Injectable({
@@ -16,7 +17,7 @@ export class AppUserService extends CrudService<AppUserModel> implements IAppUse
         super(http, `${BASE_URL}/Users`);
     }
 
-    getUnassignedEmployees(branchId: string): Promise<SelectListItem[]> {
-        return firstValueFrom(this.http.get<SelectListItem[]>(`${this.apiUrl}/unassigned-employees/${branchId}`));
+    getUnassignedEmployees(branchId: string): Promise<UnassignedEmployeeModel[]> {
+        return firstValueFrom(this.http.get<UnassignedEmployeeModel[]>(`${this.apiUrl}/unassigned-employees/${branchId}`));
     }
 }

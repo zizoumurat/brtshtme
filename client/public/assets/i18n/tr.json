@@ -93,6 +93,9 @@
         "tabs": {
             "students": "Öğrenci İşlemleri",
             "classes": "Sınıf İşlemleri"
+        },
+        "class": {
+            "list": "Sınıf Listesi"
         }
     },
     "results": {
@@ -108,7 +111,8 @@
         "duplicatePhone": "Telefon numarası başka bir kayıtta zaten mevcut",
         "duplicateMail": "E-posta adresi başka bir kayıtta zaten mevcut",
         "branchDefinitionsMissing": "Şube tanımlamaları eksik. Lütfen yöneticinizle iletişime geçin.",
-        "branchPricingSettingsMissing":"Şube fiyatlandırma parametreleri eksik. Lütfen yöneticinizle iletişime geçin."
+        "branchPricingSettingsMissing": "Şube fiyatlandırma parametreleri eksik. Lütfen yöneticinizle iletişime geçin.",
+        "startDateNotInProgramDays": "Başlangıç tarihi program günleri içinde olmalıdır."
     },
     "minAmount": "Minimum Tutar",
     "maxAmount": "Maksimum Tutar",
@@ -120,6 +124,7 @@
     "edit": "Düzenle",
     "delete": "Sil",
     "noRecords": "Kayıt bulunamadı.",
+    "reports": "Raporlar",
     "enums": {
         "StudentType": {
             "PrimarySchool": "İlkokul",
@@ -128,6 +133,12 @@
             "HighSchoolGraduate": "Lise Mezunu",
             "UniversityStudent": "Üniversite Öğrencisi",
             "UniversityGraduate": "Üniversite Mezunu",
+            "Other": "Diğer"
+        },
+        "ScheduleType": {
+            "Primary": "İlköğretim",
+            "HighSchool": "Lise",
+            "Adult": "Yetişkin",
             "Other": "Diğer"
         },
         "EducationType": {
@@ -149,17 +160,16 @@
             "Saturday": "Cumartesi"
         },
         "EmployeeRole": {
-            "Owner": "Sahip",
-            "Manager": "Yönetici",
-            "EducationConsultant": "Eğitim Danışmanı",
-            "SecurityGuard": "Güvenlik Görevlisi",
-            "PublicRelations": "Halkla İlişkiler",
-            "Cleaner": "Temizlik Görevlisi",
-            "LegalService": "Hukuk Hizmetleri",
-            "Teacher": "Öğretmen",
-            "Driver": "Sürücü",
+            "Administrator": "Yönetici",
             "BoothStaff": "Stand Personeli",
-            "Other": "Diğer"
+            "Cleaner": "Temizlik Görevlisi",
+            "Driver": "Sürücü",
+            "EducationConsultant": "Eğitim Danışmanı",
+            "LegalService": "Hukuk Hizmetleri",
+            "Other": "Diğer",
+            "PublicRelations": "Halkla İlişkiler",
+            "SecurityGuard": "Güvenlik Görevlisi",
+            "Teacher": "Öğretmen"
         },
         "SalaryType": {
             "Undefined": "Belirtilmemiş",
@@ -170,7 +180,8 @@
             "Admin": "Yönetici",
             "CRM": "CRM",
             "SRM": "SRM",
-            "Muhasebe": "Muhasebe"
+            "Muhasebe": "Muhasebe",
+            "Teacher": "Öğretmen"
         },
         "CrmDataSource": {
             "Survey": "Anket",
@@ -210,10 +221,14 @@
             "NotInterested": "Düşünmüyor",
             "CallBack": "Tekrar Ara",
             "Appointment": "Randevu",
-            "Sale": "Satış",
             "Other": "Diğer",
+            "Canceled": "İptal Edildi",
             "Sms": "SMS",
-            "AppointmentCanceled": "Görüşme İptal"
+            "Sale": "Satış Yapıldı"
+        },
+        "ClassType": {
+            "Candidate": "Aday Sınıf",
+            "Official": "Asıl Sınıf"
         }
     }
 }

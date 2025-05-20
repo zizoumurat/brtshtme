@@ -30,9 +30,10 @@ import { PaymentMethod } from '@/core/enums/paymentMethod';
 import { SALES_SERVICE } from '@/core/services/crm/sales-service';
 import { CalculatePaymentModel } from '@/core/models/calculatePayment.model';
 import { BRANCH_SERVICE } from '@/core/services/crm/branch-service';
-import { ContractType } from '@/core/enums/contractType';
+import { ContractType, SignatoryType } from '@/core/enums/contractType';
 import { EducationType } from '@/core/enums/educationType';
 import { MessageService } from 'primeng/api';
+import { STUDENT_SERVICE } from '@/core/services/crm/student-service';
 
 @Component({
     selector: 'app-salesmodal',
@@ -46,10 +47,12 @@ export class SalesModalComponent {
     @Input() crmRecord: CrmRecordModel | undefined;
     @Output() onCloseModal = new EventEmitter();
 
+    SignatoryType = SignatoryType;
+    ContractType = ContractType;
 
     private destroy$ = new Subject<void>();
 
-    activeStep = 2;
+    activeStep = 1;
 
     // Services (DI via inject)
     locationService = inject(LOCATION_SERVICE);
@@ -59,6 +62,7 @@ export class SalesModalComponent {
     installmentSettingService = inject(INSTALLMENTSETTING_SERVICE);
     salesService = inject(SALES_SERVICE);
     branchService = inject(BRANCH_SERVICE);
+    studentService = inject(STUDENT_SERVICE);
     messageService = inject(MessageService);
 
 
@@ -72,6 +76,7 @@ export class SalesModalComponent {
     totalAmount: number | undefined;
     installmentAmount: number | undefined;
     installments: any[] | undefined;
+    deposit: number | undefined;
 
     // Select Options
     studentTypeOptions: SelectListItem[] = [];
@@ -115,24 +120,25 @@ export class SalesModalComponent {
     initSalesForm(): void {
         this.salesForm = this.fb.group({
             step1: this.fb.group({
+                crmRecordId: [null, Validators.required],
                 firstName: [{ value: null, disabled: true }, Validators.required],
                 lastName: [{ value: null, disabled: true }, Validators.required],
-                identityNumber: ['', [Validators.required, Validators.minLength(11)]],
+                identityNumber: [null, [Validators.required, Validators.minLength(11)]],
                 birthDate: [null, Validators.required],
                 phone: [{ value: null, disabled: true }, Validators.required],
-                secondPhone: [''],
+                secondPhone: [null],
                 email: [{ value: null, disabled: true }, Validators.required],
                 studentType: [null, Validators.required],
                 address: [null, Validators.required],
                 cityId: [34, Validators.required],
                 districtId: [null, Validators.required],
                 branchId: [null, Validators.required],
-                signatory: ['student', Validators.required],
-                parentFirstName: [''],
-                parentLastName: [''],
-                parentIdentityNumber: [''],
-                parentBirthDate: [''],
-                parentPhone: [''],
+                signatory: [SignatoryType.Student, Validators.required],
+                parentFirstName: [null],
+                parentLastName: [null],
+                parentIdentityNumber: [null],
+                parentBirthDate: [null],
+                parentPhone: [null],
             }),
             step2: this.fb.group({
                 contractType: [ContractType.General, Validators.required],
@@ -143,7 +149,6 @@ export class SalesModalComponent {
                 installmentCount: [null, Validators.required],
                 paymentMethod: [null, Validators.required],
                 discountId: [null],
-                downPayment: [null],
                 deposit: [null],
                 firstInstallmentDate: [null, Validators.required],
             }),
@@ -192,6 +197,7 @@ export class SalesModalComponent {
             });
 
         this.step1.patchValue({ ...this.crmRecord });
+        this.step1.get('crmRecordId')?.setValue(this.crmRecord?.id);
         this.step1.get('cityId')?.setValue('34');
 
         this.step2.get('educationDuration')?.valueChanges
@@ -345,7 +351,6 @@ export class SalesModalComponent {
         this.destroy$.next();
     }
 
-
     visibleChange(value: boolean) {
         if (!value) this.closeSalesModal();
     }
@@ -354,8 +359,7 @@ export class SalesModalComponent {
         if (!value) this.closeSalesModal();
     }
 
-
-    isFieldInvalidSales(controlName: string): boolean {
+    isFieldInvalid(controlName: string): boolean {
         const control = this.step1.get(controlName) || this.step2.get(controlName);
         return control?.invalid && control?.touched ? true : false;
     }
@@ -398,7 +402,7 @@ export class SalesModalComponent {
             paymentMethod: Number(this.step2.get('paymentMethod')?.value),
             campaignId: this.step2.get('campaignId')?.value,
             discountId: this.step2.get('discountId')?.value,
-            downPayment: this.step2.get('downPayment')?.value,
+            deposit: this.step2.get('deposit')?.value,
             firstInstallmentDate: this.step2.get('firstInstallmentDate')?.value,
         } as CalculatePaymentModel;
 
@@ -407,9 +411,22 @@ export class SalesModalComponent {
         this.totalAmount = (response.totalAmount);
         this.installmentAmount = (response.financedAmount);
         this.installments = response.installments;
+        this.deposit = this.step2.get('deposit')?.value;
     }
 
     async completeStep() {
-
+        const requestBody = {
+            student: this.salesForm.get('step1')!.getRawValue(),
+            payment: {
+                ...this.salesForm.get('step2')!.getRawValue(),
+                branchId: this.salesForm.get('step1')!.getRawValue().branchId,
+                paymentMethod: Number(this.salesForm.get('step2')!.getRawValue().paymentMethod),
+                installmentCount: Number(this.salesForm.get('step2')!.getRawValue().installmentCount),
+                levelCount: Number(this.salesForm.get('step2')!.getRawValue().educationDuration),
+            }
+        };
+        
+       await this.studentService.create(requestBody);
+       this.closeSalesModal();
     }
 }

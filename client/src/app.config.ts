@@ -54,6 +54,10 @@ import { LOCATION_SERVICE } from '@/core/services/crm/locationService';
 import { LocationService } from '@/infrastructure/api/crm/location-service';
 import { SALES_SERVICE } from '@/core/services/crm/sales-service';
 import { SalesService } from '@/infrastructure/api/crm/sales-service';
+import { STUDENT_SERVICE } from '@/core/services/crm/student-service';
+import { StudentService } from '@/infrastructure/api/crm/student-service';
+import { COURSECLASS_SERVICE } from '@/core/services/crm/courseClass-service';
+import { CourseClassService } from '@/infrastructure/api/crm/courseClass-service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
     return new TranslateHttpLoader(httpClient);
@@ -157,6 +161,7 @@ export const appConfig: ApplicationConfig = {
         { provide: CRMRECORD_SERVICE, useClass: CrmRecordService },
         { provide: CRMRECORDACTION_SERVICE, useClass: CrmRecordActionService },
         { provide: COURSESALESETTING_SERVICE, useClass: CourseSaleSettingService },
+        { provide: COURSECLASS_SERVICE, useClass: CourseClassService },
         { provide: DISCOUNT_SERVICE, useClass: DiscountService },
         { provide: EMPLOYEE_SERVICE, useClass: EmployeeService },
         { provide: LEVEL_SERVICE, useClass: LevelService },
@@ -169,6 +174,7 @@ export const appConfig: ApplicationConfig = {
         { provide: LESSONSCHEDULEDEFINITION_SERVICE, useClass: LessonScheduleDefinitionService },
         { provide: APPUSER_SERVICE, useClass: AppUserService },
         { provide: SALES_SERVICE, useClass: SalesService },
+        { provide: STUDENT_SERVICE, useClass: StudentService },
 
         ConfirmationService,
         MessageService

@@ -40,7 +40,7 @@ export class AppDialogComponent {
   @Input() header: string = '';
   @Input() width: string = '30vw';
   @Input() closable: boolean = true;
-  @Input() dismissableMask: boolean = true;
+  @Input() dismissableMask: boolean = false;
 
   @Input() breakpoints: { [key: string]: string } = {
     '1920px': '30vw',

@@ -5,7 +5,7 @@ import { SharedComponentModule } from '@/presentation/admin/shared/shared-compon
 import { PaginationFilterModel } from '@/core/models/admin/paginationFilterModel';
 import { EMPLOYEE_SERVICE, IEmployeeService } from '@/core/services/crm/employee-service';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { EmployeeModel } from '@/core/models/crm/employee.model';
+import { EmployeeModel, UnassignedEmployeeModel } from '@/core/models/crm/employee.model';
 import { AppBaseComponent } from '@/presentation/admin/shared/base.component';
 import { SelectListItem } from '@/core/models/select-list-item.model';
 import { forkJoin } from 'rxjs';
@@ -30,13 +30,10 @@ export class UsersComponent extends AppBaseComponent<AppUserModel, IAppUserServi
   EmployeeRole = EmployeeRole;
   UserRole = UserRole;
 
-  employeeRoleOptions: SelectListItem[] = [];
   salaryTypeOptions: SelectListItem[] = [];
-
-  employeeOptions: SelectListItem[] = [];
-
+  employeeOptions: UnassignedEmployeeModel[] = [];
   userRoleOptions: SelectListItem[] = [];
-
+  userRoleList: SelectListItem[] = [];
 
   constructor(private fb: FormBuilder) {
     super(APPUSER_SERVICE);
@@ -60,7 +57,23 @@ export class UsersComponent extends AppBaseComponent<AppUserModel, IAppUserServi
 
     this.pageForm.get('branchId')?.valueChanges.subscribe(async id => {
       if (id) {
-       this.employeeOptions = await this.recordService.getUnassignedEmployees(id);
+        this.employeeOptions = await this.recordService.getUnassignedEmployees(id);
+      }
+    });
+
+    this.pageForm.get('employeeId')?.valueChanges.subscribe(async id => {
+      if (id) {
+        const selectedEmployee = this.employeeOptions.find(e => e.id === id);
+        const rolesControl = this.pageForm.get('roles');
+
+        if (selectedEmployee && selectedEmployee.role == EmployeeRole.Teacher) {
+          this.userRoleOptions = this.userRoleList.filter(x => x.id == UserRole.Teacher);
+          rolesControl?.setValue([UserRole.Teacher]);
+        }
+        else {
+          this.userRoleOptions = this.userRoleList.filter(x => x.id != UserRole.Teacher);
+          rolesControl?.setValue([]);
+        } 
       }
     });
   }
@@ -71,7 +84,7 @@ export class UsersComponent extends AppBaseComponent<AppUserModel, IAppUserServi
       this.enumToSelectOptionsAsync(UserRole, 'UserRole'),
       this.enumToSelectOptionsAsync(SalaryType, 'SalaryType'),
     ]).subscribe(([userRoleOptions, salaryTypes]) => {
-      this.userRoleOptions = userRoleOptions;
+      this.userRoleList = userRoleOptions;
       this.salaryTypeOptions = salaryTypes;
     });
   }

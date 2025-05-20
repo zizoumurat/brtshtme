@@ -29,9 +29,9 @@ internal sealed class LessonScheduleDefinitionConfiguration : IEntityTypeConfigu
         builder.Property(x => x.StartTime).IsRequired();
         builder.Property(x => x.EndTime).IsRequired();
 
-        builder.Property(x => x.StudentType).HasConversion<string>().IsRequired();
-        builder.Property(x => x.EducationType).HasConversion<string>().IsRequired();
-        builder.Property(x => x.ScheduleCategory).HasConversion<string>().IsRequired();
+        builder.Property(x => x.StudentType).HasConversion<int>().IsRequired();
+        builder.Property(x => x.EducationType).HasConversion<int>().IsRequired();
+        builder.Property(x => x.ScheduleCategory).HasConversion<int>().IsRequired();
         builder.Property(x => x.Discount).HasPrecision(5, 2);
 
         builder.HasOne(x => x.Branch)

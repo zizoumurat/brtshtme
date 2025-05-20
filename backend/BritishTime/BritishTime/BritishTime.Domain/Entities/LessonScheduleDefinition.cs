@@ -5,7 +5,7 @@ namespace BritishTime.Domain.Entities;
 
 public class LessonScheduleDefinition : Entity
 {
-    public StudentType StudentType { get; set; }
+    public ScheduleType StudentType { get; set; }
     public EducationType EducationType { get; set; }
 
     public string Schedule { get; set; } = null!; 

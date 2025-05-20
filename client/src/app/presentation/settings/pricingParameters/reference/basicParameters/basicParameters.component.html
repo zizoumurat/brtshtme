@@ -4,7 +4,7 @@
             <div class="grid grid-cols-12 gap-4">
                 <div class="col-span-12 md:col-span-6 lg:col-span-4 mb-4">
                     <label for="branchId">Şube</label>
-                    <p-select id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
+                    <p-select [showClear]="true" id="branchId" [options]="branchOptions" class="w-full" formControlName="branchId"
                         placeholder="Seçiniz" appendTo="body"
                         [class.ng-dirty.ng-invalid]="isFieldInvalid('branchId')" />
                     <app-validation-message [control]="pageForm.controls['branchId']"></app-validation-message>

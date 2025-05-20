@@ -29,6 +29,9 @@ public sealed class MappingProfile : Profile
         CreateMap<CourseSaleSettingDto, CourseSaleSetting>().ReverseMap();
         CreateMap<CourseSaleSettingCreateDto, CourseSaleSetting>();
 
+        CreateMap<CourseClassDto, CourseClass>().ReverseMap();
+        CreateMap<CourseClassCreateDto, CourseClass>();
+
         CreateMap<DiscountDto, Discount>().ReverseMap();
         CreateMap<DiscountCreateDto, Discount>();
 
@@ -53,5 +56,7 @@ public sealed class MappingProfile : Profile
 
         CreateMap<InstallmentSettingDto, InstallmentSetting>().ReverseMap();
         CreateMap<InstallmentSettingCreateDto, InstallmentSetting>();
+
+        CreateMap<Student, StudentDto>();
     }
 }

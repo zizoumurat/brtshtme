@@ -13,7 +13,7 @@ import { DefaultSelectOptionDirective } from '@/core/directives/default-select-o
    <div [formGroup]="form" class="grid grid-cols-12 gap-4">
     <div class="col-span-12 md:col-span-6 mb-4">
       <label for="branchId">Şube</label>
-      <p-select 
+      <p-select [showClear]="true" 
         id="branchId" 
         [options]="branchOptions" 
         class="w-full" 

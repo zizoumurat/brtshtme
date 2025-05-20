@@ -120,11 +120,11 @@ public class AppUserService : IAppUserService
         return true;
     }
 
-    public async Task<List<SelectListDto>> GetUnassignedEmployees(Guid BranchId)
+    public async Task<List<UnassignedEmployeeDto>> GetUnassignedEmployees(Guid BranchId)
     {
         var list = await _queryEmployeeRepository
            .GetAllAsync(x => x.AppUserId == null && x.BranchId == BranchId)
-           .Select(x => new SelectListDto(x.Id, $"{x.FirstName} {x.LastName}"))
+           .Select(x => new UnassignedEmployeeDto(x.Id, $"{x.FirstName} {x.LastName}", x.Role))
            .ToListAsync();
 
         return list;

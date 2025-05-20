@@ -24,7 +24,6 @@ export class SettingsComponent {
     { label: 'crm.settings.branches', routerLink: 'branches'},
     { label: 'crm.settings.employees', routerLink: 'employees' },
     { label: 'crm.settings.users', routerLink: 'users' },
-    { label: 'crm.settings.teachers', routerLink: 'users' },
     { label: 'crm.settings.regionDefinitions', routerLink: 'regions' },
     { label: 'crm.settings.classrooms', routerLink: 'classrooms' },
     { label: 'crm.settings.levels', routerLink: 'levels' },

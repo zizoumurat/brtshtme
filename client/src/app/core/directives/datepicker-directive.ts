@@ -1,11 +1,11 @@
 import { Directive, AfterViewInit, ViewChild } from '@angular/core';
-import { Calendar } from 'primeng/calendar';
+import { DatePicker } from 'primeng/datepicker';
 
 @Directive({
   selector: 'p-datepicker'
 })
 export class PDatepickerFormatDirective implements AfterViewInit {
-  @ViewChild(Calendar) datepicker!: Calendar;
+  @ViewChild(DatePicker) datepicker!: DatePicker;
 
   ngAfterViewInit() {
     if (this.datepicker) {

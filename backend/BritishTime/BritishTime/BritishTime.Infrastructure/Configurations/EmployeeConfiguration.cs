@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BritishTime.Infrastructure.Configurations;
-
 internal sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
 {
     public void Configure(EntityTypeBuilder<Employee> builder)
@@ -37,11 +36,8 @@ internal sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
         builder.Property(e => e.Phone2)
             .HasColumnType("nvarchar(20)");
 
-        builder.Property(e => e.Phone3)
-            .HasColumnType("nvarchar(20)");
-
         builder.Property(e => e.Email)
-            .HasColumnType("nvarchar(100)");
+            .HasColumnType("nvarchar(60)");
 
         builder.Property(e => e.Address)
             .HasColumnType("nvarchar(250)");
@@ -67,6 +63,19 @@ internal sealed class EmployeeConfiguration : IEntityTypeConfiguration<Employee>
             .WithMany(b => b.Employees)
             .HasForeignKey(e => e.BranchId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Yeni eklenen alanlar
+        builder.Property(e => e.ApplyOvertime)
+            .IsRequired();
+
+        builder.Property(e => e.OvertimeQuota)
+            .HasColumnType("decimal(18,2)");
+
+        builder.Property(e => e.OvertimeHourlyRate)
+            .HasColumnType("decimal(18,2)");
+
+        builder.Property(e => e.SpecialLessonHourlyRate)
+            .HasColumnType("decimal(18,2)");
     }
 }
 

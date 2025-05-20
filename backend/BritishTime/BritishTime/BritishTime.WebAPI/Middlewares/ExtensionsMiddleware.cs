@@ -15,7 +15,7 @@ public static class ExtensionsMiddleware
             var roleManager = scoped.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
             var employeeService = scoped.ServiceProvider.GetRequiredService<IEmployeeService>();
 
-            var systemRoles = new[] { "Admin", "CRM", "SRM", "Muhasebe" };
+            var systemRoles = new[] { "Admin", "CRM", "SRM", "Muhasebe", "Student", "Teacher" };
 
             foreach (var item in systemRoles)
             {

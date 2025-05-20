@@ -32,7 +32,7 @@
                 <td>{{ record.branchName }}</td>
                 <td>{{ record.schedule }}</td>
                 <td>{{ record.scheduleCategory | enumTranslate: ScheduleCategory :'ScheduleCategory' }}</td>
-                <td>{{ record.studentType | enumTranslate: StudentType :'StudentType' }}</td>
+                <td>{{ record.studentType | enumTranslate: ScheduleType :'ScheduleType' }}</td>
                 <td>{{ record.educationType | enumTranslate: EducationType: 'EducationType' }}</td>
                 <td>{{ record.days | dayShortNames }}</td>
                 <td>{{ record.startTime | timeShort }} - {{ record.endTime | timeShort }}</td>

@@ -501,6 +501,152 @@ namespace BritishTime.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    IdentityNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
+                    BirthDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    SecondPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    StudentType = table.Column<int>(type: "int", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    CityId = table.Column<int>(type: "int", nullable: false),
+                    DistrictId = table.Column<int>(type: "int", nullable: false),
+                    ParentFirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ParentLastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ParentPhone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ParentIdentityNumber = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: true),
+                    ParentBirthDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    BranchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CrmRecordId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Students_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Students_CrmRecords_CrmRecordId",
+                        column: x => x.CrmRecordId,
+                        principalTable: "CrmRecords",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contracts",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LevelCount = table.Column<int>(type: "int", nullable: false),
+                    UsedLevelCount = table.Column<int>(type: "int", nullable: false),
+                    TotalAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
+                    InstallmentCount = table.Column<int>(type: "int", nullable: true),
+                    Deposit = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    ContractType = table.Column<int>(type: "int", nullable: false),
+                    EducationType = table.Column<int>(type: "int", nullable: false),
+                    Signatory = table.Column<int>(type: "int", nullable: false),
+                    LessonScheduleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CampaignId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DiscountId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contracts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Contracts_Campaigns_CampaignId",
+                        column: x => x.CampaignId,
+                        principalTable: "Campaigns",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Contracts_Discounts_DiscountId",
+                        column: x => x.DiscountId,
+                        principalTable: "Discounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Contracts_LessonScheduleDefinitions_LessonScheduleId",
+                        column: x => x.LessonScheduleId,
+                        principalTable: "LessonScheduleDefinitions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Contracts_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Installments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ContractId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DueDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Installments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Installments_Contracts_ContractId",
+                        column: x => x.ContractId,
+                        principalTable: "Contracts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Payments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PaymentMethod = table.Column<int>(type: "int", nullable: false),
+                    InstallmentId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Payments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Payments_Installments_InstallmentId",
+                        column: x => x.InstallmentId,
+                        principalTable: "Installments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_Payments_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.InsertData(
                 table: "Branches",
                 columns: new[] { "Id", "Address", "BreakDurationInMinutes", "Description", "Email", "LessonDurationInMinutes", "LevelDurationInHours", "Name", "PhoneNumber" },
@@ -566,6 +712,26 @@ namespace BritishTime.Infrastructure.Migrations
                 column: "BranchId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Contracts_CampaignId",
+                table: "Contracts",
+                column: "CampaignId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contracts_DiscountId",
+                table: "Contracts",
+                column: "DiscountId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contracts_LessonScheduleId",
+                table: "Contracts",
+                column: "LessonScheduleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contracts_StudentId",
+                table: "Contracts",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CourseSaleSettings_BranchId",
                 table: "CourseSaleSettings",
                 column: "BranchId");
@@ -611,6 +777,11 @@ namespace BritishTime.Infrastructure.Migrations
                 column: "BranchId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Installments_ContractId",
+                table: "Installments",
+                column: "ContractId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_InstallmentSettings_BranchId",
                 table: "InstallmentSettings",
                 column: "BranchId");
@@ -619,6 +790,33 @@ namespace BritishTime.Infrastructure.Migrations
                 name: "IX_LessonScheduleDefinitions_BranchId",
                 table: "LessonScheduleDefinitions",
                 column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_InstallmentId",
+                table: "Payments",
+                column: "InstallmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Payments_StudentId",
+                table: "Payments",
+                column: "StudentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_BranchId",
+                table: "Students",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_CrmRecordId",
+                table: "Students",
+                column: "CrmRecordId",
+                unique: true,
+                filter: "[CrmRecordId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_UserId",
+                table: "Students",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -643,9 +841,6 @@ namespace BritishTime.Infrastructure.Migrations
                 name: "BranchPricingSettings");
 
             migrationBuilder.DropTable(
-                name: "Campaigns");
-
-            migrationBuilder.DropTable(
                 name: "ClassRooms");
 
             migrationBuilder.DropTable(
@@ -655,22 +850,37 @@ namespace BritishTime.Infrastructure.Migrations
                 name: "CrmRecordActions");
 
             migrationBuilder.DropTable(
-                name: "Discounts");
-
-            migrationBuilder.DropTable(
                 name: "IncentiveSettings");
 
             migrationBuilder.DropTable(
                 name: "InstallmentSettings");
 
             migrationBuilder.DropTable(
-                name: "LessonScheduleDefinitions");
-
-            migrationBuilder.DropTable(
                 name: "Levels");
 
             migrationBuilder.DropTable(
+                name: "Payments");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Installments");
+
+            migrationBuilder.DropTable(
+                name: "Contracts");
+
+            migrationBuilder.DropTable(
+                name: "Campaigns");
+
+            migrationBuilder.DropTable(
+                name: "Discounts");
+
+            migrationBuilder.DropTable(
+                name: "LessonScheduleDefinitions");
+
+            migrationBuilder.DropTable(
+                name: "Students");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

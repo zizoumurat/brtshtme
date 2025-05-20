@@ -1,12 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
 import { DefaultTableOptionsDirective } from '@/core/directives/table-options.directive';
 import { SharedComponentModule } from '@/presentation/admin/shared/shared-components.module';
-import { AppBaseComponent } from '@/presentation/admin/shared/base.component';
-import { IncentiveSettingModel } from '@/core/models/crm/incentiveSetting.model';
-import { IncentiveSettingService } from '@/infrastructure/api/crm/incentiveSetting-service';
-import { INCENTIVESETTING_SERVICE } from '@/core/services/crm/incentiveSetting-service';
-import { ParticipantType } from '@/core/enums/participantType';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-classes',
@@ -17,36 +12,33 @@ import { ParticipantType } from '@/core/enums/participantType';
   ],
   templateUrl: './classes.component.html'
 })
-export class ClassesComponent extends AppBaseComponent<IncentiveSettingModel, IncentiveSettingService> {
-  participantType: ParticipantType = ParticipantType.DataProvider;
-  
-  constructor(private fb: FormBuilder) {
-    super(INCENTIVESETTING_SERVICE);
-    this.pageTitle = 'Data Sağlayıcı Primlendirme Ayarı';
+export class ClassesComponent {
+
+  constructor(private router: Router) { }
+
+  tabs = [
+    { route: 'list', label: 'srm.class.list', icon: 'pi pi-check-square' },
+    { route: 'reports', label: 'reports', icon: 'pi pi-check-square' },
+  ];
+
+  activeTab: string = '';
+
+  ngOnInit(): void {
+    this.setActiveTab();
   }
 
-  override ngOnInit() {
-    super.ngOnInit();
-    this.searchFilter['participantType'] = this.participantType;
-    this.initForm();
+  setActiveTab(): void {
+    const currentRoute = this.router.url;
+    this.activeTab = this.tabs.find(tab => currentRoute.endsWith(tab.route))?.route || '';
   }
 
-  override openModal(): void {
-    super.openModal();
-    this.pageForm.patchValue({'participantType': this.participantType});
+  get currentRoute(): string {
+    return location.pathname;
   }
 
-  initForm(): void {
-    this.pageForm = this.fb.group({
-      id: [null],
-      participantType: [this.participantType],
-      minAmount: [0, [Validators.required, Validators.min(0)]],
-      maxAmount: [0, [Validators.required, Validators.min(0)]],
-      salesCommission: [0, [Validators.required, Validators.min(0)]],
-      collectionCommission: [0, [Validators.required, Validators.min(0)]],
-      bonus: [0, [Validators.required, Validators.min(0)]],
-      note: ['']
-    });
+  navigate(path: string) {
+    this.router.navigate(['/srm/classes/', path]);
+    this.activeTab = path;
   }
 }
 

@@ -8,7 +8,7 @@ import { ILessonScheduleDefinitionService, LESSONSCHEDULEDEFINITION_SERVICE } fr
 import { BRANCH_SERVICE } from '@/core/services/crm/branch-service';
 import { SelectListItem } from '@/core/models/admin/select-list-item';
 import { DayOfWeek } from '@/core/enums/dayOfWeek';
-import { StudentType } from '@/core/enums/studentType';
+import { ScheduleType, StudentType } from '@/core/enums/studentType';
 import { EducationType } from '@/core/enums/educationType';
 import { ScheduleCategory } from '@/core/enums/scheduleCategory';
 import { DefaultSelectOptionDirective } from '@/core/directives/default-select-options.directive';
@@ -30,6 +30,7 @@ export class ScheduleSettingsComponent extends AppBaseComponent<LessonScheduleDe
   StudentType = StudentType;
   EducationType = EducationType;
   ScheduleCategory = ScheduleCategory;
+  ScheduleType = ScheduleType;
 
   branchOptions: SelectListItem[] = [];
   studentTypeOptions: SelectListItem[] = [];
@@ -75,7 +76,7 @@ export class ScheduleSettingsComponent extends AppBaseComponent<LessonScheduleDe
   getOptions() {
     this.getBranchList();
     forkJoin([
-      this.enumToSelectOptionsAsync(StudentType, 'StudentType'),
+      this.enumToSelectOptionsAsync(ScheduleType, 'ScheduleType'),
       this.enumToSelectOptionsAsync(EducationType, 'EducationType'),
       this.enumToSelectOptionsAsync(ScheduleCategory, 'ScheduleCategory'),
       this.enumToSelectOptionsAsync(DayOfWeek, 'DayOfWeek')

@@ -7,3 +7,10 @@ export enum StudentType {
   UniversityGraduate = 5,       // Üniversite mezunu
   Other = 6                     // Diğer
 }
+
+export enum ScheduleType {
+  Primary = 0,    // İlköğretim
+  HighSchool = 1, // Lise
+  Adult = 2,      // Yetişkin
+  Other = 3       // Diğer
+}

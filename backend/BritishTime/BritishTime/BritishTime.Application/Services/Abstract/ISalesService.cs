@@ -5,5 +5,5 @@ namespace BritishTime.Application.Services.Abstract;
 
 public interface ISalesService
 {
-    Task<CalculatePaymentResultDto> CalculatePayment(CalculatePaymentDto id);
+    Task<CalculatePaymentResultDto> CalculatePayment(CalculatePaymentDto request);
 }

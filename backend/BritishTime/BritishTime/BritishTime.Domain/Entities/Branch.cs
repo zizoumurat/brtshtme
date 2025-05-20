@@ -22,4 +22,5 @@ public sealed class Branch : Entity
     public ICollection<InstallmentSetting> InstallmentSettings { get; set; } = new List<InstallmentSetting>();
     public ICollection<LessonScheduleDefinition> LessonScheduleDefinitions { get; set; } = new List<LessonScheduleDefinition>();
     public ICollection<BranchPricingSetting> BranchPricingSettings { get; set; }
+    public ICollection<CourseClass> CourseClasses { get; set; }
 }

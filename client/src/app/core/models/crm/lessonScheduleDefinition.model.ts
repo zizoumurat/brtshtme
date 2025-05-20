@@ -1,11 +1,11 @@
 import { DayOfWeek } from "@/core/enums/dayOfWeek";
 import { EducationType } from "@/core/enums/educationType";
 import { ScheduleCategory } from "@/core/enums/scheduleCategory";
-import { StudentType } from "@/core/enums/studentType";
+import { ScheduleType } from "@/core/enums/studentType";
 
 export interface LessonScheduleDefinitionModel {
   id: string;
-  studentType: StudentType;
+  studentType: ScheduleType;
   educationType: EducationType;
   schedule: string;
   scheduleCode: string;

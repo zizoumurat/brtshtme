@@ -28,15 +28,15 @@
                         class="w-full" />
                 </th>
                 <th>
-                    <p-select [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" [options]="crmStatusOptions" placeholder="Seçiniz" appendTo="body"
                         (onChange)="onSearch($event,'status')" class="w-full" />
                 </th>
                 <th>
-                    <p-select [options]="dataProviderOptions" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" [options]="dataProviderOptions" placeholder="Seçiniz" appendTo="body"
                         (onChange)="onSearch($event,'dataProviderId')" class="w-full" />
                 </th>
                 <th>
-                    <p-select [options]="regionOptions" placeholder="Seçiniz" appendTo="body"
+                    <p-select [showClear]="true" [options]="regionOptions" placeholder="Seçiniz" appendTo="body"
                         (onChange)="onSearch($event,'regionId')" class="w-full" />
                 </th>
                 <th></th>

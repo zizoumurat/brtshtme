@@ -22,80 +22,80 @@
                   <div class="col-span-12 md:col-span-4">
                     <label for="firstName">Ad</label>
                     <input pInputText formControlName="firstName"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstName')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('firstName')" />
                     <app-validation-message [control]="step1.controls['firstName']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="lastName">Soyad</label>
                     <input pInputText formControlName="lastName"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lastName')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('lastName')" />
                     <app-validation-message [control]="step1.controls['lastName']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="identityNumber">T.C Kimlik</label>
                     <p-inputMask formControlName="identityNumber" [mask]="'99999999999'"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('identityNumber')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('identityNumber')" />
                     <app-validation-message [control]="step1.controls['identityNumber']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="birthDate">Doğum Tarihi</label>
                     <p-datepicker id="birthDate" formControlName="birthDate" appendTo="body" dateFormat="dd.mm.yy"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('birthDate')" class="w-full" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('birthDate')" class="w-full" />
                     <app-validation-message [control]="step1.controls['birthDate']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="phone">Telefon</label>
                     <p-inputMask id="phone" formControlName="phone" class="w-full" [mask]="'(999) 999 99 99'"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('phone')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('phone')" />
                     <app-validation-message [control]="step1.controls['phone']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="secondPhone">2.Telefon</label>
                     <p-inputMask id="secondPhone" formControlName="secondPhone" class="w-full"
-                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('secondPhone')" />
+                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalid('secondPhone')" />
                     <app-validation-message [control]="step1.controls['secondPhone']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="email">E-Posta</label>
                     <input id="email" type="email" pInputText formControlName="email"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('email')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('email')" />
                     <app-validation-message [control]="step1.controls['email']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="studentType">Tahsil Durumu</label>
-                    <p-select id="studentType" [options]="studentTypeOptions" class="w-full" optionValue="id"
+                    <p-select [showClear]="true" id="studentType" [options]="studentTypeOptions" class="w-full" optionValue="id"
                       optionLabel="name" formControlName="studentType" placeholder="Seçiniz" appendTo="body"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('studentType')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('studentType')" />
                     <app-validation-message [control]="step1.controls['studentType']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4 col-start-1 md:col-start-1">
                     <label for="cityId">İl</label>
-                    <p-select id="cityId" [options]="cityOptions" class="w-full" formControlName="cityId"
+                    <p-select [showClear]="true" id="cityId" [options]="cityOptions" class="w-full" formControlName="cityId"
                       placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('cityId')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('cityId')" />
                     <app-validation-message [control]="step1.controls['cityId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="districtId">İlçe</label>
-                    <p-select id="districtId" [options]="districtOptions" class="w-full" formControlName="districtId"
+                    <p-select [showClear]="true" id="districtId" [options]="districtOptions" class="w-full" formControlName="districtId"
                       placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('districtId')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('districtId')" />
                     <app-validation-message [control]="step1.controls['districtId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-8 col-start-1 md:col-start-1">
                     <label for="address">Adres</label>
                     <textarea pTextarea id="address" formControlName="address"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('address')" rows="3"></textarea>
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('address')" rows="3"></textarea>
                     <app-validation-message [control]="step1.controls['address']" />
                   </div>
 
@@ -104,12 +104,12 @@
                     <div class="flex flex-wrap gap-4 mt-4">
 
                       <div class="flex items-center">
-                        <p-radiobutton name="signatory" value="student" formControlName="signatory" inputId="student" />
+                        <p-radiobutton name="signatory" [value]="SignatoryType.Student" formControlName="signatory" inputId="student" />
                         <label for="student" class="ml-2">Öğrenci</label>
                       </div>
 
                       <div class="flex items-center">
-                        <p-radiobutton name="signatory" value="parent" formControlName="signatory" inputId="parent" />
+                        <p-radiobutton name="signatory" [value]="SignatoryType.Parent" formControlName="signatory" inputId="parent" />
                         <label for="parent" class="ml-2">Veli</label>
                       </div>
 
@@ -128,28 +128,28 @@
                   <div class="col-span-12 md:col-span-4">
                     <label for="parentFirstName">Ad</label>
                     <input pInputText formControlName="parentFirstName"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentFirstName')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('parentFirstName')" />
                     <app-validation-message [control]="step1.controls['parentFirstName']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="parentLastName">Soyad</label>
                     <input pInputText formControlName="parentLastName"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentLastName')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('parentLastName')" />
                     <app-validation-message [control]="step1.controls['parentLastName']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="parentIdentityNumber">T.C Kimlik</label>
                     <p-inputMask formControlName="parentIdentityNumber" [mask]="'99999999999'"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentIdentityNumber')" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('parentIdentityNumber')" />
                     <app-validation-message [control]="step1.controls['parentIdentityNumber']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-4">
                     <label for="parentBirthDate">Doğum Tarihi</label>
                     <p-datepicker id="parentBirthDate" formControlName="parentBirthDate" appendTo="body"
-                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentBirthDate')"
+                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalid('parentBirthDate')"
                       class="w-full" />
                     <app-validation-message [control]="step1.controls['parentBirthDate']" />
                   </div>
@@ -157,7 +157,7 @@
                   <div class="col-span-12 md:col-span-4">
                     <label for="parentPhone">Telefon</label>
                     <p-inputMask id="parentPhone" formControlName="parentPhone" class="w-full"
-                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('parentPhone')" />
+                      [mask]="'(999) 999 99 99'" [class.ng-dirty.ng-invalid]="isFieldInvalid('parentPhone')" />
                     <app-validation-message [control]="step1.controls['parentPhone']" />
                   </div>
 
@@ -181,12 +181,12 @@
                     <div class="flex flex-wrap gap-4">
 
                       <div class="flex items-center">
-                        <p-radiobutton name="contractType" value="0" formControlName="contractType" inputId="genel" />
+                        <p-radiobutton name="contractType" [value]="ContractType.General" formControlName="contractType" inputId="genel" />
                         <label for="genel" class="ml-2">Genel</label>
                       </div>
 
                       <div class="flex items-center">
-                        <p-radiobutton name="contractType" value="1" formControlName="contractType"
+                        <p-radiobutton name="contractType" [value]="ContractType.Private" formControlName="contractType"
                           inputId="ozelDers" />
                         <label for="ozelDers" class="ml-2">Özel Ders</label>
                       </div>
@@ -226,9 +226,9 @@
                     <div class="grid grid-cols-12 gap-4">
 
                       <div class="col-span-12">
-                        <p-select id="lessonScheduleId" [options]="lessonScheduleOptions" optionValue="id"
+                        <p-select [showClear]="true" id="lessonScheduleId" [options]="lessonScheduleOptions" optionValue="id"
                           optionLabel="schedule" formControlName="lessonScheduleId" placeholder="Seçiniz"
-                          appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('lessonScheduleId')"
+                          appendTo="body" [class.ng-dirty.ng-invalid]="isFieldInvalid('lessonScheduleId')"
                           class="w-full">
                           <ng-template let-item #item>
                             <div class="flex items-center gap-2">
@@ -265,9 +265,9 @@
                     <div class="grid grid-cols-12 gap-4">
 
                       <div class="col-span-12">
-                        <p-select id="educationDuration" [options]="educationDurationOptions"
+                        <p-select [showClear]="true" id="educationDuration" [options]="educationDurationOptions"
                           formControlName="educationDuration" placeholder="Seçiniz" appendTo="body" optionValue="id"
-                          optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('educationDuration')"
+                          optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalid('educationDuration')"
                           class="w-full" />
                         <app-validation-message [control]="step2.controls['educationDuration']" />
                       </div>
@@ -285,33 +285,33 @@
 
                   <div class="col-span-12 md:col-span-6">
                     <label for="campaignId">Kampanya</label>
-                    <p-select id="campaignId" [options]="campaignOptions" formControlName="campaignId"
+                    <p-select [showClear]="true" id="campaignId" [options]="campaignOptions" formControlName="campaignId"
                       placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('campaignId')" class="w-full" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('campaignId')" class="w-full" />
                     <app-validation-message [control]="step2.controls['campaignId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-6">
                     <label for="discountId">Gerekçeli İndirim</label>
-                    <p-select id="discountId" [options]="discountOptions" formControlName="discountId"
+                    <p-select [showClear]="true" id="discountId" [options]="discountOptions" formControlName="discountId"
                       placeholder="Seçiniz" appendTo="body" optionValue="id" optionLabel="name"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('discountId')" class="w-full" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('discountId')" class="w-full" />
                     <app-validation-message [control]="step2.controls['discountId']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-3">
                     <label for="paymentMethod">Ödeme Türü</label>
-                    <p-select id="paymentMethod" [options]="paymentMethodOptions" formControlName="paymentMethod"
+                    <p-select [showClear]="true" id="paymentMethod" [options]="paymentMethodOptions" formControlName="paymentMethod"
                       optionValue="id" optionLabel="name" placeholder="Seçiniz" appendTo="body"
-                      [class.ng-dirty.ng-invalid]="isFieldInvalidSales('paymentMethod')" class="w-full" />
+                      [class.ng-dirty.ng-invalid]="isFieldInvalid('paymentMethod')" class="w-full" />
                     <app-validation-message [control]="step2.controls['paymentMethod']" />
                   </div>
 
                   <div class="col-span-12 md:col-span-3">
                     <label for="installmentCount">Taksit Sayısı</label>
-                    <p-select id="installmentCount" [options]="installmentCountOptions"
+                    <p-select [showClear]="true" id="installmentCount" [options]="installmentCountOptions"
                       formControlName="installmentCount" placeholder="Seçiniz" appendTo="body" optionValue="id"
-                      optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('installmentCount')"
+                      optionLabel="name" [class.ng-dirty.ng-invalid]="isFieldInvalid('installmentCount')"
                       class="w-full" />
                     <app-validation-message [control]="step2.controls['installmentCount']" />
                   </div>
@@ -319,7 +319,7 @@
                   <div class="col-span-12 md:col-span-3">
                     <label for="firstInstallmentDate">İlk Vade Tarihi</label>
                     <p-datepicker id="firstInstallmentDate" formControlName="firstInstallmentDate" appendTo="body"
-                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('firstInstallmentDate')"
+                      dateFormat="dd.mm.yy" [class.ng-dirty.ng-invalid]="isFieldInvalid('firstInstallmentDate')"
                       class="w-full" />
                     <app-validation-message [control]="step2.controls['firstInstallmentDate']" />
                   </div>
@@ -327,7 +327,7 @@
                   <div class="col-span-12 md:col-span-3">
                     <label for="deposit">Peşinat</label>
                     <p-inputNumber inputId="deposit" formControlName="deposit" mode="currency" currency="TRY"
-                      locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalidSales('deposit')" />
+                      locale="tr-TR" [class.ng-dirty.ng-invalid]="isFieldInvalid('deposit')" />
                     <app-validation-message [control]="step2.controls['deposit']" />
                   </div>
                 </div>
@@ -369,16 +369,57 @@
 
         <p-step-panel [value]="3">
           <ng-template #content>
-            <div class="flex flex-col h-48">
+
+            <div class="flex flex-col">
               <div
-                class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
-                Content III
+                class="border-2 py-4 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">
+
+                <div class="grid grid-cols-12 gap-4">
+                  <div class="col-span-12 text-center md:col-span-4">
+                    <label>Peşinat</label>
+                    <input type="text" class="!text-rose-700 !text-lg text-center" pInputText
+                      [value]="deposit | currency:'TRY'" [disabled]="true" />
+                  </div>
+
+                  <div class="col-span-12 text-center md:col-span-4">
+                    <label>Taksitlendirilen Miktar</label>
+                    <input type="text" class="!text-rose-600 !text-lg !text-center" pInputText
+                      [value]="installmentAmount | currency:'TRY'" [disabled]="true" />
+                  </div>
+
+                  <div class="col-span-12 text-center md:col-span-4">
+                    <label>Genel Toplam</label>
+                    <input type="text" class="!text-rose-700 !text-lg text-center" pInputText
+                      [value]="totalAmount | currency:'TRY'" [disabled]="true" />
+                  </div>
+                </div>
               </div>
             </div>
+
+            <p-fieldset legend="Ödeme Planı">
+              <p-table [value]="installments" stripedRows>
+                <ng-template #header>
+                  <tr>
+                    <th>No</th>
+                    <th>Tarih</th>
+                    <th>Taksit Tutarı</th>
+                  </tr>
+                </ng-template>
+                <ng-template #body let-record let-index="rowIndex">
+                  <tr [ngClass]="{'!text-pink-500': record.isDeposit}">
+                    <td>{{ index + 1}}</td>
+                    <td>{{record.dueDate | date:'dd.MM.yyyy'}}</td>
+                    <td>{{record.amount | currency:'TRY'}} <span *ngIf="record.isDeposit"> (Peşinat)</span></td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </p-fieldset>
+
             <div class="flex pt-6 justify-between">
               <p-button label="Geri" icon="pi pi-arrow-left" iconPos="left" (onClick)="prevStep()" />
-              <p-button label="İleri" icon="pi pi-arrow-right" iconPos="right" (onClick)="nextStep()" />
+              <p-button label="İleri" icon="pi pi-arrow-right" iconPos="right" (onClick)="completeStep()" />
             </div>
+
           </ng-template>
         </p-step-panel>
       </p-step-panels>

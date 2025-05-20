@@ -5,6 +5,8 @@ import { SharedComponentModule } from '@/presentation/admin/shared/shared-compon
 import { CRMRECORDACTION_SERVICE } from '@/core/services/crm/crmrecordaction-service';
 import { CrmRecordActionModel } from '@/core/models/crm/crmrecordaction.model';
 import { FormModalComponent } from '../formmodal/formmodal.component';
+import { Subject, takeUntil } from 'rxjs';
+import { EventService } from '@/core/services/event.service';
 
 @Component({
   selector: 'app-tasks',
@@ -16,7 +18,10 @@ import { FormModalComponent } from '../formmodal/formmodal.component';
   templateUrl: './tasks.component.html'
 })
 export class TasksComponent {
+  private destroy$ = new Subject<void>();
+
   crmRecordActionService = inject(CRMRECORDACTION_SERVICE);
+  eventService = inject(EventService);
 
   constructor(private fb: FormBuilder) {
   }
@@ -37,6 +42,20 @@ export class TasksComponent {
     this.getOpenAppointments();
     this.getCalls();
     this.getOpenCalls();
+
+    this.eventService.on('crmActionRefresh')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.getAppointments();
+        this.getOpenAppointments();
+        this.getCalls();
+        this.getOpenCalls();
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   async getAppointments() {

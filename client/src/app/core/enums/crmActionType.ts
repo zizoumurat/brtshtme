@@ -4,8 +4,8 @@ export enum CrmActionType {
   NotInterested = 2,
   CallBack = 3,
   Appointment = 4,
-  Sale = 5,
-  Other = 6,
+  Other = 5,
+  Canceled = 6,
   Sms = 7,
-  AppointmentCanceled = 8
+  Sale = 8
 }

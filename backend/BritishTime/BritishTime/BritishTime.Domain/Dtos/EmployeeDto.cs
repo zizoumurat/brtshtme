@@ -12,7 +12,6 @@ public record EmployeeDto(
     DateTime BirthDate,
     string Phone1,
     string Phone2,
-    string Phone3,
     string Email,
     string Address,
     Guid BranchId,
@@ -22,7 +21,11 @@ public record EmployeeDto(
     decimal? ExtraPayment,
     string SalaryNote,
     string BranchName,
-    Guid? AppUserId
+    Guid? AppUserId,
+    bool ApplyOvertime,
+    decimal? OvertimeQuota,
+    decimal? OvertimeHourlyRate,
+    decimal? SpecialLessonHourlyRate
 );
 
 public record EmployeeCreateDto(
@@ -41,14 +44,21 @@ public record EmployeeCreateDto(
     SalaryType SalaryType,
     decimal? SalaryAmount,
     decimal? ExtraPayment,
-    string SalaryNote
+    string SalaryNote,
+    bool ApplyOvertime,
+    decimal? OvertimeQuota,
+    decimal? OvertimeHourlyRate,
+    decimal? SpecialLessonHourlyRate
 );
+
 
 public record AppUserCreateDto(
     Guid EmployeeId,
     List<string> Roles,
     string Password
 );
+
+public sealed record UnassignedEmployeeDto(Guid Id, string Name, EmployeeRole Role);
 
 public sealed record EmployeeFilterDto : SearchDto
 {
