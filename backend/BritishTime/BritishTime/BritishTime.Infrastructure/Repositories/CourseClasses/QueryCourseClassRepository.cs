@@ -55,5 +55,17 @@ public class QueryCourseClassRepository : IQueryCourseClassRepository
     {
         return await _context.Set<CourseClass>().AnyAsync(predicate);
     }
+
+    public IQueryable<CourseClass> GetList(Expression<Func<CourseClass, bool>> expression, bool isTracking = false)
+    {
+        if (isTracking)
+        {
+            return _context.CourseClasses.Where(expression);
+        }
+        else
+        {
+            return _context.CourseClasses.AsNoTracking().Where(expression);
+        }
+    }
 }
 

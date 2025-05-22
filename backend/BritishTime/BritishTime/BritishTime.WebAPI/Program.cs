@@ -28,6 +28,8 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddExceptionHandler<ExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddControllers().AddOData(action =>
 {
     action.EnableQueryFeatures();

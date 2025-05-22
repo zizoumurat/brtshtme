@@ -1,17 +1,16 @@
-﻿using BritishTime.Domain.Enums;
+﻿using BritishTime.Domain.Abstractions;
+using BritishTime.Domain.Enums;
 
 namespace BritishTime.Domain.Entities;
 
-public class CourseClass
+public class CourseClass : Entity
 {
-    public Guid Id { get; set; }
-
     public Guid BranchId { get; set; }
     public Branch Branch { get; set; } = null!;
 
     public string Name { get; set; }
 
-    public ClassType ClassType { get; set; } 
+    public ClassType ClassType { get; set; }
 
     public EducationType EducationType { get; set; }
 

@@ -1,6 +1,4 @@
-﻿using BritishTime.Domain.Abstractions;
-using BritishTime.Domain.Entities;
-using BritishTime.Domain.Enums;
+﻿using BritishTime.Domain.Enums;
 
 namespace BritishTime.Domain.Dtos;
 
@@ -38,4 +36,20 @@ public class CrmRecordActionFilterDto
     public CrmStatus? Status { get; set; }
     public Guid? DataProviderId { get; set; }
     public Guid? RegionId { get; set; }
+}
+
+public class GoogleCalendarResponse
+{
+    public List<HolidayEvent> Items { get; set; }
+}
+
+public class HolidayEvent
+{
+    public HolidayDate Start { get; set; }
+    public string Summary { get; set; }
+}
+
+public class HolidayDate
+{
+    public string Date { get; set; }
 }

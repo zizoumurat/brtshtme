@@ -1,0 +1,2 @@
+﻿namespace BritishTime.Application.Features.CourseClasses.Commands.CreateLessionSession;
+public sealed record CreateLessionSessionCommandResponse(string message);

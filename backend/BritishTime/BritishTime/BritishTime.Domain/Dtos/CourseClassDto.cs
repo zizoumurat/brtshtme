@@ -52,3 +52,5 @@ public sealed record CourseClassFilterDto(
 public sealed record CourseEndDateRequest(DateTime StartDate,
     Guid LessonScheduleId
 );
+
+public sealed record CreateLessonSessionDto(Guid classId, Dictionary<DayOfWeek, Guid> programDaysWithTeachers);

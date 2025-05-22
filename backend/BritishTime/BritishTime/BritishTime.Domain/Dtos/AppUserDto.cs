@@ -1,6 +1,4 @@
-﻿using BritishTime.Domain.Enums;
-
-namespace BritishTime.Domain.Dtos;
+﻿namespace BritishTime.Domain.Dtos;
 
 public record AppUserDto(
     Guid Id,

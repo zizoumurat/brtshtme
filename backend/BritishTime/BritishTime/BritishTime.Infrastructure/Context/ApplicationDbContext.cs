@@ -23,10 +23,13 @@ public sealed class ApplicationDbContext : IdentityDbContext<AppUser, AppRole, G
     public DbSet<CourseSaleSetting> CourseSaleSettings => Set<CourseSaleSetting>();
     public DbSet<Discount> Discounts => Set<Discount>();
     public DbSet<Employee> Employees => Set<Employee>();
+    public DbSet<Holiday> Holidays => Set<Holiday>();
     public DbSet<Level> Levels => Set<Level>();
     public DbSet<IncentiveSetting> IncentiveSettings => Set<IncentiveSetting>();
     public DbSet<InstallmentSetting> InstallmentSettings => Set<InstallmentSetting>();
     public DbSet<LessonScheduleDefinition> LessonScheduleDefinitions => Set<LessonScheduleDefinition>();
+    public DbSet<LessonSession> LessonSessions => Set<LessonSession>();
+    public DbSet<LessonSessionTemplate> LessonSessionTemplates => Set<LessonSessionTemplate>();
     public DbSet<Region> Regions => Set<Region>();
     public DbSet<Student> Students => Set<Student>();
     public DbSet<Payment> Payments => Set<Payment>();

@@ -112,7 +112,8 @@
         "duplicateMail": "E-posta adresi başka bir kayıtta zaten mevcut",
         "branchDefinitionsMissing": "Şube tanımlamaları eksik. Lütfen yöneticinizle iletişime geçin.",
         "branchPricingSettingsMissing": "Şube fiyatlandırma parametreleri eksik. Lütfen yöneticinizle iletişime geçin.",
-        "startDateNotInProgramDays": "Başlangıç tarihi program günleri içinde olmalıdır."
+        "startDateNotInProgramDays": "Başlangıç tarihi program günleri içinde olmalıdır.",
+        "duplicateRoom": "Programlanan tarih ve saatte seçilen derslikte başka bir sınıf mevcut. Zamanlama çakışması tespit edildi."
     },
     "minAmount": "Minimum Tutar",
     "maxAmount": "Maksimum Tutar",
@@ -158,6 +159,15 @@
             "Thursday": "Perşembe",
             "Friday": "Cuma",
             "Saturday": "Cumartesi"
+        },
+        "DayOfWeekByIndex": {
+            "0": "Pazar",
+            "1": "Pazartesi",
+            "2": "Salı",
+            "3": "Çarşamba",
+            "4": "Perşembe",
+            "5": "Cuma",
+            "6": "Cumartesi"
         },
         "EmployeeRole": {
             "Administrator": "Yönetici",

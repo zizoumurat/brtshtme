@@ -1,8 +1,10 @@
 ﻿using BritishTime.Application.Features.CourseClasses.Commands.CreateCourseClass;
+using BritishTime.Application.Features.CourseClasses.Commands.CreateLessionSession;
 using BritishTime.Application.Features.CourseClasses.Commands.DeleteCourseClass;
 using BritishTime.Application.Features.CourseClasses.Commands.UpdateCourseClass;
 using BritishTime.Application.Features.CourseClasses.Queries.GetAllCourseClasses;
 using BritishTime.Application.Features.CourseClasses.Queries.GetEndDate;
+using BritishTime.Application.Features.CourseClasses.Queries.GetLessonSessions;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Pagination;
 using BritishTime.WebAPI.Abstractions;
@@ -28,6 +30,15 @@ public sealed class CourseClassesController : ApiController
         return Ok(response.result);
     }
 
+    [HttpGet("get-lesson-session/{courseClassId}")]
+    public async Task<IActionResult> GetLessonSession([FromRoute] Guid courseClassId)
+    {
+        GetLessonSessionsQuery request = new(courseClassId);
+        GetLessonSessionsQueryResponse response = await _mediator.Send(request);
+
+        return Ok(response.result);
+    }
+
     [HttpPost("calculate-end-date")]
     public async Task<IActionResult> GetAll(CourseEndDateRequest request)
     {
@@ -35,6 +46,15 @@ public sealed class CourseClassesController : ApiController
         GetEndDateQueryResponse response = await _mediator.Send(query);
 
         return Ok(response.result);
+    }
+
+    [HttpPost("create-lesson-session")]
+    public async Task<IActionResult> CreateLessonSession(CreateLessonSessionDto request)
+    {
+        CreateLessionSessionCommand query = new(request);
+        CreateLessionSessionCommandResponse response = await _mediator.Send(query);
+
+        return Ok(response);
     }
 
     [HttpPost]

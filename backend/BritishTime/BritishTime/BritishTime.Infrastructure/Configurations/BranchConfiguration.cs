@@ -1,6 +1,7 @@
 ﻿using BritishTime.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Security.Claims;
 
 namespace BritishTime.Infrastructure.Configurations;
 

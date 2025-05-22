@@ -47,136 +47,208 @@
     </p-table>
 </div>
 
-<p-dialog [(visible)]="displayModal" [modal]="true" [style]="{ width: '30vw' }">
-    <ng-template pTemplate="header">
-        <div class="font-semibold text-lg">{{ pageTitle }} {{ pageModal }}</div>
-    </ng-template>
 
-    <p-fluid>
+<app-dialog [(visible)]="displayModal" header="Sınıf İşlemleri"
+    [breakpoints]="{ '1920px': '60vw', '1366px': '70vw', '960px': '85vw', '640px': '95vw' }"
+    (visibleChange)="visibleChange($emit)">
 
-        <form [formGroup]="pageForm">
-            <app-select-branch [form]="pageForm"></app-select-branch>
-            <p-fieldset legend="Kod Üretimi">
-                <div class="grid grid-cols-12 gap-4">
-                    <div class="col-span-12 md:col-span-6">
-                        <label for="classType">Sınıf Türü</label>
-                        <p-select inputId="classType" formControlName="classType" [options]="classTypeOptions"
-                            appendTo="body" optionLabel="name" optionValue="id" placeholder="Sınıf Türü Seçiniz" />
-                        <app-validation-message [control]="pageForm.controls['classType']"></app-validation-message>
-                    </div>
+    <p-tabs value="0">
+        <p-tablist>
+            <p-tab value="0">Kayıt EKranı</p-tab>
+            <p-tab *ngIf="pageForm.controls['id'].value" value="1">Ders Programı</p-tab>
+            <p-tab *ngIf="pageForm.controls['id'].value" value="2">Takvim</p-tab>
+            <p-tab *ngIf="pageForm.controls['id'].value" value="3">Satış İşlemleri</p-tab>
+        </p-tablist>
 
-                    <div class="col-span-12 md:col-span-6">
-                        <label for="educationType">Eğitim Tipi</label>
-                        <p-select inputId="educationType" formControlName="educationType"
-                            [options]="educationTypeOptions" optionLabel="name" optionValue="id" appendTo="body"
-                            placeholder="Eğitim Tipi Seçiniz" />
-                        <app-validation-message [control]="pageForm.controls['educationType']"></app-validation-message>
-                    </div>
+        <p-tabpanels>
 
-                    <div class="col-span-12 md:col-span-6">
-                        <label for="scheduleType">Yaş Grubu</label>
-                        <p-select inputId="scheduleType" formControlName="scheduleType" [options]="scheduleTypeOptions"
-                            optionLabel="name" optionValue="id" appendTo="body" placeholder="Yaş Grubu Seçiniz" />
-                        <app-validation-message [control]="pageForm.controls['scheduleType']"></app-validation-message>
-                    </div>
+            <p-tabpanel value="0">
+                <p-fluid>
 
-                    <div class="col-span-12 md:col-span-6">
-                        <label for="lessonScheduleDefinitionId">Seans</label>
-                        <p-select [showClear]="true" id="lessonScheduleDefinitionId" [options]="lessonScheduleOptions"
-                            optionValue="id" optionLabel="schedule" formControlName="lessonScheduleDefinitionId"
-                            placeholder="Seçiniz" appendTo="body"
-                            [class.ng-dirty.ng-invalid]="isFieldInvalid('lessonScheduleDefinitionId')" class="w-full">
-                            <ng-template let-item #item>
-                                <div class="flex items-center gap-2">
-                                    <div class="w-[140px] border-solid border-black border-r">{{ item.schedule }}</div>
-                                    <div class="w-[140px] border-solid border-black border-r">{{ item.days |
-                                        dayShortNames }}
-                                    </div>
-                                    <div class="w-[80px]">{{ item.startTime | timeShort }} - {{ item.endTime | timeShort
-                                        }}
+                    <form [formGroup]="pageForm">
+                        <app-select-branch [form]="pageForm"></app-select-branch>
+                        <p-fieldset legend="Kod Üretimi">
+                            <div class="grid grid-cols-12 gap-4">
+                                <div class="col-span-12 md:col-span-6">
+                                    <label for="classType">Sınıf Türü</label>
+                                    <p-select inputId="classType" formControlName="classType"
+                                        [options]="classTypeOptions" appendTo="body" optionLabel="name" optionValue="id"
+                                        placeholder="Sınıf Türü Seçiniz" />
+                                    <app-validation-message
+                                        [control]="pageForm.controls['classType']"></app-validation-message>
+                                </div>
+
+                                <div class="col-span-12 md:col-span-6">
+                                    <label for="educationType">Eğitim Tipi</label>
+                                    <p-select inputId="educationType" formControlName="educationType"
+                                        [options]="educationTypeOptions" optionLabel="name" optionValue="id"
+                                        appendTo="body" placeholder="Eğitim Tipi Seçiniz" />
+                                    <app-validation-message
+                                        [control]="pageForm.controls['educationType']"></app-validation-message>
+                                </div>
+
+                                <div class="col-span-12 md:col-span-6">
+                                    <label for="scheduleType">Yaş Grubu</label>
+                                    <p-select inputId="scheduleType" formControlName="scheduleType"
+                                        [options]="scheduleTypeOptions" optionLabel="name" optionValue="id"
+                                        appendTo="body" placeholder="Yaş Grubu Seçiniz" />
+                                    <app-validation-message
+                                        [control]="pageForm.controls['scheduleType']"></app-validation-message>
+                                </div>
+
+                                <div class="col-span-12 md:col-span-6">
+                                    <label for="lessonScheduleDefinitionId">Seans</label>
+                                    <p-select [showClear]="true" id="lessonScheduleDefinitionId"
+                                        [options]="lessonScheduleOptions" optionValue="id" optionLabel="schedule"
+                                        formControlName="lessonScheduleDefinitionId" placeholder="Seçiniz"
+                                        appendTo="body"
+                                        [class.ng-dirty.ng-invalid]="isFieldInvalid('lessonScheduleDefinitionId')"
+                                        class="w-full">
+                                        <ng-template let-item #item>
+                                            <div class="flex items-center gap-2">
+                                                <div class="w-[140px] border-solid border-black border-r">{{
+                                                    item.schedule }}</div>
+                                                <div class="w-[140px] border-solid border-black border-r">{{ item.days |
+                                                    dayShortNames }}
+                                                </div>
+                                                <div class="w-[80px]">{{ item.startTime | timeShort }} - {{ item.endTime
+                                                    | timeShort
+                                                    }}
+                                                </div>
+                                            </div>
+                                        </ng-template>
+                                    </p-select>
+                                    <app-validation-message
+                                        [control]="pageForm.controls['lessonScheduleDefinitionId']"></app-validation-message>
+                                </div>
+
+                                <div class="col-span-12 md:col-span-5">
+                                    <label for="levelId">Seviye</label>
+                                    <p-select inputId="levelId" formControlName="levelId" [options]="levelOptions"
+                                        optionLabel="name" appendTo="body" optionValue="id"
+                                        placeholder="Seviye Seçiniz" />
+                                    <app-validation-message
+                                        [control]="pageForm.controls['levelId']"></app-validation-message>
+                                </div>
+
+                                <div class="col-span-12 md:col-span-4">
+                                    <label for="name">Ek Açıklama</label>
+                                    <input id="note" pInputText formControlName="note"
+                                        [class.ng-dirty.ng-invalid]="isFieldInvalid('note')" />
+                                    <app-validation-message [control]="pageForm.controls['note']" />
+                                </div>
+                                <div class="col-span-12 md:col-span-3">
+                                    <div class="flex flex-col">
+                                        <label for="">&nbsp;</label>
+                                        <p-button styleClass="w-full" label="Kod Üret" icon="pi pi-calculator"
+                                            iconPos="left" severity="success" (onClick)="generateCode()" />
                                     </div>
                                 </div>
-                            </ng-template>
-                        </p-select>
-                        <app-validation-message
-                            [control]="pageForm.controls['lessonScheduleDefinitionId']"></app-validation-message>
-                    </div>
+                            </div>
+                        </p-fieldset>
 
-                    <div class="col-span-12 md:col-span-5">
-                        <label for="levelId">Seviye</label>
-                        <p-select inputId="levelId" formControlName="levelId" [options]="levelOptions"
-                            optionLabel="name" appendTo="body" optionValue="id" placeholder="Seviye Seçiniz" />
-                        <app-validation-message [control]="pageForm.controls['levelId']"></app-validation-message>
-                    </div>
+                        <div class="grid grid-cols-12 gap-4 mt-4">
+                            <div class="col-span-12">
+                                <label for="name">Sınıf Kodu</label>
+                                <input id="name" pInputText formControlName="name"
+                                    class="!font-bold !text-black !text-center !text-lg"
+                                    [class.ng-dirty.ng-invalid]="isFieldInvalid('name')" readonly />
+                                <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
+                            </div>
 
-                    <div class="col-span-12 md:col-span-4">
-                        <label for="name">Ek Açıklama</label>
-                        <input id="note" pInputText formControlName="note"
-                            [class.ng-dirty.ng-invalid]="isFieldInvalid('note')" />
-                        <app-validation-message [control]="pageForm.controls['note']" />
-                    </div>
-                    <div class="col-span-12 md:col-span-3">
-                        <div class="flex flex-col">
-                            <label for="">&nbsp;</label>
-                            <p-button styleClass="w-full" label="Kod Üret" icon="pi pi-calculator" iconPos="left"
-                                severity="success" (onClick)="generateCode()" />
+                            <div class="col-span-12 md:col-span-6">
+                                <label for="startDate">Başlama Tarihi</label>
+                                <p-datepicker minToday inputId="startDate" formControlName="startDate" appendTo="body"
+                                    dateFormat="dd.mm.yy" showIcon />
+                                <app-validation-message
+                                    [control]="pageForm.controls['startDate']"></app-validation-message>
+                            </div>
+
+                            <div class="col-span-12 md:col-span-6">
+                                <label for="endDate">Bitiş Tarihi</label>
+                                <p-datepicker inputId="endDate" formControlName="endDate" appendTo="body"
+                                    dateFormat="dd.mm.yy" showIcon [readonlyInput]="true" />
+                                <app-validation-message
+                                    [control]="pageForm.controls['endDate']"></app-validation-message>
+                            </div>
+
+                            <div class="col-span-12 md:col-span-4">
+                                <label for="classroomId">Derslik</label>
+                                <p-select inputId="classroomId" formControlName="classroomId"
+                                    [options]="classRoomOptions" appendTo="body" optionLabel="name" optionValue="id"
+                                    placeholder="Derslik Seçiniz" />
+                                <app-validation-message
+                                    [control]="pageForm.controls['classroomId']"></app-validation-message>
+                            </div>
+
+                            <div class="col-span-12 md:col-span-4">
+                                <label for="capacity">Kontenjan</label>
+                                <p-inputNumber inputId="capacity" formControlName="capacity" [min]="1"
+                                    [class.ng-dirty.ng-invalid]="isFieldInvalid('capacity')" />
+                                <app-validation-message
+                                    [control]="pageForm.controls['capacity']"></app-validation-message>
+                            </div>
+
+                            <div class="col-span-12 md:col-span-4">
+                                <label for="unit">Ünite</label>
+                                <p-inputNumber inputId="unit" formControlName="unit" [min]="1"
+                                    [class.ng-dirty.ng-invalid]="isFieldInvalid('unit')" />
+                                <app-validation-message [control]="pageForm.controls['unit']"></app-validation-message>
+                            </div>
+
                         </div>
+                    </form>
+
+                </p-fluid>
+                <div class="flex justify-between items-center my-4">
+                    <!-- Sağ: İptal ve Kaydet -->
+                    <div class="flex gap-2">
+                        <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary"
+                            (click)="closeModal()"></button>
+                        <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success"
+                            (click)="saveRecord()" [disabled]="pageForm.invalid">
+                        </button>
                     </div>
                 </div>
-            </p-fieldset>
 
-            <div class="grid grid-cols-12 gap-4 mt-4">
-                <div class="col-span-12">
-                    <label for="name">Sınıf Kodu</label>
-                    <input id="name" pInputText formControlName="name"
-                        class="!font-bold !text-black !text-center !text-lg"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('name')" readonly />
-                    <app-validation-message [control]="pageForm.controls['name']"></app-validation-message>
+            </p-tabpanel>
+
+            <p-tabpanel *ngIf="lessonSessionForm" value="1">
+                <p-fluid>
+                    <form [formGroup]="lessonSessionForm">
+                        <div formArrayName="entries">
+                            <div class="grid grid-cols-12 gap-4 mt-4">
+                                <div *ngFor="let group of entries.controls; let i = index" [formGroupName]="i"
+                                    class="col-span-12 md:col-span-4">
+                                    <label>{{ 'enums.DayOfWeekByIndex.' + group.value.day | translate }}</label>
+                                    <p-select formControlName="teacherId" [options]="teacherList" optionLabel="name"
+                                        optionValue="id" appendTo="body" placeholder="Öğretmen Seçiniz" />
+                                    <app-validation-message
+                                        [control]="lessonSessionForm.controls['teacherId']"></app-validation-message>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </p-fluid>
+                <div class="flex justify-end items-center my-4">
+                    <!-- Sağ: İptal ve Kaydet -->
+                    <div class="flex gap-2">
+                        <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary"
+                            (click)="closeModal()"></button>
+                        <button pButton type="submit" label="Kaydet" icon="pi pi-check" class="p-button-success"
+                            (click)="submitLessonSession()" [disabled]="lessonSessionForm.invalid">
+                        </button>
+                    </div>
                 </div>
 
-                <div class="col-span-12 md:col-span-6">
-                    <label for="startDate">Başlama Tarihi</label>
-                    <p-datepicker minToday inputId="startDate" formControlName="startDate" appendTo="body" dateFormat="dd.mm.yy"
-                        showIcon />
-                    <app-validation-message [control]="pageForm.controls['startDate']"></app-validation-message>
+            </p-tabpanel>
+
+            <p-tabpanel value="2">
+                <div *ngIf="showCalendar">
+                    <app-calendar [events]="lessonSessionlist"></app-calendar>
                 </div>
+            </p-tabpanel>
+        </p-tabpanels>
+    </p-tabs>
 
-                <div class="col-span-12 md:col-span-6">
-                    <label for="endDate">Bitiş Tarihi</label>
-                    <p-datepicker inputId="endDate" formControlName="endDate" appendTo="body" dateFormat="dd.mm.yy"
-                        showIcon [readonlyInput]="true" />
-                    <app-validation-message [control]="pageForm.controls['endDate']"></app-validation-message>
-                </div>
-
-                <div class="col-span-12 md:col-span-4">
-                    <label for="classRoomId">Derslik</label>
-                    <p-select inputId="classRoomId" formControlName="classRoomId" [options]="classRoomOptions"
-                        appendTo="body" optionLabel="name" optionValue="id" placeholder="Derslik Seçiniz" />
-                    <app-validation-message [control]="pageForm.controls['classRoomId']"></app-validation-message>
-                </div>
-
-                <div class="col-span-12 md:col-span-4">
-                    <label for="capacity">Kontenjan</label>
-                    <p-inputNumber inputId="capacity" formControlName="capacity" [min]="1"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('capacity')" />
-                    <app-validation-message [control]="pageForm.controls['capacity']"></app-validation-message>
-                </div>
-
-                <div class="col-span-12 md:col-span-4">
-                    <label for="unit">Ünite</label>
-                    <p-inputNumber inputId="unit" formControlName="unit" [min]="1"
-                        [class.ng-dirty.ng-invalid]="isFieldInvalid('unit')" />
-                    <app-validation-message [control]="pageForm.controls['unit']"></app-validation-message>
-                </div>
-
-            </div>
-        </form>
-
-    </p-fluid>
-
-    <ng-template pTemplate="footer">
-        <button pButton label="İptal" icon="pi pi-times" class="p-button-secondary" (click)="closeModal()"></button>
-        <button pButton label="Kaydet" icon="pi pi-check" class="p-button-success" (click)="saveRecord()"
-            [disabled]="pageForm.invalid"></button>
-    </ng-template>
-</p-dialog>
+</app-dialog>

@@ -15,6 +15,14 @@ export class CourseClassService extends CrudService<CourseClassModel> implements
         super(http, `${BASE_URL}/CourseClasses`);
     }
 
+    getSessionLesson(courseClassId: string): Promise<any[]> {
+        return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/get-lesson-session/${courseClassId}`));
+    }
+
+    createLessonSession(payload: any): Promise<void> {
+        return firstValueFrom(this.http.post<void>(`${this.apiUrl}/create-lesson-session`, payload));
+    }
+
     calculateEndDate(request: { startDate: Date; lessonScheduleId: string; }): Promise<Date | null> {
         return firstValueFrom(this.http.post<Date | null>(`${this.apiUrl}/calculate-end-date`, this.formatDates(request)));
     }
