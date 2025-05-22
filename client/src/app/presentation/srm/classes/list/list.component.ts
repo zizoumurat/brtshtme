@@ -165,8 +165,6 @@ export class ClassListComponent extends AppBaseComponent<CourseClassModel, Cours
         teacherId: [null, [Validators.required]],
       })))
     });
-
-    console.log(this.lessonSessionForm);
   }
 
   get entries(): FormArray {
@@ -194,6 +192,10 @@ export class ClassListComponent extends AppBaseComponent<CourseClassModel, Cours
     this.getLessonSession();
   }
 
+  override async saveRecord(): Promise<void> {
+    await super.saveRecord();
+  }
+
   async getLessonscheduleList() {
     var paginationFilter = new PaginationFilterModel();
     paginationFilter.pageSize = 100;
@@ -214,7 +216,12 @@ export class ClassListComponent extends AppBaseComponent<CourseClassModel, Cours
     const lessonSession = await this.recordService.getSessionLesson(this.pageForm.get('id')?.value);
 
     this.lessonSessionlist = lessonSession;
-    this.showCalendar = true;
+  }
+
+  onTabChange(event: any) {
+    if (event == 2) {
+      setTimeout(() => { this.showCalendar = true }, 200)
+    }
   }
 
   getLessonscheduleOptions() {

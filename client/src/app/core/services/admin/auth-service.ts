@@ -11,6 +11,7 @@ export interface IAuthService {
   getUser(): User | null;
   getToken(): string | null;
   getRole(): number | null;
+  isTeacher(): Promise<boolean>;
 }
 
 

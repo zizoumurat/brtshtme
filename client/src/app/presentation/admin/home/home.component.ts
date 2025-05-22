@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SharedComponentModule } from '../shared/shared-components.module';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AUTH_SERVICE } from '@/core/services/admin/auth-token';
+import { TeacherHomeComponent } from './teacher/teacher.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [
-    SharedComponentModule
+    SharedComponentModule,
+    TeacherHomeComponent
   ],
   templateUrl: './home.component.html'
 })
@@ -22,6 +25,8 @@ export class HomeComponent {
 
   pageForm!: FormGroup;
 
+  authService = inject(AUTH_SERVICE);
+
   contactTypes = [
     { name: "Aday Müşteri", value: 1 },
     { name: "Tedarikçi", value: 2 },
@@ -32,6 +37,10 @@ export class HomeComponent {
   ];
 
   constructor(private fb: FormBuilder) { }
+
+  get isTeacher() {
+    return this.authService.isTeacher();
+  }
 
   ngOnInit() {
   }

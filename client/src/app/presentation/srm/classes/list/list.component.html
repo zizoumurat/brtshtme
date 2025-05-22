@@ -52,7 +52,7 @@
     [breakpoints]="{ '1920px': '60vw', '1366px': '70vw', '960px': '85vw', '640px': '95vw' }"
     (visibleChange)="visibleChange($emit)">
 
-    <p-tabs value="0">
+    <p-tabs value="0" (valueChange)="onTabChange($event)">
         <p-tablist>
             <p-tab value="0">Kayıt EKranı</p-tab>
             <p-tab *ngIf="pageForm.controls['id'].value" value="1">Ders Programı</p-tab>
@@ -244,8 +244,8 @@
             </p-tabpanel>
 
             <p-tabpanel value="2">
-                <div *ngIf="showCalendar">
-                    <app-calendar [events]="lessonSessionlist"></app-calendar>
+                <div class="min-h-lvh">
+                    <app-calendar *ngIf="showCalendar" [events]="lessonSessionlist"></app-calendar>
                 </div>
             </p-tabpanel>
         </p-tabpanels>

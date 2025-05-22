@@ -17,6 +17,7 @@ public sealed record CourseClassDto(
     DateTime EndDate,
     int Capacity,
     int Unit,
+    string Note,
     Guid? ClassroomId
 );
 
@@ -33,6 +34,7 @@ public sealed record CourseClassCreateDto(
     DateTime EndDate,
     int Capacity,
     int Unit,
+    string Note,
     Guid? ClassroomId
 );
 

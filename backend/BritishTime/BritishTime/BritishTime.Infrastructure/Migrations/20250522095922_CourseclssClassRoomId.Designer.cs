@@ -4,6 +4,7 @@ using BritishTime.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BritishTime.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250522095922_CourseclssClassRoomId")]
+    partial class CourseclssClassRoomId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -383,10 +386,6 @@ namespace BritishTime.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(80)
-                        .HasColumnType("nvarchar(80)");
-
-                    b.Property<string>("Note")
                         .HasMaxLength(80)
                         .HasColumnType("nvarchar(80)");
 
@@ -807,7 +806,7 @@ namespace BritishTime.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CourseClassId")
+                    b.Property<Guid>("CourseClasId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Date")
@@ -826,7 +825,7 @@ namespace BritishTime.Infrastructure.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.HasIndex("CourseClassId", "Date", "StartTime");
+                    b.HasIndex("CourseClasId", "Date", "StartTime");
 
                     b.ToTable("LessonSessions", (string)null);
                 });
@@ -1352,7 +1351,7 @@ namespace BritishTime.Infrastructure.Migrations
                 {
                     b.HasOne("BritishTime.Domain.Entities.CourseClass", "CourseClass")
                         .WithMany()
-                        .HasForeignKey("CourseClassId")
+                        .HasForeignKey("CourseClasId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

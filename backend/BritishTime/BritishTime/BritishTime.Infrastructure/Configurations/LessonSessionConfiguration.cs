@@ -29,7 +29,7 @@ internal class LessonSessionConfiguration : IEntityTypeConfiguration<LessonSessi
 
         builder.HasOne(x => x.CourseClass)
             .WithMany()
-            .HasForeignKey(x => x.CourseClasId)
+            .HasForeignKey(x => x.CourseClassId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Teacher)
@@ -37,7 +37,7 @@ internal class LessonSessionConfiguration : IEntityTypeConfiguration<LessonSessi
             .HasForeignKey(x => x.TeacherId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasIndex(x => new { x.CourseClasId, x.Date, x.StartTime }); // çakışma tespiti için
+        builder.HasIndex(x => new { x.CourseClassId, x.Date, x.StartTime }); // çakışma tespiti için
     }
 }
 

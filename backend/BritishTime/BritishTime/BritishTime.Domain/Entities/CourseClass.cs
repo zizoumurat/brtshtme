@@ -32,5 +32,9 @@ public class CourseClass : Entity
 
     public Guid? ClassroomId { get; set; }
 
+    public ClassRoom ClassRoom { get; set; }
+
+    public string Note { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

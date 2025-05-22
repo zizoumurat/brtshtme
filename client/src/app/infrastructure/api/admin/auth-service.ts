@@ -17,20 +17,17 @@ export class AuthService implements IAuthService {
   private apiUrl = `${BASE_URL}/auth`;
   private token = 'auth_token';
 
+  private userRoleList: any[] | undefined = undefined;
+
   constructor(private http: HttpClient) { }
 
-  async getRoleList(payload: { appuserRef: number; firmRef: number; }): Promise<SelectListItem[]> {
+  async getRoleList(): Promise<any[]> {
     try {
       const response = await firstValueFrom(
-        this.http.post<{ data: any[] }>(`${this.apiUrl}/GetRoleList`, payload).pipe(
-          map(res =>
-            res.data.map(role => ({
-              id: role.ref,
-              name: role.name
-            }))
-          )
-        )
+        this.http.post<any[]>(`${this.apiUrl}/GetRoleList`, {})
       );
+
+      this.userRoleList = response;
 
       return response;
     } catch (error) {
@@ -53,6 +50,8 @@ export class AuthService implements IAuthService {
       localStorage.setItem(this.token, JSON.stringify(response));
       const decodedToken = this.decodeJWT(response.token);
       localStorage.setItem('user', JSON.stringify(decodedToken));
+
+      this.getRoleList();
 
       this.router.navigate(['']);
     } catch (error: any) {
@@ -102,5 +101,9 @@ export class AuthService implements IAuthService {
 
   getRole(): number | null {
     return localStorage.getItem('selectedRoleRef') ? Number(localStorage.getItem('selectedRoleRef')) : null;
+  }
+
+  async isTeacher(): Promise<boolean> {
+    return this.userRoleList?.includes('Teacher') ?? false;
   }
 }

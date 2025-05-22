@@ -14,4 +14,5 @@ public interface ICourseClassService
     Task<bool> IsClassroomScheduleConflictAsync(Guid classroomId, DateTime newStartDate, DateTime newEndDate, List<DayOfWeek> newLessonDays, TimeOnly newStartTime, int dayHour);
     Task<List<LessonSession>> GenerateLessonSessionAsync(Guid classId, Dictionary<DayOfWeek, Guid> programDaysWithTeachers);
     Task<List<LessonSessionListDto>> GetLessonSessionListByCourseClass(Guid courseClassId);
+    Task<List<LessonSessionListDto>> GetLessonSessionListByTeacher(Guid employeeId);
 }

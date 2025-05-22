@@ -22,9 +22,10 @@ public class CourseClassService : ICourseClassService
     private readonly ICommandLessonSessionRepository _commandLessonSessionRepository;
     private readonly ICommandLessonSessionTemplateRepository _commandLessonSessionTemplateRepository;
     private readonly IQueryLessonSessionRepository _queryLessonSessionRepository;
+    private readonly IUserContextService _userContextService;
     private readonly IMapper _mapper;
 
-    public CourseClassService(IQueryCourseClassRepository queryCourseClassRepository, ICommandCourseClassRepository commandCourseClassRepository, IMapper mapper, IQueryLessonScheduleDefinitionRepository queryLessonScheduleDefinitionRepository, IQueryBranchRepository queryBranchRepository, IHolidayService holidayService, ICommandLessonSessionRepository commandLessonSessionRepository, ICommandLessonSessionTemplateRepository commandLessonSessionTemplateRepository, IQueryLessonSessionRepository queryLessonSessionRepository)
+    public CourseClassService(IQueryCourseClassRepository queryCourseClassRepository, ICommandCourseClassRepository commandCourseClassRepository, IMapper mapper, IQueryLessonScheduleDefinitionRepository queryLessonScheduleDefinitionRepository, IQueryBranchRepository queryBranchRepository, IHolidayService holidayService, ICommandLessonSessionRepository commandLessonSessionRepository, ICommandLessonSessionTemplateRepository commandLessonSessionTemplateRepository, IQueryLessonSessionRepository queryLessonSessionRepository, IUserContextService userContextService)
     {
         _queryCourseClassRepository = queryCourseClassRepository;
         _commandCourseClassRepository = commandCourseClassRepository;
@@ -35,6 +36,7 @@ public class CourseClassService : ICourseClassService
         _commandLessonSessionRepository = commandLessonSessionRepository;
         _commandLessonSessionTemplateRepository = commandLessonSessionTemplateRepository;
         _queryLessonSessionRepository = queryLessonSessionRepository;
+        _userContextService = userContextService;
     }
 
     public Task<PaginatedList<CourseClassDto>> GetAllAsync(CourseClassFilterDto filter, PageRequest pagination)
@@ -51,29 +53,37 @@ public class CourseClassService : ICourseClassService
 
     public async Task<CourseClassDto> AddAsync(CourseClassCreateDto courseClassDto)
     {
-        var isExisting = await _queryCourseClassRepository.IsExistingAsync(x => x.Name == courseClassDto.Name);
+        try
+        {
+            var isExisting = await _queryCourseClassRepository.IsExistingAsync(x => x.Name == courseClassDto.Name);
 
-        if (isExisting) throw new Exception("duplicateName");
+            if (isExisting) throw new Exception("duplicateName");
 
-        var lessonSchedule = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(courseClassDto.LessonScheduleDefinitionId);
+            var lessonSchedule = await _queryLessonScheduleDefinitionRepository.GetByIdAsync(courseClassDto.LessonScheduleDefinitionId);
 
-        if (lessonSchedule == null)
-            throw new KeyNotFoundException("notFoundEntity");
+            if (lessonSchedule == null)
+                throw new KeyNotFoundException("notFoundEntity");
 
-        var isConflict = await this.IsClassroomScheduleConflictAsync(
-            courseClassDto.ClassroomId ?? Guid.Empty,
-            courseClassDto.StartDate,
-            courseClassDto.EndDate,
-            lessonSchedule.Days,
-            lessonSchedule.StartTime,
-            lessonSchedule.DayHour
-        );
+            var isConflict = await this.IsClassroomScheduleConflictAsync(
+                courseClassDto.ClassroomId ?? Guid.Empty,
+                courseClassDto.StartDate,
+                courseClassDto.EndDate,
+                lessonSchedule.Days,
+                lessonSchedule.StartTime,
+                lessonSchedule.DayHour
+            );
 
-        if (isConflict) throw new Exception("duplicateRoom");
+            if (isConflict) throw new Exception("duplicateRoom");
 
-        var courseClass = _mapper.Map<CourseClass>(courseClassDto);
-        await _commandCourseClassRepository.AddAsync(courseClass);
-        return _mapper.Map<CourseClassDto>(courseClass);
+            var courseClass = _mapper.Map<CourseClass>(courseClassDto);
+            await _commandCourseClassRepository.AddAsync(courseClass);
+            return _mapper.Map<CourseClassDto>(courseClass);
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.Message);
+            throw;
+        }
     }
 
     public async Task<CourseClassDto> UpdateAsync(CourseClassDto CourseClassDto)
@@ -225,7 +235,7 @@ public class CourseClassService : ICourseClassService
                         result.Add(new LessonSession
                         {
                             Id = Guid.NewGuid(),
-                            CourseClasId = classId,
+                            CourseClassId = classId,
                             Date = currentDate,
                             StartTime = currentLessonStartTime,
                             EndTime = lessonEndTime,
@@ -258,7 +268,7 @@ public class CourseClassService : ICourseClassService
     public async Task<List<LessonSessionListDto>> GetLessonSessionListByCourseClass(Guid courseClassId)
     {
         var lessonSessionList = await _queryLessonSessionRepository
-            .GetList(x => x.CourseClasId == courseClassId)
+            .GetList(x => x.CourseClassId == courseClassId)
             .Include(x => x.Teacher)
             .ToListAsync();
 
@@ -280,4 +290,30 @@ public class CourseClassService : ICourseClassService
         return result;
     }
 
+    public async Task<List<LessonSessionListDto>> GetLessonSessionListByTeacher(Guid employeeId)
+    {
+        var userEmployeeId = await _userContextService.GetCurrentUserEmployeeId();
+        var lessonSessionList = await _queryLessonSessionRepository
+            .GetList(x => x.TeacherId == userEmployeeId)
+            .Include(x => x.CourseClass)
+                .ThenInclude(x => x.ClassRoom)
+            .ToListAsync();
+
+        var result = lessonSessionList
+            .OrderBy(x => x.Date)
+            .Select(x =>
+            {
+                var startDateTime = x.Date + x.StartTime.ToTimeSpan();
+                var endDateTime = x.Date + x.EndTime.ToTimeSpan();
+
+                return new LessonSessionListDto(
+                    Title: x.CourseClass.ClassRoom.Name + " - " + x.CourseClass.Name,
+                    Start: startDateTime.ToString("yyyy-MM-ddTHH:mm:ss"),
+                    End: endDateTime.ToString("yyyy-MM-ddTHH:mm:ss")
+                );
+            })
+            .ToList();
+
+        return result;
+    }
 }

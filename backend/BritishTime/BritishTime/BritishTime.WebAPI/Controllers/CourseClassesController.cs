@@ -5,6 +5,7 @@ using BritishTime.Application.Features.CourseClasses.Commands.UpdateCourseClass;
 using BritishTime.Application.Features.CourseClasses.Queries.GetAllCourseClasses;
 using BritishTime.Application.Features.CourseClasses.Queries.GetEndDate;
 using BritishTime.Application.Features.CourseClasses.Queries.GetLessonSessions;
+using BritishTime.Application.Features.CourseClasses.Queries.GetLessonSessionsByTeacher;
 using BritishTime.Domain.Dtos;
 using BritishTime.Domain.Pagination;
 using BritishTime.WebAPI.Abstractions;
@@ -35,6 +36,16 @@ public sealed class CourseClassesController : ApiController
     {
         GetLessonSessionsQuery request = new(courseClassId);
         GetLessonSessionsQueryResponse response = await _mediator.Send(request);
+
+        return Ok(response.result);
+    }
+
+
+    [HttpGet("get-lesson-session-by-teacher/{employeeId}")]
+    public async Task<IActionResult> GetLessonSessionByTeacher([FromRoute] Guid employeeId)
+    {
+        GetLessonSessionsByTeacherQuery request = new(employeeId);
+        GetLessonSessionsByTeacherQueryResponse response = await _mediator.Send(request);
 
         return Ok(response.result);
     }

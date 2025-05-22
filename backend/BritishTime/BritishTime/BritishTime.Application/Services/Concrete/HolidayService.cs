@@ -28,6 +28,8 @@ public class HolidayService : IHolidayService
 
     public async Task<List<DateTime>> GetHolidaysAsync(int year)
     {
+        return await Task.FromResult(new List<DateTime>());
+        /*
         var timeMin = $"{year}-01-01T00:00:00Z";
         var timeMax = $"{year}-12-31T23:59:59Z";
 
@@ -50,6 +52,7 @@ public class HolidayService : IHolidayService
             .Where(e => e.Start?.Date != null)
             .Select(e => DateTime.Parse(e.Start.Date))
             .ToList();
+        */
     }
 
     public async Task<List<DateTime>> GetCourseHolidaysAsync(Guid BranchId, Guid CourseClassId, DateTime StartDate)

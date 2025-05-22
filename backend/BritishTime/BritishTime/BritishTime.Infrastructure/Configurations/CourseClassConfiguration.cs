@@ -17,6 +17,9 @@ internal sealed class CourseClassConfiguration : IEntityTypeConfiguration<Course
         builder.Property(c => c.Name)
             .HasMaxLength(80);
 
+        builder.Property(c => c.Note)
+                .HasMaxLength(80);
+
         builder.Property(c => c.ClassType)
             .IsRequired();
 
@@ -69,7 +72,7 @@ internal sealed class CourseClassConfiguration : IEntityTypeConfiguration<Course
             .HasForeignKey(c => c.LessonScheduleDefinitionId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.HasOne<ClassRoom>()
+        builder.HasOne(e=> e.ClassRoom)
             .WithMany()
             .HasForeignKey(c => c.ClassroomId)
             .OnDelete(DeleteBehavior.Restrict);

@@ -4,7 +4,7 @@ namespace BritishTime.Domain.Entities;
 
 public class LessonSession : Entity
 {
-    public Guid CourseClasId { get; set; }
+    public Guid CourseClassId { get; set; }
     public CourseClass CourseClass { get; set; } = null!;
     public DateTime Date { get; set; }
     public TimeOnly StartTime { get; set; }

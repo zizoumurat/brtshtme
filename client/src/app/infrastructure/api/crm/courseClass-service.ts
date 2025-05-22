@@ -15,6 +15,10 @@ export class CourseClassService extends CrudService<CourseClassModel> implements
         super(http, `${BASE_URL}/CourseClasses`);
     }
 
+    getSessionLessonByTeacher(employeeId: string): Promise<any[]> {
+         return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/get-lesson-session-by-teacher/${employeeId}`));
+    }
+
     getSessionLesson(courseClassId: string): Promise<any[]> {
         return firstValueFrom(this.http.get<any[]>(`${this.apiUrl}/get-lesson-session/${courseClassId}`));
     }

@@ -91,7 +91,6 @@ export class AppBaseComponent<T extends HasId, S extends ICrudService<T>> {
     }
 
     onSearch(event: any, field: string, isDate: boolean = false) {
-        console.log(event);
         const value = event.target?.value || event.value;
         if (value === null || value === undefined || value === '') {
             const { [field]: _, ...updatedFilter } = this.searchFilter;

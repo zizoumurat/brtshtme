@@ -19,13 +19,11 @@ export const httpMessageInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      console.log('error', error);
       if (error.status === 401) {
         localStorage.clear();
         router.navigate(['/auth/login']);
       }
       let errorMessage = '';
-      console.log(error);
       if (error.error instanceof ErrorEvent) {
         errorMessage = `Hata: ${error.error.message}`;
       }
