@@ -13,6 +13,7 @@ public class HolidayService : IHolidayService
     private readonly HttpClient _httpClient;
     private const string CalendarId = "tr.turkish%23holiday%40group.v.calendar.google.com";
     private readonly string _apiKey;
+    //"ApiKey": "AIzaSyBWqjIYXNsPZN8VsRj7_gg7mv2QWJHj-ps"
     private readonly IQueryHolidayRepository _queryHolidayRepository;
 
     public HolidayService(HttpClient httpClient, IConfiguration configuration, IQueryHolidayRepository queryHolidayRepository)

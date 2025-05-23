@@ -1,0 +1,11 @@
+harcama türü
+
+demirbaş
+diğer
+fatura
+kira
+kitap
+masraf
+personel
+reklam
+vergi
